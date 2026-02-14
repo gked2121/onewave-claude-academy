@@ -1,10 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { useProgress } from "@/context/ProgressContext";
 import { useRouter } from "next/navigation";
-import { Sparkles, ArrowRight, Zap, Target, Rocket } from "lucide-react";
+import {
+  Sparkles,
+  ArrowRight,
+  Zap,
+  Target,
+  Rocket,
+  Briefcase,
+  Crosshair,
+  Layers,
+  MousePointerClick,
+} from "lucide-react";
 import Logo from "@/components/Logo";
 import WelcomeModal from "@/components/WelcomeModal";
 
@@ -12,7 +22,7 @@ const characters = [
   {
     id: 1,
     name: "Write Prompts That Actually Work",
-    emoji: "🎯",
+    icon: "crosshair",
     description: "Stop getting generic answers. Learn the techniques that make Claude feel like it read your mind.",
     traits: ["Get 10x better responses", "Never write a vague prompt again", "Unlock Claude\u2019s hidden depth"],
     color: "from-orange-500 to-amber-500",
@@ -21,7 +31,7 @@ const characters = [
   {
     id: 2,
     name: "Automate the Work You Hate",
-    emoji: "💼",
+    icon: "briefcase",
     description: "Turn Claude into your personal ops team \u2014 from drafting emails to building entire workflows.",
     traits: ["Save 5+ hours per week", "Master Artifacts & Projects", "Build real tools, not toy demos"],
     color: "from-orange-400 to-amber-400",
@@ -30,13 +40,26 @@ const characters = [
   {
     id: 3,
     name: "Ship Faster with Claude",
-    emoji: "⚡",
+    icon: "zap",
     description: "Code generation, debugging, API integration \u2014 use Claude the way senior engineers actually use it.",
     traits: ["From prototype to production", "MCP & API mastery", "Build apps that use Claude"],
     color: "from-amber-500 to-yellow-500",
     path: "ai-developer"
   }
 ];
+
+function CharIcon({ name, className }: { name: string; className?: string }) {
+  switch (name) {
+    case "crosshair":
+      return <Crosshair className={className} />;
+    case "briefcase":
+      return <Briefcase className={className} />;
+    case "zap":
+      return <Zap className={className} />;
+    default:
+      return <Target className={className} />;
+  }
+}
 
 // 3D Card Component with Mouse Tracking
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -96,7 +119,7 @@ function CharacterCard({ char, index, isSelected, onSelect }: { char: any; index
 
       {/* Content */}
       <div className="relative" style={{ transform: "translateZ(50px)" }}>
-        {/* Floating Emoji */}
+        {/* Floating Icon */}
         <motion.div
           animate={{
             y: isHovered ? [-5, 5, -5] : 0,
@@ -107,9 +130,11 @@ function CharacterCard({ char, index, isSelected, onSelect }: { char: any; index
             repeat: Infinity,
             ease: "easeInOut"
           }}
-          className="text-7xl mb-6 text-center filter drop-shadow-2xl"
+          className="mb-6 flex justify-center"
         >
-          {char.emoji}
+          <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${char.color} flex items-center justify-center shadow-xl`}>
+            <CharIcon name={char.icon} className="w-10 h-10 text-white" />
+          </div>
         </motion.div>
 
         {/* Title with gradient */}
@@ -280,7 +305,9 @@ export default function Home() {
             transition={{ delay: 0.6 }}
             className="bg-gradient-to-br from-orange-500/10 to-amber-500/10 backdrop-blur-xl rounded-2xl p-6 border-2 border-orange-500/30 text-center"
           >
-            <div className="text-5xl mb-4">1️⃣</div>
+            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center mx-auto mb-4 shadow-lg">
+              <MousePointerClick className="w-7 h-7 text-white" />
+            </div>
             <h3 className="text-xl font-bold mb-2 text-orange-200">Pick Your Focus</h3>
             <p className="text-orange-300 text-sm">
               Choose what matters to you. Every path leads to real skills.
@@ -292,7 +319,9 @@ export default function Home() {
             transition={{ delay: 0.7 }}
             className="bg-gradient-to-br from-amber-500/10 to-yellow-500/10 backdrop-blur-xl rounded-2xl p-6 border-2 border-amber-500/30 text-center"
           >
-            <div className="text-5xl mb-4">2️⃣</div>
+            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-amber-500 to-yellow-500 flex items-center justify-center mx-auto mb-4 shadow-lg">
+              <Layers className="w-7 h-7 text-white" />
+            </div>
             <h3 className="text-xl font-bold mb-2 text-amber-200">Learn by Doing</h3>
             <p className="text-amber-300 text-sm">
               No passive videos. You write prompts, build tools, and see results in real time.
@@ -304,7 +333,9 @@ export default function Home() {
             transition={{ delay: 0.8 }}
             className="bg-gradient-to-br from-orange-400/10 to-amber-400/10 backdrop-blur-xl rounded-2xl p-6 border-2 border-orange-400/30 text-center"
           >
-            <div className="text-5xl mb-4">3️⃣</div>
+            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-orange-400 to-amber-400 flex items-center justify-center mx-auto mb-4 shadow-lg">
+              <Rocket className="w-7 h-7 text-white" />
+            </div>
             <h3 className="text-xl font-bold mb-2 text-orange-200">Stack Your Skills</h3>
             <p className="text-orange-300 text-sm">
               Each level unlocks the next. By Level 14, you&apos;re building things most people don&apos;t know are possible.
@@ -329,9 +360,9 @@ export default function Home() {
             repeat: Infinity,
             ease: "linear"
           }}
-          className="text-4xl mb-3"
+          className="flex justify-center mb-3"
         >
-          ✨
+          <Sparkles className="w-10 h-10 text-amber-400" />
         </motion.div>
         <p className="text-xl text-orange-200 mb-2">
           <span className="text-2xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">Level 0 is free.</span> No account needed.
