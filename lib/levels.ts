@@ -125,9 +125,9 @@ export const levels: LevelData[] = [
   // ==========================================================================
   {
     id: 0,
-    title: 'Claude Fundamentals',
+    title: 'The Foundation',
     description:
-      'Learn what Claude is, how it works, and write your first effective prompts.',
+      'What Claude actually is, how to talk to it, and why your first prompt matters more than you think.',
     emoji: '🎯',
     xp: 100,
     estimatedTime: '15 min',
@@ -144,31 +144,23 @@ export const levels: LevelData[] = [
         id: 1,
         type: 'learn',
         title: 'What is Claude?',
-        content: `Claude is an AI assistant created by **Anthropic** — a company focused on AI safety and research. Claude is **not** made by OpenAI; it is a distinct model built with Anthropic's own research.
+        content: `Claude is an AI assistant made by **Anthropic**. Not OpenAI. Not Google. Anthropic — a company built specifically around AI safety.
 
-**Key capabilities of Claude:**
+**Here's what Claude can actually do for you:**
 
-• **Answer questions** — Claude can provide detailed, nuanced answers on a wide range of topics, from science and history to coding and creative writing.
+- **Write anything** — emails, blog posts, code, marketing copy, legal summaries, creative fiction. Name it.
+- **Think through problems** — break down complex decisions, compare tradeoffs, brainstorm from angles you hadn't considered.
+- **Analyze and summarize** — drop in a 50-page document and get the key points in 30 seconds.
+- **Write and debug code** — Python, JavaScript, SQL, and dozens more. Claude can explain what code does, find bugs, and suggest fixes.
+- **Learn with you** — explain quantum physics to a 10-year-old or walk a senior engineer through a new framework. Claude adapts.
 
-• **Write content** — Blog posts, emails, essays, stories, marketing copy, technical documentation, and much more.
+**What Claude won't do:**
 
-• **Analyze information** — Summarize long documents, compare options, extract key insights, and identify patterns in data.
+- Browse the internet live. Claude has a knowledge cutoff and may not know about yesterday's news.
+- Be right 100% of the time. Always verify anything high-stakes — medical, legal, financial.
+- Replace your judgment. Claude is a thinking partner, not an oracle.
 
-• **Brainstorm ideas** — Generate creative concepts, explore possibilities, and help you think through problems from multiple angles.
-
-• **Learn concepts** — Claude can explain complex topics in simple terms, act as a tutor, and adapt explanations to your level of understanding.
-
-• **Debug code** — Read, write, and fix code across many programming languages; explain what code does; and suggest improvements.
-
-**Important things to remember:**
-
-• Claude can make mistakes — always verify critical information, especially for medical, legal, or financial decisions.
-
-• Claude does not browse the internet in real time. It has a knowledge cutoff date and may not know about very recent events.
-
-• Claude works best when you give it clear, specific instructions. The quality of the output depends heavily on the quality of your prompt.
-
-• Claude is a tool to augment your thinking, not replace it. Use it as a collaborator, not an oracle.`,
+The single most important thing to know: **the quality of Claude's output depends on the quality of your input.** A vague question gets a vague answer. A specific, well-structured prompt gets something genuinely useful. That's what the rest of this course is about.`,
       },
       {
         id: 2,
@@ -379,9 +371,9 @@ export const levels: LevelData[] = [
   // ==========================================================================
   {
     id: 1,
-    title: 'Advanced Prompting',
+    title: 'Prompt Engineering',
     description:
-      'Master role prompting, chain-of-thought reasoning, and few-shot learning techniques.',
+      'Role prompts, chain-of-thought, few-shot — the techniques that separate amateurs from power users.',
     emoji: '🎭',
     xp: 150,
     estimatedTime: '25 min',
@@ -627,9 +619,9 @@ This produces a structured, thorough analysis instead of a surface-level respons
   // ==========================================================================
   {
     id: 2,
-    title: 'Claude Projects',
+    title: 'Projects & Context',
     description:
-      'Set up persistent workspaces with custom instructions and uploaded knowledge.',
+      'Stop repeating yourself. Give Claude persistent memory and watch everything click.',
     emoji: '📁',
     xp: 150,
     estimatedTime: '20 min',
@@ -803,9 +795,9 @@ This produces a structured, thorough analysis instead of a surface-level respons
   // ==========================================================================
   {
     id: 3,
-    title: 'Artifacts Fundamentals',
+    title: 'Artifacts',
     description:
-      'Create interactive React components, HTML pages, SVGs, and more with Claude Artifacts.',
+      'Generate working apps, documents, and interactive tools — right inside the conversation.',
     emoji: '🎨',
     xp: 200,
     estimatedTime: '30 min',
@@ -1070,9 +1062,9 @@ This produces a structured, thorough analysis instead of a surface-level respons
   // ==========================================================================
   {
     id: 4,
-    title: 'Sharing & Publishing',
+    title: 'Share & Collaborate',
     description:
-      'Learn how to share Artifacts, collaborate with others, and publish your Claude creations.',
+      'Publish what you build. Share artifacts with your team or the world.',
     emoji: '📤',
     xp: 150,
     estimatedTime: '20 min',
@@ -1259,7 +1251,7 @@ This produces a structured, thorough analysis instead of a surface-level respons
     id: 5,
     title: 'Claude Desktop',
     description:
-      'Master the Claude Desktop application with local file access, MCP support, and system integration.',
+      'Claude on your machine. Read local files, access your tools, work offline.',
     emoji: '💻',
     xp: 250,
     estimatedTime: '40 min',
@@ -1460,9 +1452,9 @@ The configuration file is where you set up MCP servers and other settings. A bas
   // ==========================================================================
   {
     id: 6,
-    title: 'MCP (Model Context Protocol)',
+    title: 'MCP',
     description:
-      'Connect Claude to external tools, databases, and APIs using the Model Context Protocol.',
+      'The protocol that turns Claude into a platform. Connect databases, APIs, anything.',
     emoji: '🔌',
     xp: 300,
     estimatedTime: '45 min',
@@ -1717,9 +1709,9 @@ All MCP servers are configured in the same file:
   // ==========================================================================
   {
     id: 7,
-    title: 'Web & Desktop Connectors',
+    title: 'Integrations',
     description:
-      'Integrate Claude with Gmail, Google Drive, Notion, Slack, Zapier, and other services.',
+      'Wire Claude into your actual stack — Gmail, Drive, Notion, Slack, and more.',
     emoji: '🔗',
     xp: 200,
     estimatedTime: '30 min',
@@ -1908,9 +1900,9 @@ All MCP servers are configured in the same file:
   // ==========================================================================
   {
     id: 8,
-    title: 'Building with Claude',
+    title: 'Build with the API',
     description:
-      'Learn the Claude API, model selection, system prompts, and how to build production applications.',
+      'From API keys to production apps. Build software that has Claude inside it.',
     emoji: '🏗️',
     xp: 300,
     estimatedTime: '45 min',
@@ -2199,7 +2191,7 @@ All MCP servers are configured in the same file:
     id: 9,
     title: 'Claude Master',
     description:
-      'Combine everything you have learned into a comprehensive capstone project and earn your Claude mastery.',
+      'The capstone. Design a complete solution that puts everything together.',
     emoji: '👑',
     xp: 400,
     estimatedTime: '60 min',

@@ -11,28 +11,28 @@ import WelcomeModal from "@/components/WelcomeModal";
 const characters = [
   {
     id: 1,
-    name: "Prompt Master",
+    name: "Write Prompts That Actually Work",
     emoji: "🎯",
-    description: "Master effective prompting to unlock Claude's full potential",
-    traits: ["Perfect for beginners", "Learn prompt engineering", "Get better responses"],
+    description: "Stop getting generic answers. Learn the techniques that make Claude feel like it read your mind.",
+    traits: ["Get 10x better responses", "Never write a vague prompt again", "Unlock Claude\u2019s hidden depth"],
     color: "from-orange-500 to-amber-500",
     path: "prompt-master"
   },
   {
     id: 2,
-    name: "AI Productivity Pro",
+    name: "Automate the Work You Hate",
     emoji: "💼",
-    description: "Use Claude to supercharge your productivity and workflows",
-    traits: ["Master Claude Artifacts", "Automate daily tasks", "Claude Projects for work"],
+    description: "Turn Claude into your personal ops team \u2014 from drafting emails to building entire workflows.",
+    traits: ["Save 5+ hours per week", "Master Artifacts & Projects", "Build real tools, not toy demos"],
     color: "from-orange-400 to-amber-400",
     path: "productivity-pro"
   },
   {
     id: 3,
-    name: "AI Developer",
+    name: "Ship Faster with Claude",
     emoji: "⚡",
-    description: "Leverage Claude for coding, debugging, and development",
-    traits: ["Code with Artifacts", "MCP integrations", "API & automation mastery"],
+    description: "Code generation, debugging, API integration \u2014 use Claude the way senior engineers actually use it.",
+    traits: ["From prototype to production", "MCP & API mastery", "Build apps that use Claude"],
     color: "from-amber-500 to-yellow-500",
     path: "ai-developer"
   }
@@ -228,7 +228,7 @@ export default function Home() {
           transition={{ delay: 0.2 }}
           className="text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-orange-400 via-amber-400 to-yellow-400 bg-clip-text text-transparent leading-tight"
         >
-          Master Claude AI in 10 Fun Levels
+          You&apos;re Using 10% of Claude
         </motion.h1>
 
         <motion.p
@@ -237,7 +237,7 @@ export default function Home() {
           transition={{ delay: 0.3 }}
           className="text-2xl text-orange-200 mb-4 font-light"
         >
-          Transform from beginner to Claude expert through gamified learning
+          10 hands-on levels. Real skills. Go from &quot;I&apos;ve tried Claude&quot; to &quot;Claude is my unfair advantage.&quot;
         </motion.p>
 
         <motion.p
@@ -246,7 +246,7 @@ export default function Home() {
           transition={{ delay: 0.4 }}
           className="text-lg text-orange-300"
         >
-          Unlock skills, earn achievements, and get real results — one level at a time
+          No fluff. No lectures. Just the skills that actually change how you work.
         </motion.p>
       </motion.div>
 
@@ -281,9 +281,9 @@ export default function Home() {
             className="bg-gradient-to-br from-orange-500/10 to-amber-500/10 backdrop-blur-xl rounded-2xl p-6 border-2 border-orange-500/30 text-center"
           >
             <div className="text-5xl mb-4">1️⃣</div>
-            <h3 className="text-xl font-bold mb-2 text-orange-200">Choose Your Path</h3>
+            <h3 className="text-xl font-bold mb-2 text-orange-200">Pick Your Focus</h3>
             <p className="text-orange-300 text-sm">
-              Select a learning path that matches your goals: Master prompts, boost productivity, or become an AI developer.
+              Choose what matters to you. Every path leads to real skills.
             </p>
           </motion.div>
           <motion.div
@@ -293,9 +293,9 @@ export default function Home() {
             className="bg-gradient-to-br from-amber-500/10 to-yellow-500/10 backdrop-blur-xl rounded-2xl p-6 border-2 border-amber-500/30 text-center"
           >
             <div className="text-5xl mb-4">2️⃣</div>
-            <h3 className="text-xl font-bold mb-2 text-amber-200">Learn & Practice</h3>
+            <h3 className="text-xl font-bold mb-2 text-amber-200">Learn by Doing</h3>
             <p className="text-amber-300 text-sm">
-              Complete interactive levels with hands-on challenges. Start with free Level 0, then unlock all 10 levels with Pro.
+              No passive videos. You write prompts, build tools, and see results in real time.
             </p>
           </motion.div>
           <motion.div
@@ -305,9 +305,9 @@ export default function Home() {
             className="bg-gradient-to-br from-orange-400/10 to-amber-400/10 backdrop-blur-xl rounded-2xl p-6 border-2 border-orange-400/30 text-center"
           >
             <div className="text-5xl mb-4">3️⃣</div>
-            <h3 className="text-xl font-bold mb-2 text-orange-200">Earn & Achieve</h3>
+            <h3 className="text-xl font-bold mb-2 text-orange-200">Stack Your Skills</h3>
             <p className="text-orange-300 text-sm">
-              Gain XP, unlock achievements, and track your progress. Become a Claude master!
+              Each level unlocks the next. By Level 9, you&apos;re building things most people don&apos;t know are possible.
             </p>
           </motion.div>
         </div>
@@ -334,10 +334,10 @@ export default function Home() {
           ✨
         </motion.div>
         <p className="text-xl text-orange-200 mb-2">
-          <span className="text-2xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">Start FREE</span> — Level 0 unlocked for all paths
+          <span className="text-2xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">Level 0 is free.</span> No account needed.
         </p>
         <p className="text-orange-300 text-sm">
-          Unlock the full journey for just <span className="text-orange-400 font-semibold">$9.99/month</span> and master all 10 levels with exclusive achievements
+          Try it right now. You&apos;ll know if Claude Quest is for you before you spend a dime.
         </p>
       </motion.div>
 

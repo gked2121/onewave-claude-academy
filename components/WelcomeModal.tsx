@@ -14,26 +14,26 @@ export default function WelcomeModal({ onClose }: WelcomeModalProps) {
   const steps = [
     {
       icon: <Sparkles className="w-16 h-16 text-orange-400" />,
-      title: "Welcome to Claude Quest!",
-      description: "Your gamified journey to Claude AI mastery starts here. Learn through interactive levels, earn XP, and unlock achievements!",
+      title: "You\u2019re Underusing Claude",
+      description: "Most people barely scratch the surface. You\u2019re about to change that.",
       emoji: "👋",
     },
     {
       icon: <Target className="w-16 h-16 text-amber-400" />,
-      title: "Choose Your Path",
-      description: "Select a learning path that matches your goals: Prompt Master, AI Productivity Pro, or AI Developer. Don't worry, you can explore all paths!",
+      title: "Pick Your Path",
+      description: "Prompting, productivity, or development. All roads lead to mastery.",
       emoji: "🎯",
     },
     {
       icon: <Trophy className="w-16 h-16 text-yellow-400" />,
-      title: "Level Up Your Skills",
-      description: "Complete 10 levels from beginner to expert. Master Claude Artifacts, Projects, and MCP with hands-on challenges and real-world projects.",
+      title: "10 Levels. Real Skills.",
+      description: "Each level unlocks a real capability. By the end, Claude feels like a different tool.",
       emoji: "🏆",
     },
     {
       icon: <Rocket className="w-16 h-16 text-orange-400" />,
-      title: "Start Free!",
-      description: "Level 0 is completely free! Try it out and see if Claude Quest is right for you. Upgrade to Pro anytime for $9.99/month to unlock all 10 levels.",
+      title: "Level 0 Is on Us",
+      description: "Start free. No account needed. See what you\u2019ve been missing.",
       emoji: "🚀",
     },
   ];

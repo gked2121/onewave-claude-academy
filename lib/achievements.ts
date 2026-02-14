@@ -15,7 +15,7 @@ export const achievements: Achievement[] = [
   {
     id: 'first_steps',
     title: 'First Steps',
-    description: 'Complete your first task',
+    description: 'Finish your first task. The journey begins.',
     emoji: '👣',
     xp: 25,
     rarity: 'common',
@@ -24,7 +24,7 @@ export const achievements: Achievement[] = [
   {
     id: 'quick_learner',
     title: 'Quick Learner',
-    description: 'Complete Level 0 in under 15 minutes',
+    description: 'Blaze through Level 0 in under 15 minutes.',
     emoji: '⚡',
     xp: 50,
     rarity: 'rare',
@@ -33,7 +33,7 @@ export const achievements: Achievement[] = [
   {
     id: 'perfect_prompt',
     title: 'Perfect Prompt',
-    description: 'Pass all validation checks on first try',
+    description: 'Nail every validation check on the first try.',
     emoji: '🎯',
     xp: 100,
     rarity: 'epic',
@@ -44,7 +44,7 @@ export const achievements: Achievement[] = [
   {
     id: 'rising_star',
     title: 'Rising Star',
-    description: 'Earn 500 XP',
+    description: 'Hit 500 XP. You\'re not a beginner anymore.',
     emoji: '⭐',
     xp: 75,
     rarity: 'rare',
@@ -53,7 +53,7 @@ export const achievements: Achievement[] = [
   {
     id: 'master_wizard',
     title: 'Master Wizard',
-    description: 'Complete all 10 levels',
+    description: 'All 10 levels. Complete. You\'re the real deal.',
     emoji: '🧙‍♂️',
     xp: 500,
     rarity: 'legendary',
@@ -62,7 +62,7 @@ export const achievements: Achievement[] = [
   {
     id: 'halfway_there',
     title: 'Halfway There',
-    description: 'Complete 5 levels',
+    description: 'Five down, five to go. No stopping now.',
     emoji: '🏃',
     xp: 150,
     rarity: 'rare',
@@ -73,7 +73,7 @@ export const achievements: Achievement[] = [
   {
     id: 'on_fire',
     title: 'On Fire!',
-    description: 'Maintain a 3-day streak',
+    description: 'Three days straight. Momentum is real.',
     emoji: '🔥',
     xp: 100,
     rarity: 'rare',
@@ -82,7 +82,7 @@ export const achievements: Achievement[] = [
   {
     id: 'unstoppable',
     title: 'Unstoppable',
-    description: 'Maintain a 7-day streak',
+    description: 'A full week without breaking stride.',
     emoji: '💪',
     xp: 250,
     rarity: 'epic',
@@ -91,7 +91,7 @@ export const achievements: Achievement[] = [
   {
     id: 'legendary_streak',
     title: 'Legendary Streak',
-    description: 'Maintain a 30-day streak',
+    description: '30 days. This is who you are now.',
     emoji: '👑',
     xp: 1000,
     rarity: 'legendary',
@@ -102,7 +102,7 @@ export const achievements: Achievement[] = [
   {
     id: 'prompt_master',
     title: 'Prompt Master',
-    description: 'Create 10 perfect prompts',
+    description: '10 perfect prompts. You\'ve got the touch.',
     emoji: '📝',
     xp: 200,
     rarity: 'epic',
@@ -111,7 +111,7 @@ export const achievements: Achievement[] = [
   {
     id: 'gpt_builder',
     title: 'GPT Builder',
-    description: 'Create your first Custom GPT',
+    description: 'Built your first Custom GPT. Creator mode unlocked.',
     emoji: '🏗️',
     xp: 300,
     rarity: 'epic',
@@ -120,7 +120,7 @@ export const achievements: Achievement[] = [
   {
     id: 'api_wizard',
     title: 'API Wizard',
-    description: 'Successfully integrate 3 APIs',
+    description: 'Three API integrations. You speak machine.',
     emoji: '🔌',
     xp: 350,
     rarity: 'epic',
@@ -131,7 +131,7 @@ export const achievements: Achievement[] = [
   {
     id: 'speedrunner',
     title: 'Speedrunner',
-    description: 'Complete 3 levels in one day',
+    description: 'Three levels in one day. Someone\'s hungry.',
     emoji: '🏃‍♂️',
     xp: 200,
     rarity: 'rare',
@@ -140,7 +140,7 @@ export const achievements: Achievement[] = [
   {
     id: 'marathon_runner',
     title: 'Marathon Runner',
-    description: 'Complete 5 levels in one session',
+    description: 'Five levels in one sitting. Respect.',
     emoji: '🏃‍♀️',
     xp: 400,
     rarity: 'epic',
@@ -151,7 +151,7 @@ export const achievements: Achievement[] = [
   {
     id: 'konami_code',
     title: 'Secret Code',
-    description: 'You found the secret!',
+    description: 'You found it. We knew you would.',
     emoji: '🎮',
     xp: 500,
     rarity: 'legendary',
@@ -161,7 +161,7 @@ export const achievements: Achievement[] = [
   {
     id: 'night_owl',
     title: 'Night Owl',
-    description: 'Complete a level between 12am-4am',
+    description: 'Finishing levels at 2am. Dedication or insomnia?',
     emoji: '🦉',
     xp: 100,
     rarity: 'rare',
@@ -171,7 +171,7 @@ export const achievements: Achievement[] = [
   {
     id: 'early_bird',
     title: 'Early Bird',
-    description: 'Complete a level between 5am-7am',
+    description: 'Before 7am. The quiet hours hit different.',
     emoji: '🐦',
     xp: 100,
     rarity: 'rare',
@@ -183,7 +183,7 @@ export const achievements: Achievement[] = [
   {
     id: 'influencer',
     title: 'Influencer',
-    description: 'Share your progress 5 times',
+    description: 'Shared your progress 5 times. Spreading the word.',
     emoji: '📱',
     xp: 150,
     rarity: 'rare',
@@ -192,7 +192,7 @@ export const achievements: Achievement[] = [
   {
     id: 'teacher',
     title: 'Teacher',
-    description: 'Help 3 other learners',
+    description: 'Helped 3 other learners. Knowledge multiplied.',
     emoji: '👨‍🏫',
     xp: 200,
     rarity: 'epic',

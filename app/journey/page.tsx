@@ -9,8 +9,8 @@ import { Lock, CheckCircle2, Crown, Sparkles, Star, Target, Zap, ArrowRight, X }
 const levels = [
   {
     id: 0,
-    title: "Claude Fundamentals",
-    description: "Master the basics of Claude AI and effective prompting",
+    title: "The Foundation",
+    description: "What Claude actually is, how to talk to it, and why your first prompt matters more than you think.",
     emoji: "🎯",
     xp: 100,
     estimatedTime: "15 min",
@@ -20,8 +20,8 @@ const levels = [
   },
   {
     id: 1,
-    title: "Advanced Prompting",
-    description: "Master role-playing, chain-of-thought, and few-shot prompting",
+    title: "Prompt Engineering",
+    description: "Role prompts, chain-of-thought, few-shot \u2014 the techniques that separate amateurs from power users.",
     emoji: "🎭",
     xp: 150,
     estimatedTime: "25 min",
@@ -31,8 +31,8 @@ const levels = [
   },
   {
     id: 2,
-    title: "Claude Projects",
-    description: "Organize conversations with Projects and custom knowledge",
+    title: "Projects & Context",
+    description: "Stop repeating yourself. Give Claude persistent memory and watch everything click.",
     emoji: "📁",
     xp: 150,
     estimatedTime: "20 min",
@@ -42,8 +42,8 @@ const levels = [
   },
   {
     id: 3,
-    title: "Artifacts Mastery",
-    description: "Create interactive apps, documents, and code with Artifacts",
+    title: "Artifacts",
+    description: "Generate working apps, documents, and interactive tools \u2014 right inside the conversation.",
     emoji: "🎨",
     xp: 200,
     estimatedTime: "30 min",
@@ -53,8 +53,8 @@ const levels = [
   },
   {
     id: 4,
-    title: "Sharing & Publishing",
-    description: "Share Artifacts and collaborate with your team",
+    title: "Share & Collaborate",
+    description: "Publish what you build. Share artifacts with your team or the world.",
     emoji: "📤",
     xp: 150,
     estimatedTime: "20 min",
@@ -64,8 +64,8 @@ const levels = [
   },
   {
     id: 5,
-    title: "Claude Desktop Basics",
-    description: "Get started with Claude Desktop and local file access",
+    title: "Claude Desktop",
+    description: "Claude on your machine. Read local files, access your tools, work offline.",
     emoji: "💻",
     xp: 250,
     estimatedTime: "40 min",
@@ -75,8 +75,8 @@ const levels = [
   },
   {
     id: 6,
-    title: "Model Context Protocol (MCP)",
-    description: "Connect Claude Desktop to local tools and services",
+    title: "MCP",
+    description: "The protocol that turns Claude into a platform. Connect databases, APIs, anything.",
     emoji: "🔌",
     xp: 300,
     estimatedTime: "45 min",
@@ -86,8 +86,8 @@ const levels = [
   },
   {
     id: 7,
-    title: "Web & Desktop Connectors",
-    description: "Integrate Claude with Gmail, Drive, Notion, and more",
+    title: "Integrations",
+    description: "Wire Claude into your actual stack \u2014 Gmail, Drive, Notion, Slack, and more.",
     emoji: "🔗",
     xp: 200,
     estimatedTime: "30 min",
@@ -97,8 +97,8 @@ const levels = [
   },
   {
     id: 8,
-    title: "Building with Claude",
-    description: "Create production apps using Claude API and Artifacts",
+    title: "Build with the API",
+    description: "From API keys to production apps. Build software that has Claude inside it.",
     emoji: "🏗️",
     xp: 300,
     estimatedTime: "45 min",
@@ -109,7 +109,7 @@ const levels = [
   {
     id: 9,
     title: "Claude Master",
-    description: "Advanced workflows and complete Claude mastery",
+    description: "The capstone. Design a complete solution that puts everything together.",
     emoji: "👑",
     xp: 400,
     estimatedTime: "60 min",
@@ -359,10 +359,10 @@ export default function JourneyPage() {
           🗺️
         </motion.div>
         <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-amber-400 to-yellow-400 bg-clip-text text-transparent">
-          Your Learning Journey
+          The Path to Claude Mastery
         </h1>
         <p className="text-xl text-orange-200 mb-6">
-          Master Claude from fundamentals to advanced AI automation
+          Each level builds on the last. By the end, you&apos;ll wonder how you worked without this.
         </p>
 
         {/* Overall Progress Stats */}
@@ -445,10 +445,10 @@ export default function JourneyPage() {
               👑
             </motion.div>
             <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">
-              Unlock Your Full Potential
+              Level 0 Was Just the Beginning
             </h2>
             <p className="text-xl text-orange-200 mb-6 max-w-2xl mx-auto">
-              Upgrade to <span className="font-bold text-orange-300">Claude Quest Pro</span> and get instant access to all 10 levels, advanced projects, and become a true Claude master.
+              Unlock all 10 levels and go from &apos;I&apos;ve used Claude&apos; to &apos;Claude is how I work.&apos; Every level builds a real skill.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-6 mb-8">
               <div className="flex items-center gap-2 text-green-300">
@@ -474,11 +474,11 @@ export default function JourneyPage() {
               className="px-12 py-5 rounded-2xl bg-gradient-to-r from-orange-600 to-amber-600 text-white font-bold text-xl shadow-2xl shadow-orange-500/50 hover:shadow-orange-500/70 transition-all flex items-center justify-center gap-3 mx-auto"
             >
               <Crown className="w-6 h-6" />
-              Upgrade to Pro - $9.99/month
+              Unlock All Levels &mdash; $9.99/mo
               <ArrowRight className="w-6 h-6" />
             </motion.button>
             <p className="text-orange-400 text-sm mt-4">
-              Cancel anytime. 30-day money-back guarantee.
+              Cancel anytime. You&apos;ll know if it&apos;s worth it by Level 2.
             </p>
           </div>
         </motion.div>
