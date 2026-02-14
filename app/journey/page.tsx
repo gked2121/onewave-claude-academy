@@ -1,123 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useProgress } from "@/context/ProgressContext";
 import { useRouter } from "next/navigation";
 import { Lock, CheckCircle2, Crown, Sparkles, Star, Target, Zap, ArrowRight, X } from "lucide-react";
-
-const levels = [
-  {
-    id: 0,
-    title: "The Foundation",
-    description: "What Claude actually is, how to talk to it, and why your first prompt matters more than you think.",
-    emoji: "🎯",
-    xp: 100,
-    estimatedTime: "15 min",
-    isPaid: false,
-    skills: ["Basic Prompting", "Understanding Claude", "Claude Basics"],
-    color: "from-green-500 to-emerald-500"
-  },
-  {
-    id: 1,
-    title: "Prompt Engineering",
-    description: "Role prompts, chain-of-thought, few-shot \u2014 the techniques that separate amateurs from power users.",
-    emoji: "🎭",
-    xp: 150,
-    estimatedTime: "25 min",
-    isPaid: true,
-    skills: ["Role Prompting", "Few-Shot Learning", "Chain of Thought"],
-    color: "from-orange-500 to-amber-500"
-  },
-  {
-    id: 2,
-    title: "Projects & Context",
-    description: "Stop repeating yourself. Give Claude persistent memory and watch everything click.",
-    emoji: "📁",
-    xp: 150,
-    estimatedTime: "20 min",
-    isPaid: true,
-    skills: ["Projects", "Custom Knowledge", "Organization"],
-    color: "from-blue-500 to-cyan-500"
-  },
-  {
-    id: 3,
-    title: "Artifacts",
-    description: "Generate working apps, documents, and interactive tools \u2014 right inside the conversation.",
-    emoji: "🎨",
-    xp: 200,
-    estimatedTime: "30 min",
-    isPaid: true,
-    skills: ["Artifacts", "Interactive Apps", "Code Generation"],
-    color: "from-orange-500 to-red-500"
-  },
-  {
-    id: 4,
-    title: "Share & Collaborate",
-    description: "Publish what you build. Share artifacts with your team or the world.",
-    emoji: "📤",
-    xp: 150,
-    estimatedTime: "20 min",
-    isPaid: true,
-    skills: ["Sharing", "Publishing", "Collaboration"],
-    color: "from-teal-500 to-cyan-500"
-  },
-  {
-    id: 5,
-    title: "Claude Desktop",
-    description: "Claude on your machine. Read local files, access your tools, work offline.",
-    emoji: "💻",
-    xp: 250,
-    estimatedTime: "40 min",
-    isPaid: true,
-    skills: ["Desktop App", "File Access", "Local Tools"],
-    color: "from-amber-500 to-orange-500"
-  },
-  {
-    id: 6,
-    title: "MCP",
-    description: "The protocol that turns Claude into a platform. Connect databases, APIs, anything.",
-    emoji: "🔌",
-    xp: 300,
-    estimatedTime: "45 min",
-    isPaid: true,
-    skills: ["MCP Servers", "Local Integration", "Tool Connections"],
-    color: "from-teal-500 to-green-500"
-  },
-  {
-    id: 7,
-    title: "Integrations",
-    description: "Wire Claude into your actual stack \u2014 Gmail, Drive, Notion, Slack, and more.",
-    emoji: "🔗",
-    xp: 200,
-    estimatedTime: "30 min",
-    isPaid: true,
-    skills: ["Gmail", "Google Drive", "Notion", "Zapier"],
-    color: "from-amber-500 to-orange-500"
-  },
-  {
-    id: 8,
-    title: "Build with the API",
-    description: "From API keys to production apps. Build software that has Claude inside it.",
-    emoji: "🏗️",
-    xp: 300,
-    estimatedTime: "45 min",
-    isPaid: true,
-    skills: ["Claude API", "Production Apps", "Best Practices"],
-    color: "from-indigo-500 to-blue-500"
-  },
-  {
-    id: 9,
-    title: "Claude Master",
-    description: "The capstone. Design a complete solution that puts everything together.",
-    emoji: "👑",
-    xp: 400,
-    estimatedTime: "60 min",
-    isPaid: true,
-    skills: ["Full Stack Claude", "Advanced Workflows", "Expert Techniques"],
-    color: "from-yellow-500 to-amber-500"
-  },
-];
+import levels from "@/lib/levels";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function LevelCard({ level, isUnlocked, isCompleted, onClick }: { level: any; isUnlocked: boolean; isCompleted: boolean; onClick: () => void }) {
@@ -211,7 +99,7 @@ function LevelCard({ level, isUnlocked, isCompleted, onClick }: { level: any; is
             <Sparkles className="w-3 h-3" />
             <span>{level.xp} XP</span>
           </div>
-          <div>⏱️ {level.estimatedTime}</div>
+          <div>{level.estimatedTime}</div>
         </div>
 
         {/* Details Button */}
@@ -411,19 +299,38 @@ export default function JourneyPage() {
           const isCompleted = isLevelCompleted(level.id);
 
           return (
-            <motion.div
-              key={level.id}
-              initial={{ opacity: 0, y: 50, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ delay: index * 0.1, type: "spring" }}
-            >
-              <LevelCard
-                level={level}
-                isUnlocked={isUnlocked}
-                isCompleted={isCompleted}
-                onClick={() => handleLevelClick(level)}
-              />
-            </motion.div>
+            <React.Fragment key={level.id}>
+              {/* Advanced Track Separator */}
+              {level.id === 10 && (
+                <div className="md:col-span-2 lg:col-span-3">
+                  <div className="flex items-center gap-4 py-6">
+                    <div className="flex-1 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
+                    <div className="text-center">
+                      <div className="text-3xl mb-1">🚀</div>
+                      <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                        Advanced Track
+                      </h2>
+                      <p className="text-sm text-cyan-300/70 mt-1">
+                        Deep-dive into Claude Code, automation, and system architecture.
+                      </p>
+                    </div>
+                    <div className="flex-1 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
+                  </div>
+                </div>
+              )}
+              <motion.div
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ delay: index * 0.1, type: "spring" }}
+              >
+                <LevelCard
+                  level={level}
+                  isUnlocked={isUnlocked}
+                  isCompleted={isCompleted}
+                  onClick={() => handleLevelClick(level)}
+                />
+              </motion.div>
+            </React.Fragment>
           );
         })}
       </div>
@@ -448,12 +355,12 @@ export default function JourneyPage() {
               Level 0 Was Just the Beginning
             </h2>
             <p className="text-xl text-orange-200 mb-6 max-w-2xl mx-auto">
-              Unlock all 10 levels and go from &apos;I&apos;ve used Claude&apos; to &apos;Claude is how I work.&apos; Every level builds a real skill.
+              Unlock all 15 levels and go from &apos;I&apos;ve used Claude&apos; to &apos;Claude is how I work.&apos; Every level builds a real skill.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-6 mb-8">
               <div className="flex items-center gap-2 text-green-300">
                 <CheckCircle2 className="w-5 h-5" />
-                <span>All 10 Levels</span>
+                <span>All 15 Levels</span>
               </div>
               <div className="flex items-center gap-2 text-green-300">
                 <CheckCircle2 className="w-5 h-5" />

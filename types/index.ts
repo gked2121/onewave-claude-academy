@@ -77,6 +77,9 @@ export interface ProgressState {
   achievements: string[];
   license?: string;
   userEmail?: string;
+  userName?: string;
+  userRole?: 'marketer' | 'developer' | 'designer' | 'manager' | 'founder' | 'student' | 'other';
+  userTitle?: string;
   preferences: UserPreferences;
   customGpts: CustomGPT[]; // User's created GPTs
 

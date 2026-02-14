@@ -74,6 +74,15 @@ export default function Header() {
               </span>
             </div>
 
+            {/* User Name */}
+            {progress.userName && (
+              <div className="flex items-center gap-2 bg-orange-500/20 border border-orange-400/50 rounded-full px-3 py-1.5">
+                <span className="text-sm font-bold text-orange-300">
+                  {progress.userName}
+                </span>
+              </div>
+            )}
+
             {/* Achievements */}
             <Link
               href="/achievements"
@@ -129,6 +138,12 @@ export default function Header() {
             </Link>
             {/* User Stats - Mobile Only */}
             <div className="mt-4 pt-4 border-t border-orange-500/20 space-y-3">
+              {progress.userName && (
+                <div className="flex justify-between items-center px-4">
+                  <span className="text-orange-300 text-sm">Name</span>
+                  <span className="text-orange-100 font-bold">{progress.userName}</span>
+                </div>
+              )}
               <div className="flex justify-between items-center px-4">
                 <span className="text-orange-300 text-sm">Level</span>
                 <span className="text-orange-100 font-bold">{level}</span>

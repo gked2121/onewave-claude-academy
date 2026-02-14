@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Claude Quest - Master Claude AI in 10 Fun Levels",
+    default: "Claude Quest - Master Claude AI in 15 Fun Levels",
     template: "%s | Claude Quest",
   },
   description: "Master Claude AI, Artifacts, Projects, and MCP through gamified learning. Unlock skills, earn achievements, and get real results — one level at a time. Start free today!",

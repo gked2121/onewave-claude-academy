@@ -237,7 +237,7 @@ export default function Home() {
           transition={{ delay: 0.3 }}
           className="text-2xl text-orange-200 mb-4 font-light"
         >
-          10 hands-on levels. Real skills. Go from &quot;I&apos;ve tried Claude&quot; to &quot;Claude is my unfair advantage.&quot;
+          15 hands-on levels. Real skills. Go from &quot;I&apos;ve tried Claude&quot; to &quot;Claude is my unfair advantage.&quot;
         </motion.p>
 
         <motion.p
@@ -307,7 +307,7 @@ export default function Home() {
             <div className="text-5xl mb-4">3️⃣</div>
             <h3 className="text-xl font-bold mb-2 text-orange-200">Stack Your Skills</h3>
             <p className="text-orange-300 text-sm">
-              Each level unlocks the next. By Level 9, you&apos;re building things most people don&apos;t know are possible.
+              Each level unlocks the next. By Level 14, you&apos;re building things most people don&apos;t know are possible.
             </p>
           </motion.div>
         </div>

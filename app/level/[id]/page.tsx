@@ -15,6 +15,7 @@ import {
   Lock,
 } from "lucide-react";
 import confetti from "canvas-confetti";
+import ReactMarkdown from "react-markdown";
 import ClaudeSimulator from "@/components/ClaudeSimulator";
 import TaskValidator from "@/components/TaskValidator";
 import { useProgress } from "@/context/ProgressContext";
@@ -119,7 +120,7 @@ export default function LevelPage() {
           </h1>
           <p className="text-orange-300 mb-8">
             Upgrade to <span className="text-orange-400 font-semibold">Pro</span>{" "}
-            to unlock all 10 levels and master Claude AI.
+            to unlock all levels and master Claude AI.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
@@ -298,10 +299,53 @@ export default function LevelPage() {
             <h2 className="text-3xl font-bold text-orange-200 mb-6">
               {currentTaskData.title}
             </h2>
-            <div className="prose prose-invert max-w-none">
-              <div className="text-orange-100 whitespace-pre-line leading-relaxed text-lg">
-                {currentTaskData.content}
-              </div>
+            <div className="prose prose-invert max-w-none text-lg leading-relaxed">
+              <ReactMarkdown
+                components={{
+                  p: ({ children }) => (
+                    <p className="text-orange-100 mb-4 leading-relaxed">{children}</p>
+                  ),
+                  strong: ({ children }) => (
+                    <strong className="text-orange-200 font-bold">{children}</strong>
+                  ),
+                  ul: ({ children }) => (
+                    <ul className="space-y-2 mb-5 ml-1">{children}</ul>
+                  ),
+                  li: ({ children }) => (
+                    <li className="text-orange-100 flex gap-3">
+                      <span className="text-orange-400 mt-1.5 flex-shrink-0 text-sm">&#9679;</span>
+                      <span>{children}</span>
+                    </li>
+                  ),
+                  code: ({ children, className }) => {
+                    const isBlock = className?.includes("language-");
+                    if (isBlock) {
+                      return (
+                        <pre className="bg-black/50 border border-orange-500/30 rounded-xl p-4 overflow-x-auto mb-4">
+                          <code className="text-orange-300 text-sm font-mono">{children}</code>
+                        </pre>
+                      );
+                    }
+                    return (
+                      <code className="bg-orange-500/15 text-orange-300 px-1.5 py-0.5 rounded-md text-[0.9em] font-mono">
+                        {children}
+                      </code>
+                    );
+                  },
+                  pre: ({ children }) => <>{children}</>,
+                  h2: ({ children }) => (
+                    <h2 className="text-2xl font-bold text-orange-200 mt-8 mb-4">{children}</h2>
+                  ),
+                  h3: ({ children }) => (
+                    <h3 className="text-xl font-bold text-orange-200 mt-6 mb-3">{children}</h3>
+                  ),
+                  hr: () => (
+                    <hr className="border-orange-500/20 my-6" />
+                  ),
+                }}
+              >
+                {currentTaskData.content || ""}
+              </ReactMarkdown>
             </div>
           </div>
         )}

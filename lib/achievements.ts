@@ -53,16 +53,16 @@ export const achievements: Achievement[] = [
   {
     id: 'master_wizard',
     title: 'Master Wizard',
-    description: 'All 10 levels. Complete. You\'re the real deal.',
+    description: 'All 10 core levels. Complete. You\'re the real deal.',
     emoji: '🧙‍♂️',
     xp: 500,
     rarity: 'legendary',
-    condition: (p) => p.completedLevels.length === 10
+    condition: (p) => p.completedLevels.length >= 10 && [0,1,2,3,4,5,6,7,8,9].every((l: number) => p.completedLevels.includes(l))
   },
   {
     id: 'halfway_there',
     title: 'Halfway There',
-    description: 'Five down, five to go. No stopping now.',
+    description: 'Five down, ten to go. No stopping now.',
     emoji: '🏃',
     xp: 150,
     rarity: 'rare',
@@ -197,6 +197,26 @@ export const achievements: Achievement[] = [
     xp: 200,
     rarity: 'epic',
     condition: (p) => p.helpedUsers >= 3
+  },
+
+  // Advanced Track Achievements
+  {
+    id: 'advanced_student',
+    title: 'Advanced Student',
+    description: 'Entered the Advanced Track. Welcome to the deep end.',
+    emoji: '🎓',
+    xp: 200,
+    rarity: 'epic',
+    condition: (p) => p.completedLevels.includes(10)
+  },
+  {
+    id: 'grand_architect',
+    title: 'Grand Architect',
+    description: 'All 15 levels. Core and Advanced. Nothing left to prove.',
+    emoji: '🏛️',
+    xp: 750,
+    rarity: 'legendary',
+    condition: (p) => p.completedLevels.length >= 15
   },
 ];
 

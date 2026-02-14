@@ -4,6 +4,7 @@ import { createContext, useContext, useMemo, useState, useCallback, useEffect, u
 import { ProgressState, Plan, LevelCompletedEvent, AchievementUnlockedEvent, CustomGPT } from '@/types';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { achievements } from '@/lib/achievements';
+import levels from '@/lib/levels';
 
 type ProgressContextType = ProgressState & {
   // Character actions
@@ -28,6 +29,9 @@ type ProgressContextType = ProgressState & {
   setPlan: (plan: Plan) => void;
   setLicense: (token: string | undefined) => void;
   setUserEmail: (email: string | undefined) => void;
+  setUserName: (name: string | undefined) => void;
+  setUserRole: (role: ProgressState['userRole']) => void;
+  setUserTitle: (title: string | undefined) => void;
   updatePreferences: (preferences: Partial<ProgressState['preferences']>) => void;
 
   // Custom GPT management
@@ -64,6 +68,9 @@ const defaultState: ProgressState = {
     notifications: true,
   },
   customGpts: [],
+  userName: undefined,
+  userRole: undefined,
+  userTitle: undefined,
 
   // Achievement tracking
   streak: 0,
@@ -191,7 +198,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
       let unlockedLevels = s.unlockedLevels;
       const isAdminUser = s.userEmail === 'gabe@onewave-ai.com' || s.userEmail === 'gked21@gmail.com';
       const isPaidGate = next >= 1 && s.plan === 'free' && !isAdminUser;
-      if (!isPaidGate && !unlockedLevels.includes(next) && next <= 9) {
+      if (!isPaidGate && !unlockedLevels.includes(next) && next <= levels[levels.length - 1].id) {
         unlockedLevels = [...unlockedLevels, next];
       }
 
@@ -427,7 +434,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
       const newState = { ...s, plan };
       // If upgrading to pro, unlock all levels
       if (plan === 'pro') {
-        newState.unlockedLevels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+        newState.unlockedLevels = levels.map(l => l.id);
       }
       return newState;
     });
@@ -439,6 +446,18 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
 
   const setUserEmail = useCallback((email: string | undefined) => {
     setState(s => ({ ...s, userEmail: email }));
+  }, [setState]);
+
+  const setUserName = useCallback((name: string | undefined) => {
+    setState(s => ({ ...s, userName: name }));
+  }, [setState]);
+
+  const setUserRole = useCallback((role: ProgressState['userRole']) => {
+    setState(s => ({ ...s, userRole: role }));
+  }, [setState]);
+
+  const setUserTitle = useCallback((title: string | undefined) => {
+    setState(s => ({ ...s, userTitle: title }));
   }, [setState]);
 
   const updatePreferences = useCallback((preferences: Partial<ProgressState['preferences']>) => {
@@ -516,7 +535,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
   }, [state.unlockedLevels, state.completedLevels]);
 
   const getTotalProgress = useCallback(() => {
-    const totalLevels = 10; // 0-9
+    const totalLevels = levels.length;
     return Math.round((state.completedLevels.length / totalLevels) * 100);
   }, [state.completedLevels]);
 
@@ -538,6 +557,9 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
       setPlan,
       setLicense,
       setUserEmail,
+      setUserName,
+      setUserRole,
+      setUserTitle,
       updatePreferences,
       addCustomGPT,
       updateCustomGPT,
@@ -568,6 +590,9 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
       setPlan,
       setLicense,
       setUserEmail,
+      setUserName,
+      setUserRole,
+      setUserTitle,
       updatePreferences,
       addCustomGPT,
       updateCustomGPT,

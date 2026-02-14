@@ -1,15 +1,30 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Sparkles, Target, Trophy, Rocket } from "lucide-react";
+import { X, Sparkles, Target, Trophy, Rocket, User } from "lucide-react";
 import { useState } from "react";
+import { useProgress } from "@/context/ProgressContext";
 
 interface WelcomeModalProps {
   onClose: () => void;
 }
 
+const roles = [
+  { value: 'marketer' as const, label: 'Marketer' },
+  { value: 'developer' as const, label: 'Developer' },
+  { value: 'designer' as const, label: 'Designer' },
+  { value: 'manager' as const, label: 'Manager' },
+  { value: 'founder' as const, label: 'Founder' },
+  { value: 'student' as const, label: 'Student' },
+  { value: 'other' as const, label: 'Other' },
+];
+
 export default function WelcomeModal({ onClose }: WelcomeModalProps) {
   const [step, setStep] = useState(0);
+  const [name, setName] = useState("");
+  const [role, setRole] = useState<typeof roles[number]['value'] | null>(null);
+  const [title, setTitle] = useState("");
+  const { setUserName, setUserRole, setUserTitle } = useProgress();
 
   const steps = [
     {
@@ -19,6 +34,13 @@ export default function WelcomeModal({ onClose }: WelcomeModalProps) {
       emoji: "👋",
     },
     {
+      icon: <User className="w-16 h-16 text-cyan-400" />,
+      title: "Tell Us About You",
+      description: "We\u2019ll personalize your experience.",
+      emoji: "🙋",
+      isProfileStep: true,
+    },
+    {
       icon: <Target className="w-16 h-16 text-amber-400" />,
       title: "Pick Your Path",
       description: "Prompting, productivity, or development. All roads lead to mastery.",
@@ -26,7 +48,7 @@ export default function WelcomeModal({ onClose }: WelcomeModalProps) {
     },
     {
       icon: <Trophy className="w-16 h-16 text-yellow-400" />,
-      title: "10 Levels. Real Skills.",
+      title: "15 Levels. Real Skills.",
       description: "Each level unlocks a real capability. By the end, Claude feels like a different tool.",
       emoji: "🏆",
     },
@@ -39,8 +61,15 @@ export default function WelcomeModal({ onClose }: WelcomeModalProps) {
   ];
 
   const currentStep = steps[step];
+  const isProfileStep = currentStep.isProfileStep;
+  const canProceed = !isProfileStep || name.trim().length > 0;
 
   const handleNext = () => {
+    if (isProfileStep && name.trim()) {
+      setUserName(name.trim());
+      if (role) setUserRole(role);
+      if (title.trim()) setUserTitle(title.trim());
+    }
     if (step < steps.length - 1) {
       setStep(step + 1);
     } else {
@@ -153,6 +182,68 @@ export default function WelcomeModal({ onClose }: WelcomeModalProps) {
               </p>
             </motion.div>
 
+            {/* Profile form (step 1 only) */}
+            {isProfileStep && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="space-y-5 mb-8 max-w-md mx-auto"
+              >
+                {/* Name input */}
+                <div>
+                  <label className="block text-sm font-semibold text-orange-200 mb-2">
+                    Your Name *
+                  </label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="What should we call you?"
+                    className="w-full px-4 py-3 rounded-xl bg-black/40 border-2 border-orange-500/40 text-white placeholder-orange-400/50 focus:border-orange-400 focus:outline-none transition-colors"
+                    autoFocus
+                  />
+                </div>
+
+                {/* Role selector */}
+                <div>
+                  <label className="block text-sm font-semibold text-orange-200 mb-2">
+                    Your Role
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {roles.map((r) => (
+                      <button
+                        key={r.value}
+                        type="button"
+                        onClick={() => setRole(role === r.value ? null : r.value)}
+                        className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
+                          role === r.value
+                            ? "bg-orange-500 text-white shadow-lg shadow-orange-500/30"
+                            : "bg-white/10 text-orange-200 hover:bg-white/20"
+                        }`}
+                      >
+                        {r.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Title input */}
+                <div>
+                  <label className="block text-sm font-semibold text-orange-200 mb-2">
+                    Title <span className="text-orange-400/60 font-normal">(optional)</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="e.g. Product Manager at Acme"
+                    className="w-full px-4 py-3 rounded-xl bg-black/40 border-2 border-orange-500/40 text-white placeholder-orange-400/50 focus:border-orange-400 focus:outline-none transition-colors"
+                  />
+                </div>
+              </motion.div>
+            )}
+
             {/* Navigation buttons */}
             <div className="flex gap-4 justify-center">
               {step > 0 && (
@@ -166,10 +257,13 @@ export default function WelcomeModal({ onClose }: WelcomeModalProps) {
                 </motion.button>
               )}
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: canProceed ? 1.05 : 1 }}
+                whileTap={{ scale: canProceed ? 0.95 : 1 }}
                 onClick={handleNext}
-                className="px-8 py-3 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 text-white font-bold shadow-xl hover:shadow-orange-500/50 transition-all flex items-center gap-2"
+                disabled={!canProceed}
+                className={`px-8 py-3 rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 text-white font-bold shadow-xl transition-all flex items-center gap-2 ${
+                  !canProceed ? "opacity-50 cursor-not-allowed" : "hover:shadow-orange-500/50"
+                }`}
               >
                 {step < steps.length - 1 ? (
                   <>

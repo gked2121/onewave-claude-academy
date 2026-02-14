@@ -1,6 +1,6 @@
 // ============================================================================
 // Claude Quest - Complete Level Data
-// All 10 levels (0-9) for the Claude AI learning platform
+// All 15 levels (0-14) for the Claude AI learning platform
 // ============================================================================
 
 export interface ValidationRuleData {
@@ -2456,7 +2456,1017 @@ In the following tasks, you will combine these skills to design a **complete Cla
 
 • **Explore the API** — If you have not already, sign up for API access at console.anthropic.com and start building.
 
-**You are now a Claude Master. Go build something amazing.**`,
+**You are now a Claude Master. Go build something amazing.**
+
+**Ready for more?** You've completed the core 10 levels. Continue to the **Advanced Track** (Levels 10-14) to master Claude Code, automation, and system architecture.`,
+      },
+    ],
+  },
+  // ==========================================================================
+  // LEVEL 10: Claude Code (PRO — Advanced Track)
+  // ==========================================================================
+  {
+    id: 10,
+    title: 'Claude Code',
+    description:
+      'The CLI that turns Claude into an agentic coding partner. Write a CLAUDE.md, use plan mode, and design real workflows.',
+    emoji: '💻',
+    xp: 350,
+    estimatedTime: '50 min',
+    isPaid: true,
+    skills: [
+      'CLI Workflows',
+      'CLAUDE.md',
+      'Agentic Coding',
+      'Plan Mode',
+    ],
+    color: 'from-cyan-500 to-blue-500',
+    tasks: [
+      {
+        id: 1,
+        type: 'learn',
+        title: 'What is Claude Code?',
+        content: `Claude Code is Anthropic's **command-line tool** that brings Claude directly into your terminal. It's not a chatbot in a browser — it's an agentic coding partner that can read your files, run commands, and make changes to your codebase.
+
+**Why it matters:**
+
+- **Agentic coding** — Claude Code doesn't just answer questions. It can explore your repo, plan changes, write code, and run tests — all in one flow.
+- **Context-aware** — It automatically understands your project structure, dependencies, and conventions.
+- **Terminal-native** — Works where developers already work. No context-switching to a browser.
+
+**Key concepts:**
+
+- **Plan mode** — Ask Claude to plan before acting. It will outline what it intends to do and wait for your approval before making changes.
+- **CLAUDE.md** — A project-level configuration file that tells Claude about your codebase, conventions, and rules.
+- **Hooks** — Shell commands that run in response to Claude Code events (e.g., before a file edit, after a command).
+- **MCP servers** — Claude Code can connect to MCP servers for additional tool access.
+
+**Getting started:**
+
+Install with \`npm install -g @anthropic-ai/claude-code\`, then run \`claude\` in any project directory. Claude will read your codebase and start helping immediately.`,
+      },
+      {
+        id: 2,
+        type: 'learn',
+        title: 'CLAUDE.md and Project Configuration',
+        content: `The **CLAUDE.md** file is how you give Claude Code persistent context about your project. Think of it as project instructions that live in your repo.
+
+**What goes in CLAUDE.md:**
+
+- **Project overview** — What the project does, its architecture, and key technologies.
+- **Coding conventions** — Naming patterns, file organization, preferred libraries.
+- **Rules and guidelines** — Things Claude should always or never do (e.g., "always use TypeScript strict mode," "never modify the database schema directly").
+- **Build and test commands** — How to run the project, run tests, and deploy.
+- **Important context** — API patterns, environment setup, team conventions.
+
+**Where it lives:**
+
+- \`CLAUDE.md\` in the project root — applies to the whole project.
+- \`.claude/CLAUDE.md\` — user-specific overrides (not checked in).
+- Nested \`CLAUDE.md\` in subdirectories — applies to files in that directory.
+
+**Best practices:**
+
+- Keep it concise but complete. Claude reads this every session.
+- Update it as the project evolves. Stale instructions lead to stale output.
+- Include actual commands, not just descriptions: \`npm run test\` is better than "run the tests."
+- Use it to prevent common mistakes: "Never import from the legacy/ directory."`,
+      },
+      {
+        id: 3,
+        type: 'task',
+        title: 'Write a CLAUDE.md File',
+        description:
+          'Write a CLAUDE.md file for a real or hypothetical project. Include project description, coding conventions, rules or guidelines, and key commands.',
+        taskConfig: {
+          placeholder:
+            'Write your CLAUDE.md content here...',
+          validationRules: [
+            {
+              type: 'minLength',
+              params: { min: 80 },
+              message:
+                'Your CLAUDE.md should be at least 80 characters. Include project context and rules.',
+              hint: 'A good CLAUDE.md includes a project overview, coding conventions, and rules for Claude to follow.',
+            },
+            {
+              type: 'containsAny',
+              params: {
+                words: [
+                  'instructions',
+                  'rules',
+                  'guidelines',
+                  'conventions',
+                  'standards',
+                ],
+              },
+              message:
+                'Include instructions, rules, or guidelines for Claude to follow.',
+              hint: 'Tell Claude what to do and what not to do: "Follow these guidelines..." or "Rules: always use..."',
+            },
+            {
+              type: 'containsAny',
+              params: {
+                words: [
+                  'project',
+                  'codebase',
+                  'repository',
+                  'app',
+                  'application',
+                ],
+              },
+              message:
+                'Reference the project or codebase context.',
+              hint: 'Describe what the project is: "This project is a..." or "The codebase contains..."',
+            },
+          ],
+          successMessage:
+            'Great CLAUDE.md! This gives Claude Code the context it needs to work effectively in your project.',
+        },
+      },
+      {
+        id: 4,
+        type: 'task',
+        title: 'Design an Agentic Workflow',
+        description:
+          'Describe an agentic workflow using Claude Code. Explain what you want Claude to do, what plan mode steps it should take, and what commands or hooks are involved.',
+        taskConfig: {
+          placeholder:
+            'Describe your agentic coding workflow...',
+          validationRules: [
+            {
+              type: 'minLength',
+              params: { min: 100 },
+              message:
+                'Your workflow should be at least 100 characters. Describe the full agentic flow.',
+              hint: 'Explain the goal, the steps Claude should plan, and what code or refactoring is involved.',
+            },
+            {
+              type: 'containsAny',
+              params: {
+                words: [
+                  'plan',
+                  'command',
+                  'hook',
+                  'step',
+                  'mode',
+                ],
+              },
+              message:
+                'Reference plan mode, commands, hooks, or steps in your workflow.',
+              hint: 'Mention how Claude Code will plan and execute: "Using plan mode, Claude will first..." or "A pre-commit hook runs..."',
+            },
+            {
+              type: 'containsAny',
+              params: {
+                words: [
+                  'code',
+                  'refactor',
+                  'build',
+                  'test',
+                  'implement',
+                ],
+              },
+              message:
+                'Describe the coding task Claude will perform.',
+              hint: 'What is Claude actually building or changing? "Refactor the authentication module," "Build a new API endpoint," etc.',
+            },
+          ],
+          successMessage:
+            'Excellent workflow design! You understand how to leverage Claude Code\'s agentic capabilities for real development tasks.',
+        },
+      },
+      {
+        id: 5,
+        type: 'simulator',
+        title: 'Practice: Claude Code',
+        description:
+          'Practice using Claude Code concepts. Ask about CLI setup, plan mode, hooks, and project configuration.',
+        simulatorConfig: {
+          suggestedPrompts: [
+            'How do I set up Claude Code in an existing project?',
+            'Explain how plan mode works and when to use it',
+            'What should I put in my CLAUDE.md for a Next.js project?',
+          ],
+        },
+      },
+    ],
+  },
+
+  // ==========================================================================
+  // LEVEL 11: Skills & Plugins (PRO — Advanced Track)
+  // ==========================================================================
+  {
+    id: 11,
+    title: 'Skills & Plugins',
+    description:
+      'Extend Claude with custom skills, slash commands, and MCP tool chains. Build your own plugins.',
+    emoji: '🧩',
+    xp: 300,
+    estimatedTime: '40 min',
+    isPaid: true,
+    skills: [
+      'Custom Skills',
+      'MCP Composition',
+      'Community Tools',
+      'Slash Commands',
+    ],
+    color: 'from-fuchsia-500 to-pink-500',
+    tasks: [
+      {
+        id: 1,
+        type: 'learn',
+        title: 'Custom Skills & Slash Commands',
+        content: `**Skills** are reusable prompts and workflows that extend what Claude can do. Think of them as specialized "modes" you can activate with a slash command.
+
+**How skills work:**
+
+- A skill is defined as a prompt template with optional parameters.
+- Users invoke skills with \`/skill-name\` — like \`/commit\`, \`/review-pr\`, or \`/screenshot-to-code\`.
+- When invoked, the skill's prompt is expanded and Claude follows those specialized instructions.
+
+**Built-in skills vs. custom skills:**
+
+- **Built-in** — Claude Code ships with skills like \`/commit\` (write a git commit) and other common workflows.
+- **Custom** — You can create your own skills by defining prompt templates in your project's \`.claude/\` directory.
+
+**Why custom skills matter:**
+
+- **Consistency** — A \`/code-review\` skill ensures every review follows the same checklist.
+- **Speed** — One command triggers a complex, multi-step workflow.
+- **Team alignment** — Share skills across your team so everyone uses the same patterns.
+
+**Creating a custom skill:**
+
+Define a markdown file in \`.claude/commands/\` with the skill name and prompt content. When anyone on the team types that slash command, Claude follows those instructions.`,
+      },
+      {
+        id: 2,
+        type: 'learn',
+        title: 'MCP Tool Composition',
+        content: `The **Model Context Protocol (MCP)** lets you connect Claude to external tools and data sources. But the real power is in **composing** multiple MCP servers together.
+
+**Tool composition patterns:**
+
+- **Data + Action** — Connect a database MCP server (read data) with a notification MCP server (send alerts). Claude can query your database and then notify your team about the results.
+- **Read + Write** — Connect a file system MCP server with a GitHub MCP server. Claude can read local files, make changes, and create pull requests.
+- **Chain of tools** — Claude can use one tool's output as input to another. Query an API, process the data, write it to a file, and commit the result.
+
+**The MCP ecosystem:**
+
+- **Official servers** — Anthropic and partners maintain servers for common tools (GitHub, Slack, databases, file systems).
+- **Community servers** — The open-source community builds and shares MCP servers for everything from Jira to Figma.
+- **Custom servers** — Build your own MCP server to expose any API or tool to Claude.
+
+**Best practices:**
+
+- Start with one or two servers and add more as needed.
+- Use \`claude mcp add\` to configure servers in your project.
+- Test each server independently before composing them.
+- Document your MCP setup in CLAUDE.md so teammates can replicate it.`,
+      },
+      {
+        id: 3,
+        type: 'task',
+        title: 'Design a Custom Skill',
+        description:
+          'Design a custom skill (slash command) for Claude Code. Describe what it does, when it triggers, and what actions it performs.',
+        taskConfig: {
+          placeholder:
+            'Describe your custom skill design...',
+          validationRules: [
+            {
+              type: 'minLength',
+              params: { min: 80 },
+              message:
+                'Your skill design should be at least 80 characters.',
+              hint: 'Describe the skill name, what it does, and what steps it performs.',
+            },
+            {
+              type: 'containsAny',
+              params: {
+                words: [
+                  'skill',
+                  'command',
+                  'slash',
+                  'plugin',
+                ],
+              },
+              message:
+                'Reference the skill, command, or plugin you are designing.',
+              hint: 'Name your skill: "/my-skill" or "A custom skill that..."',
+            },
+            {
+              type: 'containsAny',
+              params: {
+                words: [
+                  'trigger',
+                  'action',
+                  'tool',
+                  'execute',
+                  'run',
+                  'perform',
+                ],
+              },
+              message:
+                'Describe what triggers the skill and what actions it performs.',
+              hint: 'What happens when the skill runs? "When triggered, it will..." or "The action performs..."',
+            },
+          ],
+          successMessage:
+            'Great skill design! You understand how to extend Claude with custom commands.',
+        },
+      },
+      {
+        id: 4,
+        type: 'task',
+        title: 'Plan a Tool Chain',
+        description:
+          'Design a tool chain that composes multiple MCP servers or tools together. Describe the data flow and how tools connect.',
+        taskConfig: {
+          placeholder:
+            'Describe your MCP tool chain...',
+          validationRules: [
+            {
+              type: 'minLength',
+              params: { min: 100 },
+              message:
+                'Your tool chain should be at least 100 characters. Describe the full data flow.',
+              hint: 'Explain which tools connect, what data flows between them, and what the end result is.',
+            },
+            {
+              type: 'containsAny',
+              params: {
+                words: [
+                  'mcp',
+                  'tool',
+                  'server',
+                  'protocol',
+                ],
+              },
+              message:
+                'Reference MCP, tools, or servers in your chain.',
+              hint: 'Name the MCP servers or tools: "The GitHub MCP server connects to..." or "Tool A pipes data to Tool B."',
+            },
+            {
+              type: 'containsAny',
+              params: {
+                words: [
+                  'chain',
+                  'compose',
+                  'pipeline',
+                  'connect',
+                  'flow',
+                  'integrate',
+                ],
+              },
+              message:
+                'Describe how tools chain, compose, or connect together.',
+              hint: 'Show the flow: "First, the database tool queries... then the results flow to... finally, the output is..."',
+            },
+          ],
+          successMessage:
+            'Excellent tool chain design! You understand how to compose MCP servers for powerful workflows.',
+        },
+      },
+      {
+        id: 5,
+        type: 'simulator',
+        title: 'Practice: Skills & Plugins',
+        description:
+          'Practice designing skills and tool chains. Ask about custom commands, MCP composition, and the plugin ecosystem.',
+        simulatorConfig: {
+          suggestedPrompts: [
+            'How do I create a custom slash command for code reviews?',
+            'What MCP servers should I combine for a full-stack workflow?',
+            'Help me design a skill that automates our release process',
+          ],
+        },
+      },
+    ],
+  },
+
+  // ==========================================================================
+  // LEVEL 12: Collaborative Workflows (PRO — Advanced Track)
+  // ==========================================================================
+  {
+    id: 12,
+    title: 'Collaborative Workflows',
+    description:
+      'Pair program with Claude, run code reviews, and design team workflows that scale.',
+    emoji: '🤝',
+    xp: 300,
+    estimatedTime: '40 min',
+    isPaid: true,
+    skills: [
+      'Pair Programming',
+      'Code Review',
+      'Team Patterns',
+      'Shared Context',
+    ],
+    color: 'from-emerald-500 to-teal-500',
+    tasks: [
+      {
+        id: 1,
+        type: 'learn',
+        title: 'Pair Programming with Claude',
+        content: `Pair programming with Claude is different from using a chatbot. It's a **conversation-driven development workflow** where Claude acts as your coding partner.
+
+**Effective pair programming patterns:**
+
+- **Think-first** — Start by describing the problem, not the solution. Let Claude think through the approach with you before writing code.
+- **Plan mode** — Use plan mode for non-trivial changes. Claude outlines the plan, you approve or adjust, then it executes.
+- **Incremental steps** — Don't ask for an entire feature at once. Build incrementally: "First, let's set up the data model. Then we'll add the API route."
+- **Review as you go** — After each change, review what Claude did. Catch issues early instead of debugging a large changeset.
+
+**When to use plan mode vs. direct execution:**
+
+- **Plan mode** — New features, refactoring, architectural changes, anything touching multiple files.
+- **Direct** — Quick fixes, one-line changes, simple questions, running tests.
+
+**Conversation patterns that work:**
+
+- "Let's start by understanding the current code. Read [file] and explain what it does."
+- "I want to add [feature]. What's your recommended approach?"
+- "Before making changes, show me the plan."
+- "That looks good, but change [X]. Then continue with the next step."
+
+**Anti-patterns to avoid:**
+
+- Dumping a huge spec and saying "build this" — break it into steps.
+- Accepting changes without reviewing — always check the diff.
+- Ignoring Claude's questions — if it asks for clarification, that's a sign the requirement is ambiguous.`,
+      },
+      {
+        id: 2,
+        type: 'learn',
+        title: 'Code Review & Team Patterns',
+        content: `Claude Code is a powerful code reviewer — but only if you use it effectively. It can also help your team establish shared patterns.
+
+**Code review with Claude:**
+
+- **Focused reviews** — Ask Claude to review for specific things: security vulnerabilities, performance issues, accessibility, or adherence to your style guide.
+- **PR reviews** — Use \`/review-pr\` or point Claude at a diff. It will analyze changes and provide feedback.
+- **Automated checks** — Set up hooks that run Claude-powered reviews before commits or merges.
+
+**Team patterns with CLAUDE.md:**
+
+- **Shared CLAUDE.md** — Check it into your repo. Everyone on the team gets the same Claude behavior.
+- **Convention enforcement** — "Always use named exports," "Never use any type in TypeScript," "Follow the existing naming pattern."
+- **Onboarding** — New team members get up to speed faster because Claude already knows the codebase conventions.
+
+**Collaboration workflows:**
+
+- **Branch-specific context** — Different branches can have different CLAUDE.md additions for feature-specific context.
+- **Review checklists** — Define a standard review checklist in a custom skill. Every review covers the same quality gates.
+- **Knowledge sharing** — Document architectural decisions in CLAUDE.md so Claude (and teammates) can reference them.`,
+      },
+      {
+        id: 3,
+        type: 'task',
+        title: 'Write a Code Review Prompt',
+        description:
+          'Write a prompt or custom skill definition for Claude to perform thorough code reviews. Include what to check for, quality standards, and feedback format.',
+        taskConfig: {
+          placeholder:
+            'Write your code review prompt or skill definition...',
+          validationRules: [
+            {
+              type: 'minLength',
+              params: { min: 80 },
+              message:
+                'Your code review prompt should be at least 80 characters.',
+              hint: 'Include what to review, quality standards, and how to format the feedback.',
+            },
+            {
+              type: 'containsAny',
+              params: {
+                words: [
+                  'review',
+                  'pr',
+                  'pull request',
+                  'diff',
+                  'code review',
+                ],
+              },
+              message:
+                'Reference code review, PR, or diff analysis.',
+              hint: 'Make it clear this is for code review: "Review this PR..." or "Analyze the code changes..."',
+            },
+            {
+              type: 'containsAny',
+              params: {
+                words: [
+                  'quality',
+                  'improve',
+                  'feedback',
+                  'suggest',
+                  'issue',
+                  'fix',
+                ],
+              },
+              message:
+                'Include quality criteria or feedback expectations.',
+              hint: 'What should Claude look for? "Check for quality issues," "Provide improvement suggestions," "Flag potential bugs."',
+            },
+          ],
+          successMessage:
+            'Solid code review prompt! This will help maintain consistent code quality across your team.',
+        },
+      },
+      {
+        id: 4,
+        type: 'task',
+        title: 'Design a Team Workflow',
+        description:
+          'Design a collaborative workflow for a team using Claude Code. Describe how team members share context, patterns, and coordinate their work.',
+        taskConfig: {
+          placeholder:
+            'Describe your team workflow...',
+          validationRules: [
+            {
+              type: 'minLength',
+              params: { min: 100 },
+              message:
+                'Your team workflow should be at least 100 characters.',
+              hint: 'Describe how the team shares context, coordinates work, and maintains consistency.',
+            },
+            {
+              type: 'containsAny',
+              params: {
+                words: [
+                  'team',
+                  'collaborate',
+                  'together',
+                  'shared',
+                  'group',
+                ],
+              },
+              message:
+                'Reference team collaboration or shared workflows.',
+              hint: 'Describe the team aspect: "Team members share..." or "Collaboratively, the team..."',
+            },
+            {
+              type: 'containsAny',
+              params: {
+                words: [
+                  'share',
+                  'context',
+                  'pattern',
+                  'convention',
+                  'standard',
+                  'consistent',
+                ],
+              },
+              message:
+                'Describe how context, patterns, or standards are shared across the team.',
+              hint: 'How does the team stay aligned? "Shared CLAUDE.md ensures consistent patterns," "Context is maintained through..."',
+            },
+          ],
+          successMessage:
+            'Great team workflow! You understand how to scale Claude Code across a development team.',
+        },
+      },
+      {
+        id: 5,
+        type: 'simulator',
+        title: 'Practice: Collaborative Workflows',
+        description:
+          'Practice pair programming, code review, and team workflow concepts.',
+        simulatorConfig: {
+          suggestedPrompts: [
+            'How should I structure my team\'s CLAUDE.md for a monorepo?',
+            'Write a code review checklist for React components',
+            'Help me design an onboarding workflow for new developers using Claude Code',
+          ],
+        },
+      },
+    ],
+  },
+
+  // ==========================================================================
+  // LEVEL 13: Advanced Automation (PRO — Advanced Track)
+  // ==========================================================================
+  {
+    id: 13,
+    title: 'Advanced Automation',
+    description:
+      'Build multi-step workflows, design agents, and integrate Claude into your CI/CD pipeline.',
+    emoji: '🤖',
+    xp: 400,
+    estimatedTime: '55 min',
+    isPaid: true,
+    skills: [
+      'Multi-Step Workflows',
+      'Agent Design',
+      'CI/CD Integration',
+      'Error Handling',
+    ],
+    color: 'from-red-500 to-orange-500',
+    tasks: [
+      {
+        id: 1,
+        type: 'learn',
+        title: 'Multi-Step Workflows',
+        content: `Real automation requires **chaining multiple Claude interactions** into coherent workflows. This is where Claude goes from "helpful assistant" to "autonomous worker."
+
+**What makes a multi-step workflow:**
+
+- **Sequential tasks** — Each step builds on the previous one's output. "Read the data → analyze trends → generate report → send summary."
+- **Conditional branching** — Different paths based on results. "If tests pass, deploy. If they fail, create a bug report."
+- **State management** — Maintaining context across steps. Claude Code's conversation context handles this naturally, but longer workflows may need explicit state.
+
+**Workflow design patterns:**
+
+- **Pipeline** — Linear chain of steps. Input → Process → Output. Best for data transformation and report generation.
+- **Fan-out/Fan-in** — One input triggers multiple parallel tasks, results are combined. Best for multi-file analysis or parallel processing.
+- **Loop** — Repeat a step until a condition is met. Best for iterative refinement or batch processing.
+
+**Tools for building workflows:**
+
+- **Claude Code CLI** — Chain commands with scripts that invoke Claude Code in headless mode.
+- **GitHub Actions** — Run Claude Code in CI/CD pipelines for automated code review, documentation generation, or test creation.
+- **Hooks** — Trigger Claude Code actions in response to events (file changes, git commits, test results).
+
+**Key principle:** Start with the simplest workflow that solves the problem. Add complexity only when the simple version fails.`,
+      },
+      {
+        id: 2,
+        type: 'learn',
+        title: 'Building Agents',
+        content: `An **agent** is a Claude-powered system that can independently plan, act, observe results, and adjust its approach. It's the most advanced pattern for Claude automation.
+
+**Agent architecture:**
+
+- **Goal** — What the agent is trying to achieve.
+- **Tools** — What actions the agent can take (MCP servers, CLI commands, API calls).
+- **Observation** — How the agent sees the results of its actions (command output, file contents, API responses).
+- **Loop** — Plan → Act → Observe → Adjust → Repeat until the goal is met or a limit is reached.
+
+**Agent design patterns:**
+
+- **ReAct** (Reasoning + Acting) — Claude reasons about what to do, takes an action, observes the result, and reasons again. This is the default pattern in Claude Code.
+- **Plan-then-execute** — Claude creates a complete plan upfront, then executes each step. Use plan mode for this.
+- **Hierarchical** — A "manager" agent delegates subtasks to "worker" agents. Use the Task tool for this pattern.
+
+**Error handling in agents:**
+
+- **Retry with backoff** — If an action fails, try again with modified parameters.
+- **Fallback strategies** — If the primary approach fails, try an alternative.
+- **Human-in-the-loop** — When the agent is stuck, ask the user for guidance instead of failing silently.
+- **Guardrails** — Set limits on actions (max iterations, allowed commands, file access restrictions).
+
+**When to use agents vs. simple automation:**
+
+- **Simple automation** — Known steps, predictable outcomes, no decision-making needed.
+- **Agents** — Unknown steps, variable outcomes, requires judgment and adaptation.`,
+      },
+      {
+        id: 3,
+        type: 'task',
+        title: 'Design a Multi-Step Automation',
+        description:
+          'Design a multi-step automation workflow using Claude Code. Describe each step, triggers, actions, and how state flows between steps.',
+        taskConfig: {
+          placeholder:
+            'Describe your multi-step automation...',
+          validationRules: [
+            {
+              type: 'minLength',
+              params: { min: 100 },
+              message:
+                'Your automation should be at least 100 characters. Describe the full workflow.',
+              hint: 'Include the trigger, each step in the workflow, and the final output or action.',
+            },
+            {
+              type: 'containsAny',
+              params: {
+                words: [
+                  'workflow',
+                  'automate',
+                  'automation',
+                  'pipeline',
+                  'process',
+                ],
+              },
+              message:
+                'Reference the workflow or automation you are designing.',
+              hint: 'Frame it as a workflow: "This automation..." or "The workflow triggers when..."',
+            },
+            {
+              type: 'containsAny',
+              params: {
+                words: [
+                  'trigger',
+                  'action',
+                  'step',
+                  'then',
+                  'next',
+                  'result',
+                ],
+              },
+              message:
+                'Describe the triggers, actions, or steps in your workflow.',
+              hint: 'Show the flow: "When X happens, trigger Y. Then Z runs. The result is..."',
+            },
+          ],
+          successMessage:
+            'Impressive automation design! You understand how to chain Claude interactions into powerful workflows.',
+        },
+      },
+      {
+        id: 4,
+        type: 'task',
+        title: 'Plan a CI/CD Integration',
+        description:
+          'Design a CI/CD pipeline that integrates Claude Code for automated code review, testing, or documentation generation.',
+        taskConfig: {
+          placeholder:
+            'Describe your CI/CD integration with Claude Code...',
+          validationRules: [
+            {
+              type: 'minLength',
+              params: { min: 80 },
+              message:
+                'Your CI/CD plan should be at least 80 characters.',
+              hint: 'Describe what triggers the pipeline, what Claude does in it, and the expected output.',
+            },
+            {
+              type: 'containsAny',
+              params: {
+                words: [
+                  'ci',
+                  'cd',
+                  'pipeline',
+                  'deploy',
+                  'github actions',
+                  'continuous',
+                ],
+              },
+              message:
+                'Reference CI/CD, pipelines, or deployment automation.',
+              hint: 'Name your CI/CD approach: "In our GitHub Actions pipeline..." or "The CI step runs..."',
+            },
+            {
+              type: 'containsAny',
+              params: {
+                words: [
+                  'automate',
+                  'integrate',
+                  'review',
+                  'test',
+                  'generate',
+                  'check',
+                ],
+              },
+              message:
+                'Describe what Claude automates in the pipeline.',
+              hint: 'What does Claude do? "Automatically reviews PRs," "Generates test cases," "Checks documentation freshness."',
+            },
+          ],
+          successMessage:
+            'Great CI/CD integration plan! You understand how to embed Claude into your development pipeline.',
+        },
+      },
+      {
+        id: 5,
+        type: 'simulator',
+        title: 'Practice: Automation',
+        description:
+          'Practice designing multi-step workflows, agents, and CI/CD integrations.',
+        simulatorConfig: {
+          suggestedPrompts: [
+            'Design an agent that automatically fixes failing tests',
+            'How do I integrate Claude Code into GitHub Actions?',
+            'Help me build a workflow that generates changelogs from git history',
+          ],
+        },
+      },
+      {
+        id: 6,
+        type: 'learn',
+        title: 'Error Handling & Monitoring',
+        content: `Production automation needs **robust error handling**. When Claude-powered workflows run unsupervised, failures need to be caught, logged, and handled gracefully.
+
+**Error handling patterns:**
+
+- **Retry with exponential backoff** — If a Claude API call fails (rate limit, timeout), wait and retry. Double the wait time each attempt.
+- **Fallback responses** — If Claude can't generate the expected output, use a safe default. "If code review fails, flag the PR for manual review."
+- **Circuit breaker** — If errors exceed a threshold, stop the automation and alert a human.
+- **Validation gates** — Check Claude's output before acting on it. Parse JSON, verify code compiles, confirm the output matches expected patterns.
+
+**Monitoring and logging:**
+
+- **Log every step** — Record inputs, outputs, and timing for each workflow step.
+- **Track success rates** — Monitor what percentage of automated tasks complete successfully.
+- **Alert on anomalies** — If a workflow that usually takes 30 seconds suddenly takes 5 minutes, something is wrong.
+- **Cost tracking** — Monitor API usage and token consumption. Set budget alerts.
+
+**Production checklist:**
+
+- All Claude API calls have retry logic and timeouts.
+- Outputs are validated before being used in downstream steps.
+- Errors are logged with enough context to debug later.
+- Alerts notify the team when automation fails.
+- Cost and usage are tracked and budgeted.`,
+      },
+    ],
+  },
+
+  // ==========================================================================
+  // LEVEL 14: Claude Architect (PRO — Advanced Track)
+  // ==========================================================================
+  {
+    id: 14,
+    title: 'Claude Architect',
+    description:
+      'The advanced capstone. Design a complete system using everything you have learned — Claude Code, MCP, API, and production patterns.',
+    emoji: '🏛️',
+    xp: 500,
+    estimatedTime: '75 min',
+    isPaid: true,
+    skills: [
+      'System Design',
+      'Full-Stack AI',
+      'Production Deploy',
+      'Architecture Patterns',
+    ],
+    color: 'from-yellow-500 to-orange-500',
+    tasks: [
+      {
+        id: 1,
+        type: 'learn',
+        title: 'Thinking in Systems',
+        content: `System design for AI-powered applications is different from traditional software architecture. Claude introduces new patterns, tradeoffs, and capabilities.
+
+**Key architectural patterns:**
+
+- **Claude as a service** — Your application calls the Claude API as a backend service. The app handles UI, auth, and state; Claude handles reasoning, generation, and analysis.
+- **Claude as an agent** — Claude operates autonomously within defined boundaries. It plans, executes, and adapts. Your system provides tools (MCP), guardrails (rules), and oversight (logging).
+- **Claude as a layer** — Claude sits between the user and your existing systems. It translates natural language into structured actions (database queries, API calls, form submissions).
+- **Hybrid** — Most production systems combine patterns. Claude handles the AI-heavy parts while traditional code handles everything else.
+
+**Design considerations:**
+
+- **Latency** — Claude API calls take 1-30 seconds. Design your UX around this (streaming, progressive loading, optimistic updates).
+- **Cost** — Token usage scales with input and output length. Cache when possible, minimize unnecessary context, choose the right model.
+- **Reliability** — Claude is not deterministic. The same prompt can produce different outputs. Design for variability.
+- **Security** — Never send sensitive data (passwords, API keys, PII) to Claude unless you've verified it's necessary and secure.
+
+**System boundaries:**
+
+- What should Claude do vs. what should traditional code do?
+- Where does Claude's context end and your database begin?
+- How do you handle Claude being wrong?
+- What happens when Claude is unavailable?`,
+      },
+      {
+        id: 2,
+        type: 'learn',
+        title: 'Production Patterns',
+        content: `Taking Claude from prototype to production requires attention to **rate limiting, caching, cost management, and security**.
+
+**Rate limiting:**
+
+- Anthropic's API has rate limits (requests per minute, tokens per minute).
+- Implement client-side rate limiting to avoid hitting the API limits.
+- Use queues for batch processing — don't fire all requests simultaneously.
+- For user-facing apps, implement per-user rate limits to prevent abuse.
+
+**Caching:**
+
+- Cache Claude's responses when the same input produces the same output.
+- Use content-addressable caching (hash the prompt + model to create a cache key).
+- Set appropriate TTLs — some content can be cached for hours, other content should be fresh.
+- Anthropic's prompt caching feature reduces costs for repeated system prompts.
+
+**Cost management:**
+
+- **Model selection** — Use Haiku for simple tasks, Sonnet for most tasks, Opus for complex reasoning.
+- **Prompt optimization** — Shorter prompts cost less. Remove unnecessary context.
+- **Output limits** — Set max_tokens to prevent runaway generation.
+- **Budget alerts** — Set up monitoring to alert when spending exceeds thresholds.
+- **Usage dashboards** — Track token usage by feature, user, or team.
+
+**Security:**
+
+- **Input validation** — Sanitize user input before including it in prompts. Prevent prompt injection.
+- **Output validation** — Don't blindly execute Claude's output. Validate generated code, SQL, or commands before running them.
+- **Access control** — Limit what tools and data Claude can access. Principle of least privilege.
+- **Audit logging** — Log all Claude interactions for compliance and debugging.`,
+      },
+      {
+        id: 3,
+        type: 'task',
+        title: 'Design a Complete System',
+        description:
+          'Design a complete AI-powered system that uses Claude Code, MCP, and the Claude API. Describe the architecture, components, data flow, user experience, and production considerations.',
+        taskConfig: {
+          placeholder:
+            'Describe your complete system architecture...',
+          validationRules: [
+            {
+              type: 'minLength',
+              params: { min: 150 },
+              message:
+                'Your system design should be at least 150 characters. This is the advanced capstone — go deep.',
+              hint: 'Cover architecture, Claude integration points, data flow, and production considerations.',
+            },
+            {
+              type: 'containsAny',
+              params: {
+                words: [
+                  'architecture',
+                  'system',
+                  'design',
+                  'platform',
+                  'infrastructure',
+                ],
+              },
+              message:
+                'Describe the overall system architecture.',
+              hint: 'Frame it as a system: "The architecture consists of..." or "This system is designed with..."',
+            },
+            {
+              type: 'containsAny',
+              params: {
+                words: [
+                  'claude code',
+                  'mcp',
+                  'api',
+                  'claude',
+                  'anthropic',
+                ],
+              },
+              message:
+                'Reference Claude Code, MCP, or the Claude API in your design.',
+              hint: 'Name the Claude technologies: "Claude Code handles...", "MCP servers connect to...", "The Claude API powers..."',
+            },
+            {
+              type: 'containsAny',
+              params: {
+                words: [
+                  'user',
+                  'data',
+                  'production',
+                  'deploy',
+                  'scale',
+                  'monitor',
+                ],
+              },
+              message:
+                'Address users, data flow, or production deployment.',
+              hint: 'Think production: "Users interact via...", "Data flows from...", "In production, the system..."',
+            },
+          ],
+          successMessage:
+            'Outstanding system design! You have demonstrated mastery of the full Claude ecosystem — from CLI to API to production.',
+        },
+      },
+      {
+        id: 4,
+        type: 'simulator',
+        title: 'Practice: System Architecture',
+        description:
+          'Practice system design for AI-powered applications. Discuss architecture patterns, production tradeoffs, and real-world deployment.',
+        simulatorConfig: {
+          suggestedPrompts: [
+            'Help me architect an AI-powered customer support system using Claude',
+            'What are the tradeoffs between using Claude as a service vs. as an agent?',
+            'How should I handle rate limiting and caching for a Claude-powered SaaS app?',
+          ],
+        },
+      },
+      {
+        id: 5,
+        type: 'learn',
+        title: 'Graduation: Advanced Track',
+        content: `**Congratulations, Claude Architect!** You have completed all 15 levels of Claude Quest — the core track and the advanced track.
+
+**What you mastered in the Advanced Track:**
+
+• **Claude Code** (Level 10) — Agentic coding, CLAUDE.md project configuration, plan mode, and CLI workflows.
+
+• **Skills & Plugins** (Level 11) — Custom slash commands, MCP tool composition, and extending Claude's capabilities.
+
+• **Collaborative Workflows** (Level 12) — Pair programming patterns, code review automation, and team-wide Claude adoption.
+
+• **Advanced Automation** (Level 13) — Multi-step workflows, agent design patterns, CI/CD integration, and production error handling.
+
+• **System Architecture** (Level 14) — Designing complete AI-powered systems with Claude Code, MCP, and the API. Production patterns for rate limiting, caching, cost management, and security.
+
+**What makes you different now:**
+
+You don't just use Claude — you **architect systems** around it. You know when to use the API vs. Claude Code vs. MCP. You can design workflows that run autonomously, review code at scale, and build production applications that leverage AI at every layer.
+
+**Next steps:**
+
+• **Build your capstone** — Take your system design from Level 14 and implement it.
+• **Contribute to the ecosystem** — Build and share MCP servers, custom skills, or open-source tools.
+• **Stay sharp** — The Claude ecosystem evolves fast. Follow Anthropic's changelog and experiment with new features.
+• **Teach others** — The best way to solidify knowledge is to share it.
+
+**You are now a Claude Architect. Nothing left to prove — except what you build next.**`,
       },
     ],
   },
