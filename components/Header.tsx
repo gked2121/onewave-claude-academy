@@ -18,7 +18,7 @@ export default function Header() {
 
   return (
     <>
-    <header className="fixed top-0 left-0 right-0 z-50 bg-black/30 backdrop-blur-md border-b border-orange-500/20">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-stone-950/50 backdrop-blur-md border-b border-amber-200/15">
       <div className="max-w-7xl mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           {/* Logo */}
@@ -97,8 +97,8 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6">
-            <Link href="/" className="hover:text-orange-300 transition-colors font-medium">Home</Link>
-            <Link href="/journey" className="hover:text-orange-300 transition-colors font-medium">Journey</Link>
+            <Link href="/" className="text-stone-200 hover:text-amber-50 transition-colors font-medium">Home</Link>
+            <Link href="/journey" className="text-stone-200 hover:text-amber-50 transition-colors font-medium">Journey</Link>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -119,7 +119,7 @@ export default function Header() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          className="fixed top-[72px] left-0 right-0 z-40 md:hidden bg-black/95 backdrop-blur-xl border-b border-orange-500/20"
+          className="fixed top-[72px] left-0 right-0 z-40 md:hidden bg-stone-950/95 backdrop-blur-xl border-b border-amber-200/15"
         >
           <nav className="max-w-7xl mx-auto px-4 py-6 flex flex-col gap-4">
             <Link
@@ -137,24 +137,24 @@ export default function Header() {
               Journey
             </Link>
             {/* User Stats - Mobile Only */}
-            <div className="mt-4 pt-4 border-t border-orange-500/20 space-y-3">
+            <div className="mt-4 pt-4 border-t border-amber-200/15 space-y-3">
               {progress.userName && (
                 <div className="flex justify-between items-center px-4">
-                  <span className="text-orange-300 text-sm">Name</span>
-                  <span className="text-orange-100 font-bold">{progress.userName}</span>
+                  <span className="text-stone-400 text-sm">Name</span>
+                  <span className="text-amber-50 font-bold">{progress.userName}</span>
                 </div>
               )}
               <div className="flex justify-between items-center px-4">
-                <span className="text-orange-300 text-sm">Level</span>
-                <span className="text-orange-100 font-bold">{level}</span>
+                <span className="text-stone-400 text-sm">Level</span>
+                <span className="text-amber-50 font-bold">{level}</span>
               </div>
               <div className="flex justify-between items-center px-4">
-                <span className="text-orange-300 text-sm">XP</span>
-                <span className="text-orange-100 font-bold">{progress.xp}</span>
+                <span className="text-stone-400 text-sm">XP</span>
+                <span className="text-amber-50 font-bold">{progress.xp}</span>
               </div>
               <div className="flex justify-between items-center px-4">
-                <span className="text-orange-300 text-sm">Achievements</span>
-                <span className="text-orange-100 font-bold">{progress.achievements.length}</span>
+                <span className="text-stone-400 text-sm">Achievements</span>
+                <span className="text-amber-50 font-bold">{progress.achievements.length}</span>
               </div>
             </div>
           </nav>

@@ -81,10 +81,10 @@ export default function LevelPage() {
           className="bg-black/40 backdrop-blur-sm rounded-2xl p-12 border-2 border-orange-500/30"
         >
           <div className="text-6xl mb-6">🔍</div>
-          <h1 className="text-3xl font-bold text-orange-200 mb-4">
+          <h1 className="text-3xl font-bold text-amber-50 mb-4">
             Level not found
           </h1>
-          <p className="text-orange-300 mb-8">
+          <p className="text-stone-300 mb-8">
             We could not find a level with that id. Head back to the journey map
             to pick a level.
           </p>
@@ -115,10 +115,10 @@ export default function LevelPage() {
           >
             <Lock className="w-16 h-16 mx-auto text-orange-400" />
           </motion.div>
-          <h1 className="text-3xl font-bold text-orange-200 mb-4">
+          <h1 className="text-3xl font-bold text-amber-50 mb-4">
             Level {level.id} is Locked
           </h1>
-          <p className="text-orange-300 mb-8">
+          <p className="text-stone-300 mb-8">
             Upgrade to <span className="text-orange-400 font-semibold">Pro</span>{" "}
             to unlock all levels and master Claude AI.
           </p>
@@ -217,7 +217,7 @@ export default function LevelPage() {
             >
               Level {level.id}: {level.title}
             </h1>
-            <p className="text-orange-300 mt-1 flex items-center gap-3">
+            <p className="text-stone-300 mt-1 flex items-center gap-3">
               <span className="flex items-center gap-1">
                 <Zap className="w-4 h-4 text-amber-400" />
                 {level.xp} XP
@@ -229,7 +229,7 @@ export default function LevelPage() {
         </div>
 
         {/* ------ Progress bar ---------------------------------------------- */}
-        <div className="bg-black/40 rounded-full h-3 overflow-hidden border-2 border-orange-500/30">
+        <div className="bg-black/40 rounded-full h-3 overflow-hidden border border-amber-200/20">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${progress * 100}%` }}
@@ -237,7 +237,7 @@ export default function LevelPage() {
           />
         </div>
         <div className="flex justify-between items-center mt-2 text-sm">
-          <span className="text-orange-300">
+          <span className="text-stone-300">
             {completedTasks.length} of {tasks.length} tasks completed
           </span>
           <span className="text-orange-400 font-semibold">
@@ -295,24 +295,24 @@ export default function LevelPage() {
       >
         {/* ---------- Learn ----------------------------------------------- */}
         {currentTaskData.type === "learn" && (
-          <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border-2 border-orange-500/30 mb-6">
-            <h2 className="text-3xl font-bold text-orange-200 mb-6">
+          <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-amber-200/20 mb-6">
+            <h2 className="text-3xl font-bold text-amber-50 mb-6">
               {currentTaskData.title}
             </h2>
             <div className="prose prose-invert max-w-none text-lg leading-relaxed">
               <ReactMarkdown
                 components={{
                   p: ({ children }) => (
-                    <p className="text-orange-100 mb-4 leading-relaxed">{children}</p>
+                    <p className="text-stone-200 mb-4 leading-relaxed">{children}</p>
                   ),
                   strong: ({ children }) => (
-                    <strong className="text-orange-200 font-bold">{children}</strong>
+                    <strong className="text-amber-50 font-bold">{children}</strong>
                   ),
                   ul: ({ children }) => (
                     <ul className="space-y-2 mb-5 ml-1">{children}</ul>
                   ),
                   li: ({ children }) => (
-                    <li className="text-orange-100 flex gap-3">
+                    <li className="text-stone-200 flex gap-3">
                       <span className="text-orange-400 mt-1.5 flex-shrink-0 text-sm">&#9679;</span>
                       <span>{children}</span>
                     </li>
@@ -334,13 +334,13 @@ export default function LevelPage() {
                   },
                   pre: ({ children }) => <>{children}</>,
                   h2: ({ children }) => (
-                    <h2 className="text-2xl font-bold text-orange-200 mt-8 mb-4">{children}</h2>
+                    <h2 className="text-2xl font-bold text-amber-50 mt-8 mb-4">{children}</h2>
                   ),
                   h3: ({ children }) => (
-                    <h3 className="text-xl font-bold text-orange-200 mt-6 mb-3">{children}</h3>
+                    <h3 className="text-xl font-bold text-amber-50 mt-6 mb-3">{children}</h3>
                   ),
                   hr: () => (
-                    <hr className="border-orange-500/20 my-6" />
+                    <hr className="border-amber-200/15 my-6" />
                   ),
                 }}
               >
@@ -369,12 +369,12 @@ export default function LevelPage() {
         {currentTaskData.type === "simulator" &&
           currentTaskData.simulatorConfig && (
             <div className="space-y-4">
-              <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border-2 border-orange-500/30">
-                <h2 className="text-2xl font-bold text-orange-200 mb-2">
+              <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-6 border border-amber-200/20">
+                <h2 className="text-2xl font-bold text-amber-50 mb-2">
                   {currentTaskData.title}
                 </h2>
                 {currentTaskData.description && (
-                  <p className="text-orange-300">
+                  <p className="text-stone-300">
                     {currentTaskData.description}
                   </p>
                 )}
@@ -396,7 +396,7 @@ export default function LevelPage() {
       {/* ------------------------------------------------------------------ */}
       {/* Navigation buttons                                                   */}
       {/* ------------------------------------------------------------------ */}
-      <div className="flex items-center justify-between mt-8 pt-6 border-t border-orange-500/30">
+      <div className="flex items-center justify-between mt-8 pt-6 border-t border-amber-200/15">
         {/* Previous */}
         <button
           onClick={handlePrevTask}

@@ -75,14 +75,14 @@ function LevelCard({ level, isUnlocked, isCompleted, onClick }: { level: any; is
         </h3>
 
         {/* Description */}
-        <p className="text-orange-200 text-sm text-center mb-4 leading-relaxed">
+        <p className="text-stone-200 text-sm text-center mb-4 leading-relaxed">
           {level.description}
         </p>
 
         {/* Skills Tags */}
         <div className="flex flex-wrap gap-1 justify-center mb-4">
           {level.skills.slice(0, 2).map((skill: string, i: number) => (
-            <span key={i} className="text-xs px-2 py-1 bg-orange-500/20 rounded-full text-orange-300">
+            <span key={i} className="text-xs px-2 py-1 bg-white/5 rounded-full text-stone-300">
               {skill}
             </span>
           ))}
@@ -94,7 +94,7 @@ function LevelCard({ level, isUnlocked, isCompleted, onClick }: { level: any; is
         </div>
 
         {/* Stats */}
-        <div className="flex items-center justify-between text-xs text-orange-400 pt-4 border-t border-orange-500/20">
+        <div className="flex items-center justify-between text-xs text-orange-400 pt-4 border-t border-amber-200/15">
           <div className="flex items-center gap-1">
             <Sparkles className="w-3 h-3" />
             <span>{level.xp} XP</span>
@@ -143,7 +143,7 @@ function LevelCard({ level, isUnlocked, isCompleted, onClick }: { level: any; is
                 <h2 className={`text-3xl font-bold mb-3 bg-gradient-to-r ${level.color} bg-clip-text text-transparent`}>
                   Level {level.id}: {level.title}
                 </h2>
-                <p className="text-orange-200 text-lg">{level.description}</p>
+                <p className="text-amber-50 text-lg">{level.description}</p>
               </div>
 
               <div className="space-y-4 mb-6">
@@ -154,7 +154,7 @@ function LevelCard({ level, isUnlocked, isCompleted, onClick }: { level: any; is
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {level.skills.map((skill: string, i: number) => (
-                      <span key={i} className="px-3 py-1 bg-orange-500/30 rounded-lg text-orange-100 text-sm">
+                      <span key={i} className="px-3 py-1 bg-white/10 rounded-lg text-amber-50 text-sm">
                         {skill}
                       </span>
                     ))}
@@ -249,35 +249,35 @@ export default function JourneyPage() {
         <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-orange-400 via-amber-400 to-yellow-400 bg-clip-text text-transparent">
           The Path to Claude Mastery
         </h1>
-        <p className="text-xl text-orange-200 mb-6">
+        <p className="text-xl text-amber-100 mb-6">
           Each level builds on the last. By the end, you&apos;ll wonder how you worked without this.
         </p>
 
         {/* Overall Progress Stats */}
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-3 gap-4 mb-6">
-            <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-4 border-2 border-orange-500/30">
+            <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-4 border border-amber-200/20">
               <div className="text-3xl font-bold bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">
                 {completedCount}/{levels.length}
               </div>
-              <div className="text-sm text-orange-300">Levels Complete</div>
+              <div className="text-sm text-stone-300">Levels Complete</div>
             </div>
-            <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-4 border-2 border-orange-500/30">
+            <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-4 border border-amber-200/20">
               <div className="text-3xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
                 {earnedXP}
               </div>
-              <div className="text-sm text-orange-300">XP Earned</div>
+              <div className="text-sm text-stone-300">XP Earned</div>
             </div>
-            <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-4 border-2 border-orange-500/30">
+            <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-4 border border-amber-200/20">
               <div className="text-3xl font-bold bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">
                 {Math.round((earnedXP / totalXP) * 100)}%
               </div>
-              <div className="text-sm text-orange-300">Progress</div>
+              <div className="text-sm text-stone-300">Progress</div>
             </div>
           </div>
 
           {/* Progress Bar */}
-          <div className="bg-black/40 rounded-full h-6 overflow-hidden border-2 border-orange-500/30">
+          <div className="bg-black/40 rounded-full h-6 overflow-hidden border border-amber-200/20">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${(earnedXP / totalXP) * 100}%` }}
@@ -354,7 +354,7 @@ export default function JourneyPage() {
             <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">
               Level 0 Was Just the Beginning
             </h2>
-            <p className="text-xl text-orange-200 mb-6 max-w-2xl mx-auto">
+            <p className="text-xl text-amber-50 mb-6 max-w-2xl mx-auto">
               Unlock all 15 levels and go from &apos;I&apos;ve used Claude&apos; to &apos;Claude is how I work.&apos; Every level builds a real skill.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-6 mb-8">
@@ -384,7 +384,7 @@ export default function JourneyPage() {
               Unlock All Levels &mdash; $9.99/mo
               <ArrowRight className="w-6 h-6" />
             </motion.button>
-            <p className="text-orange-400 text-sm mt-4">
+            <p className="text-stone-400 text-sm mt-4">
               Cancel anytime. You&apos;ll know if it&apos;s worth it by Level 2.
             </p>
           </div>

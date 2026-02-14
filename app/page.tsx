@@ -142,7 +142,7 @@ function CharacterCard({ char, index, isSelected, onSelect }: { char: any; index
           {char.name}
         </h3>
 
-        <p className="text-orange-100 text-center mb-6 leading-relaxed">
+        <p className="text-amber-50 text-center mb-6 leading-relaxed">
           {char.description}
         </p>
 
@@ -154,7 +154,7 @@ function CharacterCard({ char, index, isSelected, onSelect }: { char: any; index
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.15 + i * 0.1 }}
-              className="flex items-center gap-3 text-sm text-orange-200 bg-orange-500/10 rounded-lg p-2"
+              className="flex items-center gap-3 text-sm text-stone-200 bg-white/5 rounded-lg p-2"
             >
               {i === 0 && <Target className="w-4 h-4 text-orange-400 flex-shrink-0" />}
               {i === 1 && <Zap className="w-4 h-4 text-amber-400 flex-shrink-0" />}
@@ -260,7 +260,7 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="text-2xl text-orange-200 mb-4 font-light"
+          className="text-2xl text-amber-50 mb-4 font-light"
         >
           15 hands-on levels. Real skills. Go from &quot;I&apos;ve tried Claude&quot; to &quot;Claude is my unfair advantage.&quot;
         </motion.p>
@@ -269,7 +269,7 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
-          className="text-lg text-orange-300"
+          className="text-lg text-stone-300"
         >
           No fluff. No lectures. Just the skills that actually change how you work.
         </motion.p>
@@ -303,13 +303,13 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="bg-gradient-to-br from-orange-500/10 to-amber-500/10 backdrop-blur-xl rounded-2xl p-6 border-2 border-orange-500/30 text-center"
+            className="bg-gradient-to-br from-orange-500/10 to-amber-500/10 backdrop-blur-xl rounded-2xl p-6 border border-amber-200/20 text-center"
           >
             <div className="w-14 h-14 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center mx-auto mb-4 shadow-lg">
               <MousePointerClick className="w-7 h-7 text-white" />
             </div>
-            <h3 className="text-xl font-bold mb-2 text-orange-200">Pick Your Focus</h3>
-            <p className="text-orange-300 text-sm">
+            <h3 className="text-xl font-bold mb-2 text-amber-50">Pick Your Focus</h3>
+            <p className="text-stone-300 text-sm">
               Choose what matters to you. Every path leads to real skills.
             </p>
           </motion.div>
@@ -317,13 +317,13 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7 }}
-            className="bg-gradient-to-br from-amber-500/10 to-yellow-500/10 backdrop-blur-xl rounded-2xl p-6 border-2 border-amber-500/30 text-center"
+            className="bg-gradient-to-br from-amber-500/10 to-yellow-500/10 backdrop-blur-xl rounded-2xl p-6 border border-amber-200/20 text-center"
           >
             <div className="w-14 h-14 rounded-full bg-gradient-to-br from-amber-500 to-yellow-500 flex items-center justify-center mx-auto mb-4 shadow-lg">
               <Layers className="w-7 h-7 text-white" />
             </div>
-            <h3 className="text-xl font-bold mb-2 text-amber-200">Learn by Doing</h3>
-            <p className="text-amber-300 text-sm">
+            <h3 className="text-xl font-bold mb-2 text-amber-50">Learn by Doing</h3>
+            <p className="text-stone-300 text-sm">
               No passive videos. You write prompts, build tools, and see results in real time.
             </p>
           </motion.div>
@@ -331,13 +331,13 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
-            className="bg-gradient-to-br from-orange-400/10 to-amber-400/10 backdrop-blur-xl rounded-2xl p-6 border-2 border-orange-400/30 text-center"
+            className="bg-gradient-to-br from-orange-400/10 to-amber-400/10 backdrop-blur-xl rounded-2xl p-6 border border-amber-200/20 text-center"
           >
             <div className="w-14 h-14 rounded-full bg-gradient-to-br from-orange-400 to-amber-400 flex items-center justify-center mx-auto mb-4 shadow-lg">
               <Rocket className="w-7 h-7 text-white" />
             </div>
-            <h3 className="text-xl font-bold mb-2 text-orange-200">Stack Your Skills</h3>
-            <p className="text-orange-300 text-sm">
+            <h3 className="text-xl font-bold mb-2 text-amber-50">Stack Your Skills</h3>
+            <p className="text-stone-300 text-sm">
               Each level unlocks the next. By Level 14, you&apos;re building things most people don&apos;t know are possible.
             </p>
           </motion.div>
@@ -349,7 +349,7 @@ export default function Home() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.9 }}
-        className="text-center bg-gradient-to-r from-orange-500/20 via-amber-500/20 to-yellow-500/20 backdrop-blur-xl rounded-2xl p-6 border-2 border-orange-400/30 max-w-2xl"
+        className="text-center bg-gradient-to-r from-orange-500/20 via-amber-500/20 to-yellow-500/20 backdrop-blur-xl rounded-2xl p-6 border border-amber-200/20 max-w-2xl"
       >
         <motion.div
           animate={{
@@ -364,10 +364,10 @@ export default function Home() {
         >
           <Sparkles className="w-10 h-10 text-amber-400" />
         </motion.div>
-        <p className="text-xl text-orange-200 mb-2">
+        <p className="text-xl text-amber-50 mb-2">
           <span className="text-2xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">Level 0 is free.</span> No account needed.
         </p>
-        <p className="text-orange-300 text-sm">
+        <p className="text-stone-300 text-sm">
           Try it right now. You&apos;ll know if Claude Quest is for you before you spend a dime.
         </p>
       </motion.div>

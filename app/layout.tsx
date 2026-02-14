@@ -59,8 +59,8 @@ export default function RootLayout({
             <main className="pt-24 px-4 max-w-7xl mx-auto">
               {children}
             </main>
-            <footer className="mt-20 py-8 border-t border-orange-500/20">
-              <div className="max-w-7xl mx-auto px-4 text-center text-orange-300 text-sm">
+            <footer className="mt-20 py-8 border-t border-amber-200/15">
+              <div className="max-w-7xl mx-auto px-4 text-center text-stone-300 text-sm">
                 <p>&copy; 2026 OneWave AI. Master Claude AI through gamified learning.</p>
               </div>
             </footer>
