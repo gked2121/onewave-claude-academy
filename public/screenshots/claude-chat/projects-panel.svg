@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" fill="none">
+  <rect width="800" height="500" rx="12" fill="#1E293B"/>
+  <rect x="1" y="1" width="798" height="498" rx="11" stroke="#334155" stroke-width="2"/>
+  <rect x="0" y="0" width="200" height="500" rx="12" fill="#0F172A"/>
+  <rect x="188" y="0" width="12" height="500" fill="#0F172A"/>
+  <text x="100" y="40" text-anchor="middle" fill="#F8FAFC" font-family="system-ui" font-size="14" font-weight="700">Projects</text>
+  <rect x="16" y="60" width="168" height="40" rx="8" fill="#DA775620"/>
+  <text x="32" y="85" fill="#DA7756" font-family="system-ui" font-size="12">Marketing Campaign</text>
+  <rect x="16" y="110" width="168" height="40" rx="8" fill="#33415520"/>
+  <text x="32" y="135" fill="#94A3B8" font-family="system-ui" font-size="12">Legal Review</text>
+  <rect x="16" y="160" width="168" height="40" rx="8" fill="#33415520"/>
+  <text x="32" y="185" fill="#94A3B8" font-family="system-ui" font-size="12">Sales Outreach</text>
+  <text x="500" y="250" text-anchor="middle" fill="#94A3B8" font-family="system-ui" font-size="16" font-weight="600">Claude Projects Panel</text>
+  <rect x="300" y="280" width="400" height="48" rx="24" fill="#DA775630" stroke="#DA775650" stroke-width="1"/>
+  <text x="500" y="309" text-anchor="middle" fill="#DA7756" font-family="system-ui" font-size="14" font-weight="600">Replace with actual screenshot</text>
+</svg>

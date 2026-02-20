@@ -1,0 +1,138 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#09090b"/>
+
+  <!-- Gradient orbs -->
+  <circle cx="200" cy="150" r="300" fill="#2FC9F4" opacity="0.15" filter="url(#blur)"/>
+  <circle cx="1000" cy="480" r="350" fill="#00C7BD" opacity="0.12" filter="url(#blur)"/>
+  <circle cx="600" cy="315" r="250" fill="#e76f34" opacity="0.08" filter="url(#blur)"/>
+
+  <!-- Grid pattern -->
+  <defs>
+    <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M 64 0 L 0 0 0 64" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+    </pattern>
+    <filter id="blur">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="120"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+
+  <!-- Logo - much larger and centered left -->
+  <g transform="translate(120, 165)">
+    <!-- Outer glow -->
+    <circle cx="150" cy="150" r="130" fill="url(#glow)" opacity="0.4"/>
+
+    <!-- Terminal window background -->
+    <rect x="37.5" y="37.5" width="225" height="225" rx="20" fill="url(#terminalBg)"/>
+
+    <!-- Terminal header bar -->
+    <rect x="37.5" y="37.5" width="225" height="30" rx="20" fill="url(#headerGradient)"/>
+    <rect x="37.5" y="52.5" width="225" height="15" fill="#0a0a15" opacity="0.3"/>
+
+    <!-- Terminal dots (traffic lights style) -->
+    <circle cx="57.5" cy="52.5" r="6.25" fill="#FF5F57"/>
+    <circle cx="77.5" cy="52.5" r="6.25" fill="#FFBD2E"/>
+    <circle cx="97.5" cy="52.5" r="6.25" fill="#28CA42"/>
+
+    <!-- Terminal prompt symbol (>) -->
+    <path d="M62.5 112.5 L87.5 130 L62.5 147.5"
+          stroke="url(#primaryGradient)"
+          stroke-width="7.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          fill="none"/>
+
+    <!-- "vibe" text -->
+    <text x="100" y="140" font-family="monospace" font-size="35" font-weight="bold" fill="url(#textGradient)">vibe</text>
+
+    <!-- Terminal prompt symbol (>) for second line -->
+    <path d="M62.5 170 L87.5 187.5 L62.5 205"
+          stroke="url(#secondaryGradient)"
+          stroke-width="7.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          fill="none"/>
+
+    <!-- "quest" text -->
+    <text x="100" y="197.5" font-family="monospace" font-size="35" font-weight="bold" fill="url(#textGradient2)">quest</text>
+
+    <!-- Blinking cursor after quest -->
+    <rect x="200" y="177.5" width="7.5" height="30" fill="#2FC9F4" rx="3.75"/>
+
+    <!-- Terminal border glow -->
+    <rect x="37.5" y="37.5" width="225" height="225" rx="20" stroke="url(#borderGradient)" stroke-width="5" fill="none" opacity="0.5"/>
+  </g>
+
+  <!-- Main text content -->
+  <text x="500" y="220" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="800" fill="#ffffff">
+    Learn to Vibe Code
+  </text>
+
+  <text x="500" y="290" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="800" fill="url(#titleGradient)">
+    Like a Pro
+  </text>
+
+  <!-- Subtitle -->
+  <text x="500" y="360" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="600" fill="rgba(255,255,255,0.8)">
+    AI-Powered Game • Terminal Agents • Real Projects
+  </text>
+
+  <!-- Badge -->
+  <g transform="translate(500, 400)">
+    <rect width="280" height="50" rx="25" fill="rgba(47, 201, 244, 0.15)" stroke="rgba(47, 201, 244, 0.3)" stroke-width="2"/>
+    <text x="140" y="32" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="700" fill="#2FC9F4" text-anchor="middle">
+      From Zero to Developer
+    </text>
+  </g>
+
+  <!-- Definitions for gradients -->
+  <defs>
+    <radialGradient id="glow">
+      <stop offset="0%" stop-color="#2FC9F4" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#00C7BD" stop-opacity="0"/>
+    </radialGradient>
+
+    <linearGradient id="terminalBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#0f0f1a"/>
+    </linearGradient>
+
+    <linearGradient id="headerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2a2a3e"/>
+      <stop offset="100%" stop-color="#1f1f2a"/>
+    </linearGradient>
+
+    <linearGradient id="primaryGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2FC9F4"/>
+      <stop offset="100%" stop-color="#00C7BD"/>
+    </linearGradient>
+
+    <linearGradient id="secondaryGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00C7BD"/>
+      <stop offset="100%" stop-color="#2FC9F4"/>
+    </linearGradient>
+
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2FC9F4"/>
+      <stop offset="100%" stop-color="#00C7BD"/>
+    </linearGradient>
+
+    <linearGradient id="textGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00C7BD"/>
+      <stop offset="100%" stop-color="#2FC9F4"/>
+    </linearGradient>
+
+    <linearGradient id="borderGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2FC9F4"/>
+      <stop offset="50%" stop-color="#00C7BD"/>
+      <stop offset="100%" stop-color="#2FC9F4"/>
+    </linearGradient>
+
+    <linearGradient id="titleGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2FC9F4"/>
+      <stop offset="50%" stop-color="#00C7BD"/>
+      <stop offset="100%" stop-color="#2FC9F4"/>
+    </linearGradient>
+  </defs>
+</svg>

@@ -1,0 +1,90 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer glow -->
+  <circle cx="60" cy="60" r="52" fill="url(#glow)" opacity="0.3"/>
+
+  <!-- Terminal window background -->
+  <rect x="15" y="15" width="90" height="90" rx="8" fill="url(#terminalBg)"/>
+
+  <!-- Terminal header bar -->
+  <rect x="15" y="15" width="90" height="12" rx="8" fill="url(#headerGradient)"/>
+  <rect x="15" y="21" width="90" height="6" fill="#0a0a15" opacity="0.3"/>
+
+  <!-- Terminal dots (traffic lights style) -->
+  <circle cx="23" cy="21" r="2.5" fill="#FF5F57"/>
+  <circle cx="31" cy="21" r="2.5" fill="#FFBD2E"/>
+  <circle cx="39" cy="21" r="2.5" fill="#28CA42"/>
+
+  <!-- Terminal prompt symbol (>) -->
+  <path d="M25 45 L35 52 L25 59"
+        stroke="url(#primaryGradient)"
+        stroke-width="3"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        fill="none"/>
+
+  <!-- "vibe" text -->
+  <text x="40" y="56" font-family="monospace" font-size="14" font-weight="bold" fill="url(#textGradient)">vibe</text>
+
+  <!-- Terminal prompt symbol (>) for second line -->
+  <path d="M25 68 L35 75 L25 82"
+        stroke="url(#secondaryGradient)"
+        stroke-width="3"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        fill="none"/>
+
+  <!-- "quest" text -->
+  <text x="40" y="79" font-family="monospace" font-size="14" font-weight="bold" fill="url(#textGradient2)">quest</text>
+
+  <!-- Blinking cursor after quest -->
+  <rect x="80" y="71" width="3" height="12" fill="#2FC9F4" rx="1.5">
+    <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- Terminal border glow -->
+  <rect x="15" y="15" width="90" height="90" rx="8" stroke="url(#borderGradient)" stroke-width="2" fill="none" opacity="0.5"/>
+
+  <!-- Definitions -->
+  <defs>
+    <radialGradient id="glow">
+      <stop offset="0%" stop-color="#2FC9F4" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#00C7BD" stop-opacity="0"/>
+    </radialGradient>
+
+    <linearGradient id="terminalBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#0f0f1a"/>
+    </linearGradient>
+
+    <linearGradient id="headerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2a2a3e"/>
+      <stop offset="100%" stop-color="#1f1f2a"/>
+    </linearGradient>
+
+    <linearGradient id="primaryGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2FC9F4"/>
+      <stop offset="100%" stop-color="#00C7BD"/>
+    </linearGradient>
+
+    <linearGradient id="secondaryGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00C7BD"/>
+      <stop offset="100%" stop-color="#2FC9F4"/>
+    </linearGradient>
+
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2FC9F4"/>
+      <stop offset="100%" stop-color="#00C7BD"/>
+    </linearGradient>
+
+    <linearGradient id="textGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00C7BD"/>
+      <stop offset="100%" stop-color="#2FC9F4"/>
+    </linearGradient>
+
+    <linearGradient id="borderGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2FC9F4"/>
+      <stop offset="50%" stop-color="#00C7BD"/>
+      <stop offset="100%" stop-color="#2FC9F4"/>
+    </linearGradient>
+  </defs>
+</svg>

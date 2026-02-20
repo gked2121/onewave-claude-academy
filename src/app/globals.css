@@ -1,0 +1,289 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@import 'tailwindcss';
+
+@theme {
+  /* Claude Brand Colors - Official Anthropic palette */
+  --color-claude: #DA7756;
+  --color-claude-light: #E8957A;
+  --color-claude-dark: #C15F3C;
+  --color-claude-glow: rgba(218, 119, 86, 0.3);
+  --color-claude-crail: #C15F3C;
+
+  /* Claude neutral palette */
+  --color-claude-cloudy: #B1ADA1;
+  --color-claude-pampas: #F4F3EE;
+
+  /* OneWave Blue - Primary brand color */
+  --color-primary: #2563EB;
+  --color-primary-hover: #1D4ED8;
+  --color-primary-dark: #1E40AF;
+  --color-primary-light: #3B82F6;
+
+  /* Secondary - Teal accent */
+  --color-secondary: #0891B2;
+  --color-accent: #06B6D4;
+
+  /* Status colors */
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+
+  /* Dark theme backgrounds - Slate tones */
+  --color-bg: #0F172A;
+  --color-bg-light: #1E293B;
+  --color-bg-lighter: #334155;
+  --color-bg-card: #1E293B;
+
+  /* Light surface colors - for enterprise contrast sections */
+  --color-surface: #F8FAFC;
+  --color-surface-dim: #F1F5F9;
+  --color-surface-muted: #E2E8F0;
+  --color-surface-card: #FFFFFF;
+  --color-surface-text: #0F172A;
+  --color-surface-text-muted: #475569;
+  --color-surface-text-soft: #64748B;
+  --color-surface-border: #E2E8F0;
+
+  /* Text */
+  --color-text: #F8FAFC;
+  --color-text-muted: #CBD5E1;
+  --color-text-soft: #94A3B8;
+
+  /* Borders */
+  --color-border: #334155;
+  --color-border-hover: #475569;
+
+  /* Font family */
+  --font-family-inter: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  /* OneWave Blue palette */
+  --color-primary-50: #EFF6FF;
+  --color-primary-100: #DBEAFE;
+  --color-primary-200: #BFDBFE;
+  --color-primary-300: #93C5FD;
+  --color-primary-400: #60A5FA;
+  --color-primary-500: #3B82F6;
+  --color-primary-600: #2563EB;
+  --color-primary-700: #1D4ED8;
+  --color-primary-800: #1E40AF;
+  --color-primary-900: #1E3A8A;
+
+  /* Claude Terra Cotta palette - Official brand */
+  --color-claude-50: #FDF6F4;
+  --color-claude-100: #FBEAE5;
+  --color-claude-200: #F6D4CA;
+  --color-claude-300: #EFBAA9;
+  --color-claude-400: #E8957A;
+  --color-claude-500: #DA7756;
+  --color-claude-600: #C15F3C;
+  --color-claude-700: #A14E32;
+  --color-claude-800: #84402A;
+  --color-claude-900: #6C3524;
+
+  /* Secondary teal palette */
+  --color-secondary-50: #ECFEFF;
+  --color-secondary-100: #CFFAFE;
+  --color-secondary-200: #A5F3FC;
+  --color-secondary-300: #67E8F9;
+  --color-secondary-400: #22D3EE;
+  --color-secondary-500: #06B6D4;
+  --color-secondary-600: #0891B2;
+  --color-secondary-700: #0E7490;
+  --color-secondary-800: #155E75;
+  --color-secondary-900: #164E63;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-family-inter);
+    background: var(--color-bg);
+    color: var(--color-text);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+
+  ::selection {
+    background-color: var(--color-claude-glow);
+    color: white;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Modern Scrollbar Styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-bg-light);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border-hover);
+    border-radius: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-muted);
+  }
+}
+
+@layer components {
+  /* Text gradient utilities */
+  .text-gradient-primary {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-claude {
+    background: linear-gradient(135deg, var(--color-claude), var(--color-claude-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-secondary {
+    background: linear-gradient(135deg, var(--color-secondary), var(--color-accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Claude brand accent for XP, achievements, celebrations */
+  .bg-claude {
+    background-color: var(--color-claude);
+  }
+
+  .text-claude {
+    color: var(--color-claude);
+  }
+
+  .border-claude {
+    border-color: var(--color-claude);
+  }
+
+  /* Light surface sections for enterprise contrast */
+  .bg-surface {
+    background-color: var(--color-surface);
+    color: var(--color-surface-text);
+  }
+
+  .bg-surface-dim {
+    background-color: var(--color-surface-dim);
+    color: var(--color-surface-text);
+  }
+
+  .bg-surface-card {
+    background-color: var(--color-surface-card);
+    color: var(--color-surface-text);
+  }
+}
+
+@layer utilities {
+  /* Shadow utilities */
+  .shadow-glow-blue {
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.2), 0 0 40px rgba(37, 99, 235, 0.1);
+  }
+
+  .shadow-glow-claude {
+    box-shadow: 0 0 20px var(--color-claude-glow), 0 0 40px rgba(218, 119, 86, 0.1);
+  }
+
+  .shadow-glow-teal {
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.2), 0 0 40px rgba(6, 182, 212, 0.1);
+  }
+
+  /* Animation utilities */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      opacity: 0.5;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0) translateX(0);
+    }
+    25% {
+      transform: translateY(-20px) translateX(10px);
+    }
+    50% {
+      transform: translateY(-10px) translateX(-10px);
+    }
+    75% {
+      transform: translateY(-15px) translateX(5px);
+    }
+  }
+
+  @keyframes fadeInOut {
+    0% {
+      opacity: 0;
+    }
+    20% {
+      opacity: 1;
+    }
+    80% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 3s linear infinite;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 100%
+    );
+    background-size: 1000px 100%;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+}

@@ -1,34 +1,44 @@
 {
-  "name": "claude-quest",
+  "name": "onewave-claude-academy",
   "version": "0.1.0",
   "private": true,
+  "description": "OneWave Claude Academy - Learn the complete Anthropic/Claude ecosystem",
   "scripts": {
     "dev": "next dev --turbopack",
+    "prebuild": "node scripts/inject-env.js",
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
-    "@stripe/stripe-js": "^8.0.0",
+    "@react-email/render": "^1.3.1",
+    "@stripe/stripe-js": "^4.9.0",
+    "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/supabase-js": "^2.58.0",
     "canvas-confetti": "^1.9.3",
-    "framer-motion": "^12.23.22",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.23.18",
     "lucide-react": "^0.544.0",
-    "next": "^15.5.12",
+    "next": "15.5.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "react-markdown": "^10.1.0",
-    "stripe": "^19.1.0"
+    "resend": "^6.1.1",
+    "stripe": "^16.6.0",
+    "three": "^0.169.0",
+    "vercel": "^48.2.0",
+    "web-vitals": "^5.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
-    "@types/canvas-confetti": "^1.9.0",
+    "@types/canvas-confetti": "^1.6.4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/three": "^0.169.0",
     "eslint": "^9",
-    "eslint-config-next": "15.5.4",
+    "eslint-config-next": "15.5.3",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

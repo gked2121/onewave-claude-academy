@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" fill="none">
+  <rect width="800" height="500" rx="12" fill="#1E293B"/>
+  <rect x="1" y="1" width="798" height="498" rx="11" stroke="#334155" stroke-width="2"/>
+  <rect x="0" y="0" width="800" height="48" rx="12" fill="#0F172A"/>
+  <rect x="0" y="36" width="800" height="12" fill="#0F172A"/>
+  <circle cx="24" cy="24" r="6" fill="#EF4444"/>
+  <circle cx="44" cy="24" r="6" fill="#F59E0B"/>
+  <circle cx="64" cy="24" r="6" fill="#22C55E"/>
+  <text x="400" y="28" text-anchor="middle" fill="#94A3B8" font-family="system-ui" font-size="14" font-weight="600">Claude Chat Interface</text>
+  <rect x="40" y="80" width="720" height="60" rx="8" fill="#334155"/>
+  <text x="60" y="115" fill="#CBD5E1" font-family="system-ui" font-size="14">How can I help you today?</text>
+  <rect x="40" y="160" width="520" height="80" rx="8" fill="#DA775620" stroke="#DA775640" stroke-width="1"/>
+  <text x="60" y="195" fill="#DA7756" font-family="system-ui" font-size="13" font-weight="500">Claude</text>
+  <text x="60" y="220" fill="#CBD5E1" font-family="system-ui" font-size="13">Screenshot placeholder -- replace with actual Claude chat UI</text>
+  <rect x="200" y="300" width="400" height="48" rx="24" fill="#DA775630" stroke="#DA775650" stroke-width="1"/>
+  <text x="400" y="329" text-anchor="middle" fill="#DA7756" font-family="system-ui" font-size="14" font-weight="600">Replace with actual screenshot</text>
+</svg>

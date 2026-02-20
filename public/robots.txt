@@ -1,0 +1,10 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Disallow admin/testing pages
+Disallow: /api/
+Disallow: /test
+
+# Sitemap
+Sitemap: https://claude-academy.onewave.ai/sitemap.xml
