@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { getTestEmails } from '@/config/auth';
 import { useProgress } from '@/context/ProgressContext';
-import { Mail, ArrowRight, Sparkles, Shield, User, Users, Lock } from 'lucide-react';
+import { Mail, ArrowRight, Sparkles, Shield, User, Users, Lock, Play } from 'lucide-react';
 import { signUp, signIn } from '@/lib/supabase';
 import { createOrganization } from '@/lib/admin';
 
@@ -27,6 +27,14 @@ export default function LoginPage() {
   const resetMessages = () => {
     setError(null);
     setSuccess(null);
+  };
+
+  const handleDemoLogin = () => {
+    setLoading(true);
+    setPlan('full');
+    setUserEmail('demo@claude-academy.com');
+    setSuccess('Welcome to the demo! Redirecting...');
+    setTimeout(() => router.push('/dashboard'), 800);
   };
 
   const validateEmail = (email: string): string | null => {
@@ -323,6 +331,26 @@ export default function LoginPage() {
                 </>
               )}
             </motion.button>
+
+            {/* Demo Login */}
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-white/10" />
+              </div>
+              <div className="relative flex justify-center text-xs">
+                <span className="bg-zinc-900 px-3 text-white/40">or</span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleDemoLogin}
+              disabled={loading}
+              className="w-full border border-white/20 bg-white/5 px-6 py-3 rounded-lg text-white/80 font-medium hover:bg-white/10 hover:text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              <Play className="w-4 h-4" />
+              Try Demo -- No Account Needed
+            </button>
 
             {/* Footer Info */}
             <div className="text-center space-y-3 pt-4 border-t border-white/10">
