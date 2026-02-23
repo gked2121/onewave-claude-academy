@@ -22,7 +22,9 @@
         fill="none"/>
 
   <!-- Terminal cursor blink -->
-  <rect x="322" y="296" width="14" height="48" rx="7" fill="url(#cursorGradient)" opacity="0.9"/>
+  <rect x="322" y="296" width="14" height="48" rx="7" fill="url(#cursorGradient)" opacity="0.9">
+    <animate attributeName="opacity" values="0.9;0.3;0.9" dur="1.5s" repeatCount="indefinite"/>
+  </rect>
 
   <!-- Prompt chevron -->
   <path d="M114 210 L148 248 L114 286"
@@ -33,32 +35,49 @@
         fill="none"
         opacity="0.5"/>
 
+  <!-- Subtle grid pattern overlay -->
+  <line x1="176" y1="400" x2="336" y2="400" stroke="white" stroke-width="1.5" opacity="0.06"/>
+  <line x1="176" y1="420" x2="296" y2="420" stroke="white" stroke-width="1.5" opacity="0.04"/>
+
   <defs>
+    <!-- Background gradient - slate dark -->
     <linearGradient id="bgGradient" x1="0" y1="0" x2="512" y2="512">
       <stop offset="0%" stop-color="#0F172A"/>
       <stop offset="100%" stop-color="#1E293B"/>
     </linearGradient>
+
+    <!-- Card gradient -->
     <linearGradient id="cardGradient" x1="48" y1="48" x2="464" y2="464">
       <stop offset="0%" stop-color="#1E293B"/>
       <stop offset="100%" stop-color="#0F172A"/>
     </linearGradient>
+
+    <!-- Card border -->
     <linearGradient id="cardBorder" x1="48" y1="48" x2="464" y2="464">
       <stop offset="0%" stop-color="#334155"/>
       <stop offset="100%" stop-color="#1E293B"/>
     </linearGradient>
+
+    <!-- Header background -->
     <linearGradient id="headerBg" x1="48" y1="48" x2="464" y2="104">
       <stop offset="0%" stop-color="#1E293B"/>
       <stop offset="100%" stop-color="#334155"/>
     </linearGradient>
+
+    <!-- Claude brand gradient for the C -->
     <linearGradient id="claudeGradient" x1="150" y1="150" x2="340" y2="370">
       <stop offset="0%" stop-color="#DA7756"/>
       <stop offset="50%" stop-color="#E8957A"/>
       <stop offset="100%" stop-color="#DA7756"/>
     </linearGradient>
+
+    <!-- Cursor gradient -->
     <linearGradient id="cursorGradient" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#2563EB"/>
       <stop offset="100%" stop-color="#3B82F6"/>
     </linearGradient>
+
+    <!-- Prompt chevron gradient -->
     <linearGradient id="promptGradient" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#2563EB"/>
       <stop offset="100%" stop-color="#0891B2"/>

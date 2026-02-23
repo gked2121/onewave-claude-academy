@@ -3,19 +3,21 @@ import { createClient } from '@supabase/supabase-js';
 // Admin Supabase client with service role key - bypasses RLS policies
 // ONLY use this for server-side admin operations!
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
-if (!supabaseUrl || !supabaseServiceKey) {
-  throw new Error('Missing Supabase admin configuration');
-}
+const isConfigured = supabaseUrl && supabaseServiceKey;
 
-export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false
-  },
-  db: {
-    schema: 'public'
-  }
-});
+export const supabaseAdmin = isConfigured
+  ? createClient(supabaseUrl, supabaseServiceKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      },
+      db: {
+        schema: 'public'
+      }
+    })
+  : null as any;
+
+export const isSupabaseAdminAvailable = () => isConfigured;

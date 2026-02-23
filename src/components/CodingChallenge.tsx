@@ -1146,7 +1146,7 @@ export default function CodingChallenge({ levelId }: CodingChallengeProps) {
                     onClick={() => setShowPreview(false)}
                     className="text-gray-400 hover:text-white"
                   >
-                    ✕
+                    <span className="text-lg leading-none">&times;</span>
                   </button>
                 </div>
                 {viewMode === 'code' ? (

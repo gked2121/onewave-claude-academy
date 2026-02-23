@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Terminal, CheckCircle, ArrowRight, Sparkles, Trophy } from 'lucide-react';
+import { Terminal, CheckCircle, ArrowRight, Sparkles, Trophy, MapPin, FolderOpen, MessageCircle } from 'lucide-react';
 
 interface PracticeCommand {
   id: string;
@@ -16,7 +16,7 @@ interface PracticeCommand {
 const practiceCommands: PracticeCommand[] = [
   {
     id: 'pwd',
-    instruction: '📍 Step 1: Find out where you are in your computer',
+    instruction: 'Step 1: Find out where you are in your computer',
     command: 'pwd',
     explanation: 'pwd means "print working directory" - it shows your current folder location. This is like asking "where am I?" in your computer\'s file system.',
     expectedOutput: '/Users/your-name/...',
@@ -24,7 +24,7 @@ const practiceCommands: PracticeCommand[] = [
   },
   {
     id: 'ls',
-    instruction: '📂 Step 2: See what files and folders are here',
+    instruction: 'Step 2: See what files and folders are here',
     command: 'ls',
     explanation: 'ls means "list" - it shows all files and folders in your current location. Think of it like opening a drawer to see what\'s inside.',
     expectedOutput: 'Desktop  Documents  Downloads  ...',
@@ -32,7 +32,7 @@ const practiceCommands: PracticeCommand[] = [
   },
   {
     id: 'echo',
-    instruction: '💬 Step 3: Make the computer say something',
+    instruction: 'Step 3: Make the computer say something',
     command: 'echo "Hello, I did it!"',
     explanation: 'echo prints text to the screen - like making your computer talk! This is similar to console.log() if you know programming.',
     expectedOutput: 'Hello, I did it!',

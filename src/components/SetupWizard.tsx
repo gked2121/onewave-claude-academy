@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useProgress } from '@/context/ProgressContext';
-import { ChevronRight, ChevronLeft, CheckCircle, Download, ExternalLink, Play, Lightbulb, Code, Terminal, Zap, ArrowRight, AlertCircle } from 'lucide-react';
+import { ChevronRight, ChevronLeft, CheckCircle, Check, Download, ExternalLink, Play, Lightbulb, Code, Terminal, Zap, ArrowRight, AlertCircle } from 'lucide-react';
 import { parseMarkdown } from '@/utils/markdown';
 import LiveCodeDemo from './LiveCodeDemo';
 import TerminalLauncher from './TerminalLauncher';
@@ -512,7 +512,7 @@ Your AI assistant will write most of the code - you'll focus on the creative dec
                         }`}
                         disabled={index > Math.max(...completedSteps) + 1}
                       >
-                        {completedSteps.includes(index) ? '✓' : index + 1}
+                        {completedSteps.includes(index) ? <Check className="w-4 h-4" /> : index + 1}
                       </button>
                       <span className={`text-xs mt-1 ${index === currentStep ? 'text-primary font-semibold' : 'text-white/50'}`}>
                         Step {index + 1}

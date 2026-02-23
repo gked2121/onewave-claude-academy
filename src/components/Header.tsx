@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useProgress } from "@/context/ProgressContext";
@@ -156,9 +157,13 @@ export default function Header() {
               transition={{ delay: 0.2, duration: 0.5 }}
             >
               <Link href={(mounted && isSignedIn) ? "/dashboard" : "/"} className="flex items-center gap-3 group">
-                <div className="w-10 h-10 group-hover:scale-110 transition-transform flex items-center justify-center rounded-xl bg-gradient-to-br from-claude/20 to-claude/10">
-                  <span className="text-2xl font-bold text-claude">C</span>
-                </div>
+                <Image
+                  src="/favicon.svg"
+                  alt="Claude Academy"
+                  width={40}
+                  height={40}
+                  className="group-hover:scale-105 transition-transform rounded-lg"
+                />
                 <div className="hidden sm:flex flex-col">
                   <span className="font-bold text-lg tracking-tight text-claude">
                     Claude Academy

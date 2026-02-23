@@ -1,8 +1,11 @@
 import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase-admin';
+import { supabaseAdmin, isSupabaseAdminAvailable } from '@/lib/supabase-admin';
 import { getUserProfile } from '@/lib/supabase';
 
 export async function POST(req: Request) {
+  if (!isSupabaseAdminAvailable()) {
+    return NextResponse.json({ success: false, error: 'Admin not configured' }, { status: 503 });
+  }
   try {
     const { email } = await req.json();
 

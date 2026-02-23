@@ -50,30 +50,28 @@ export default function Home() {
   return (
     <div className="min-h-screen pb-32">
       {/* Hero Section */}
-      <section className="relative py-20 sm:py-28 overflow-hidden">
+      <section className="relative py-20 sm:py-24 overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {/* Background mesh */}
+          {/* Background mesh - subtle */}
           <div className="absolute inset-0 -z-10 overflow-hidden">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80rem_50rem_at_50%_-20%,rgba(218,119,86,0.15),transparent)]" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_60rem_40rem_at_80%_80%,rgba(8,145,178,0.08),transparent)]" />
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,black_10%,transparent_100%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80rem_50rem_at_50%_-20%,rgba(218,119,86,0.08),transparent)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_60rem_40rem_at_80%_80%,rgba(8,145,178,0.04),transparent)]" />
           </div>
 
           <div className="text-center relative">
             {/* Logo mark */}
             <div className="mb-6 animate-[fadeIn_0.6s_ease-out]">
-              <div className="w-20 h-20 mx-auto relative group flex items-center justify-center">
-                <div className="absolute inset-0 bg-claude/20 blur-2xl rounded-full opacity-50 group-hover:opacity-80 transition-opacity duration-500" />
-                <div className="w-full h-full rounded-2xl bg-gradient-to-br from-claude/25 to-claude/8 flex items-center justify-center relative z-10 border border-claude/20">
-                  <span className="text-4xl font-bold text-claude drop-shadow-[0_0_12px_rgba(218,119,86,0.2)]">C</span>
-                </div>
-              </div>
+              <img
+                src="/logo.svg"
+                alt="Claude Academy"
+                className="w-20 h-20 mx-auto rounded-2xl"
+              />
             </div>
 
             {/* Main Heading */}
             <div className="mb-6 animate-[fadeIn_0.8s_ease-out]">
               <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl leading-[1.1]">
-                <span className="text-claude drop-shadow-[0_0_20px_rgba(218,119,86,0.15)]">Claude Academy</span>
+                <span className="text-claude">Claude Academy</span>
                 <br />
                 <span className="bg-gradient-to-b from-white to-white/75 bg-clip-text text-transparent">by OneWave AI</span>
               </h1>
@@ -94,16 +92,15 @@ export default function Home() {
                 <>
                   <Link
                     href="/dashboard"
-                    className="group relative inline-flex items-center justify-center gap-2.5 rounded-2xl bg-gradient-to-r from-claude via-claude to-claude-dark px-8 py-4 text-base font-bold text-white shadow-[0_0_15px_rgba(218,119,86,0.3)] hover:shadow-[0_0_30px_rgba(218,119,86,0.4)] transition-all duration-300 hover:scale-105 overflow-hidden"
+                    className="inline-flex items-center justify-center gap-2.5 rounded-2xl bg-claude px-8 py-4 text-base font-bold text-white shadow-lg hover:bg-claude-dark transition-all duration-200"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-                    <Play className="h-5 w-5 relative z-10" />
-                    <span className="relative z-10">Continue Learning</span>
-                    <ArrowRight className="h-5 w-5 relative z-10 group-hover:translate-x-1 transition-transform" />
+                    <Play className="h-5 w-5" />
+                    <span>Continue Learning</span>
+                    <ArrowRight className="h-5 w-5" />
                   </Link>
                   <Link
                     href="/tracks"
-                    className="group inline-flex items-center justify-center gap-2.5 rounded-2xl border border-white/20 bg-white/5 px-8 py-4 text-base font-bold text-white backdrop-blur-xl hover:bg-white/10 hover:border-white/30 transition-all duration-300"
+                    className="inline-flex items-center justify-center gap-2.5 rounded-2xl border border-white/20 bg-white/5 px-8 py-4 text-base font-bold text-white hover:bg-white/10 hover:border-white/30 transition-all duration-200"
                   >
                     <BookOpen className="h-5 w-5" />
                     <span>Browse All Tracks</span>
@@ -113,16 +110,15 @@ export default function Home() {
                 <>
                   <Link
                     href="/login"
-                    className="group relative inline-flex items-center justify-center gap-2.5 rounded-2xl bg-gradient-to-r from-claude via-claude to-claude-dark px-8 py-4 text-base font-bold text-white shadow-[0_0_15px_rgba(218,119,86,0.3)] hover:shadow-[0_0_30px_rgba(218,119,86,0.4)] transition-all duration-300 hover:scale-105 overflow-hidden"
+                    className="inline-flex items-center justify-center gap-2.5 rounded-2xl bg-claude px-8 py-4 text-base font-bold text-white shadow-lg hover:bg-claude-dark transition-all duration-200"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-                    <UserPlus className="h-5 w-5 relative z-10" />
-                    <span className="relative z-10">Start Free</span>
-                    <ArrowRight className="h-5 w-5 relative z-10 group-hover:translate-x-1 transition-transform" />
+                    <UserPlus className="h-5 w-5" />
+                    <span>Start Free</span>
+                    <ArrowRight className="h-5 w-5" />
                   </Link>
                   <Link
                     href="/upgrade"
-                    className="group inline-flex items-center justify-center gap-2.5 rounded-2xl border border-white/20 bg-white/5 px-8 py-4 text-base font-bold text-white backdrop-blur-xl hover:bg-white/10 hover:border-white/30 transition-all duration-300"
+                    className="inline-flex items-center justify-center gap-2.5 rounded-2xl border border-white/20 bg-white/5 px-8 py-4 text-base font-bold text-white hover:bg-white/10 hover:border-white/30 transition-all duration-200"
                   >
                     <Sparkles className="h-5 w-5" />
                     <span>Get Full Access</span>
@@ -133,6 +129,11 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Section divider */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      </div>
 
       {/* Choose Your Path Section */}
       <section className="relative py-16 sm:py-20">
@@ -160,53 +161,32 @@ export default function Home() {
                 <Link
                   key={path.id}
                   href={`/paths/${path.slug}`}
-                  className="group relative rounded-3xl overflow-hidden transition-all duration-500 hover:scale-[1.02]"
+                  className="group relative rounded-2xl overflow-hidden transition-all duration-200 bg-white/[0.04] ring-1 ring-white/[0.08] hover:bg-white/[0.07] hover:ring-white/15"
                 >
-                  {/* Card background with glass morphism */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/[0.07] via-white/[0.03] to-transparent backdrop-blur-xl" />
+                  {/* Top accent line */}
                   <div
-                    className="absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/10 group-hover:ring-2 transition-all duration-500"
+                    className="absolute top-0 left-0 right-0 h-[2px]"
                     style={{
-                      // @ts-expect-error -- CSS custom property for hover glow
-                      '--tw-ring-color': undefined,
+                      background: `linear-gradient(to right, transparent, ${path.color}80, transparent)`,
                     }}
-                  />
-                  {/* Colored border glow on hover */}
-                  <div
-                    className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                    style={{
-                      boxShadow: `inset 0 0 0 1.5px ${path.color}50, 0 0 30px ${path.color}15`,
-                    }}
-                  />
-                  {/* Top accent gradient */}
-                  <div
-                    className="absolute top-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                    style={{
-                      background: `linear-gradient(to right, transparent, ${path.color}, transparent)`,
-                    }}
-                  />
-                  {/* Background glow */}
-                  <div
-                    className="absolute -top-32 -right-32 w-64 h-64 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-                    style={{ background: `${path.color}08` }}
                   />
 
                   <div className="relative z-10 p-8 sm:p-9">
                     {/* Icon */}
                     <div
-                      className="w-14 h-14 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300"
+                      className="w-12 h-12 rounded-xl flex items-center justify-center mb-6"
                       style={{
-                        background: `linear-gradient(135deg, ${path.color}30, ${path.color}10)`,
+                        background: `linear-gradient(135deg, ${path.color}25, ${path.color}10)`,
                         boxShadow: `0 0 0 1px ${path.color}20`,
                       }}
                     >
                       <span style={{ color: path.color }}>
-                        <IconComponent className="w-7 h-7" />
+                        <IconComponent className="w-6 h-6" />
                       </span>
                     </div>
 
                     {/* Name & tagline */}
-                    <h3 className="text-2xl font-bold text-white mb-2 group-hover:translate-x-0.5 transition-transform duration-300">
+                    <h3 className="text-2xl font-bold text-white mb-2">
                       {path.name}
                     </h3>
                     <p className="text-white/60 text-[15px] leading-relaxed mb-6">
@@ -248,11 +228,11 @@ export default function Home() {
 
                     {/* CTA */}
                     <div
-                      className="inline-flex items-center gap-2 text-sm font-semibold transition-colors duration-300"
+                      className="inline-flex items-center gap-2 text-sm font-semibold transition-colors duration-200"
                       style={{ color: path.accentColor }}
                     >
                       <span>View Curriculum</span>
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
                     </div>
                   </div>
                 </Link>
@@ -261,6 +241,11 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Section divider */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      </div>
 
       {/* Complete Curriculum Section */}
       <section className="relative py-16 sm:py-20 overflow-hidden">
@@ -322,6 +307,11 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Section divider */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      </div>
+
       {/* Why Claude Academy Section */}
       <section className="relative py-16 sm:py-20 overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -340,8 +330,8 @@ export default function Home() {
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {/* Gamified Learning */}
-            <div className="group relative rounded-2xl bg-white/[0.04] p-7 ring-1 ring-white/[0.06] backdrop-blur-sm hover:bg-white/[0.07] hover:ring-white/12 transition-all duration-400">
-              <div className="w-12 h-12 mb-5 rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-500/5 flex items-center justify-center ring-1 ring-amber-500/15 group-hover:scale-110 transition-transform duration-300">
+            <div className="relative rounded-2xl bg-white/[0.04] p-7 ring-1 ring-white/[0.08] hover:bg-white/[0.07] transition-colors duration-200">
+              <div className="w-12 h-12 mb-5 rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-500/5 flex items-center justify-center ring-1 ring-amber-500/15">
                 <Trophy className="w-6 h-6 text-amber-400" />
               </div>
               <h4 className="text-lg font-bold text-white mb-2">Gamified Learning</h4>
@@ -351,8 +341,8 @@ export default function Home() {
             </div>
 
             {/* AI-Verified */}
-            <div className="group relative rounded-2xl bg-white/[0.04] p-7 ring-1 ring-white/[0.06] backdrop-blur-sm hover:bg-white/[0.07] hover:ring-white/12 transition-all duration-400">
-              <div className="w-12 h-12 mb-5 rounded-xl bg-gradient-to-br from-claude/20 to-claude/5 flex items-center justify-center ring-1 ring-claude/15 group-hover:scale-110 transition-transform duration-300">
+            <div className="relative rounded-2xl bg-white/[0.04] p-7 ring-1 ring-white/[0.08] hover:bg-white/[0.07] transition-colors duration-200">
+              <div className="w-12 h-12 mb-5 rounded-xl bg-gradient-to-br from-claude/20 to-claude/5 flex items-center justify-center ring-1 ring-claude/15">
                 <Bot className="w-6 h-6 text-claude" />
               </div>
               <h4 className="text-lg font-bold text-white mb-2">AI-Verified Exercises</h4>
@@ -362,8 +352,8 @@ export default function Home() {
             </div>
 
             {/* Team Certifications */}
-            <div className="group relative rounded-2xl bg-white/[0.04] p-7 ring-1 ring-white/[0.06] backdrop-blur-sm hover:bg-white/[0.07] hover:ring-white/12 transition-all duration-400">
-              <div className="w-12 h-12 mb-5 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center ring-1 ring-primary/15 group-hover:scale-110 transition-transform duration-300">
+            <div className="relative rounded-2xl bg-white/[0.04] p-7 ring-1 ring-white/[0.08] hover:bg-white/[0.07] transition-colors duration-200">
+              <div className="w-12 h-12 mb-5 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center ring-1 ring-primary/15">
                 <Award className="w-6 h-6 text-primary" />
               </div>
               <h4 className="text-lg font-bold text-white mb-2">Team Certifications</h4>
@@ -375,17 +365,15 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Section divider */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      </div>
+
       {/* Final CTA */}
       <section className="relative py-16 sm:py-20">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <div className="group relative rounded-3xl overflow-hidden">
-            {/* Glass background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-claude/10 via-claude/5 to-transparent backdrop-blur-xl" />
-            <div className="absolute inset-0 rounded-3xl ring-1 ring-inset ring-claude/20 group-hover:ring-claude/35 transition-all duration-500" />
-            {/* Glow effects */}
-            <div className="absolute -top-32 -right-32 w-64 h-64 bg-claude/8 rounded-full blur-3xl" />
-            <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-primary/6 rounded-full blur-3xl" />
-
+          <div className="relative rounded-2xl overflow-hidden bg-white/[0.04] ring-1 ring-white/[0.08]">
             <div className="relative z-10 p-10 sm:p-14 text-center">
               <h3 className="text-3xl font-extrabold text-white mb-4 sm:text-4xl">
                 Ready to Master Claude?
@@ -396,16 +384,15 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   href={isAuthenticated ? '/dashboard' : '/login'}
-                  className="group/btn relative inline-flex items-center justify-center gap-2.5 rounded-2xl bg-gradient-to-r from-claude via-claude to-claude-dark px-9 py-4 text-base font-bold text-white shadow-[0_0_15px_rgba(218,119,86,0.3)] hover:shadow-[0_0_30px_rgba(218,119,86,0.4)] transition-all duration-300 hover:scale-105 overflow-hidden"
+                  className="inline-flex items-center justify-center gap-2.5 rounded-2xl bg-claude px-9 py-4 text-base font-bold text-white shadow-lg hover:bg-claude-dark transition-all duration-200"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-700" />
-                  <Play className="w-5 h-5 relative z-10" />
-                  <span className="relative z-10">{isAuthenticated ? 'Continue Learning' : 'Start Free'}</span>
-                  <ArrowRight className="w-5 h-5 relative z-10 group-hover/btn:translate-x-1 transition-transform" />
+                  <Play className="w-5 h-5" />
+                  <span>{isAuthenticated ? 'Continue Learning' : 'Start Free'}</span>
+                  <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link
                   href="/upgrade"
-                  className="group/btn inline-flex items-center justify-center gap-2.5 rounded-2xl border border-white/20 bg-white/5 px-9 py-4 text-base font-bold text-white backdrop-blur-xl hover:bg-white/10 hover:border-white/30 transition-all duration-300"
+                  className="inline-flex items-center justify-center gap-2.5 rounded-2xl border border-white/20 bg-white/5 px-9 py-4 text-base font-bold text-white hover:bg-white/10 hover:border-white/30 transition-all duration-200"
                 >
                   <Users className="w-5 h-5" />
                   <span>For Teams</span>

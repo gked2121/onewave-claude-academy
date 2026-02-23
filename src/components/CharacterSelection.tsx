@@ -113,9 +113,9 @@ export default function CharacterSelection() {
             className="max-w-3xl mx-auto bg-primary/5 rounded-xl p-4 border border-primary/20 mb-6"
           >
             <div className="flex flex-wrap justify-center gap-4 text-sm">
-              <span className="text-emerald-400">✓ Master AI CLI Tools</span>
-              <span className="text-blue-400">✓ Build 5+ Real Projects</span>
-              <span className="text-purple-400">✓ Advance Your Career</span>
+              <span className="text-emerald-400">Master AI CLI Tools</span>
+              <span className="text-blue-400">Build 5+ Real Projects</span>
+              <span className="text-primary">Advance Your Career</span>
             </div>
           </motion.div>
         </motion.div>

@@ -24,7 +24,7 @@ const achievements: Achievement[] = [
     id: 'first_steps',
     title: 'First Steps',
     description: 'Complete your first coding challenge',
-    icon: '👶',
+    icon: 'sparkles',
     xpReward: 100,
     category: 'progress',
     unlocked: false,
