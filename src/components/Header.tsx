@@ -6,7 +6,8 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useProgress } from "@/context/ProgressContext";
 import { motion } from "framer-motion";
-import { Menu, X, Star, Trophy, Zap, LogOut, LogIn, Settings, ShieldCheck } from "lucide-react";
+import { Menu, X, Star, Trophy, Zap, LogOut, LogIn, Settings, ShieldCheck, Users } from "lucide-react";
+import useOrgRole from "@/hooks/useOrgRole";
 
 function NavLink({ href, label }: { href: string; label: string }) {
   const pathname = usePathname();
@@ -99,7 +100,9 @@ export default function Header() {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const { userEmail, logout } = useProgress();
+  const { role: orgRole } = useOrgRole();
   const isSignedIn = !!userEmail;
+  const showTeamLink = orgRole === 'admin' || orgRole === 'manager';
 
   useEffect(() => {
     setMounted(true);
@@ -185,6 +188,7 @@ export default function Header() {
               <NavLink href="/dashboard" label="Dashboard" />
               <NavLink href="/tracks" label="Tracks" />
               <NavLink href="/achievements" label="Achievements" />
+              {showTeamLink && <NavLink href="/admin" label="Team" />}
               <NavLink href="/settings" label="Settings" />
               <NavLink href="/upgrade" label="Upgrade" />
             </motion.nav>
@@ -263,6 +267,15 @@ export default function Header() {
               >
                 Achievements
               </Link>
+              {showTeamLink && (
+                <Link
+                  href="/admin"
+                  className="rounded-2xl bg-zinc-800 px-6 py-4 text-center font-semibold text-white hover:bg-zinc-700 transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Team
+                </Link>
+              )}
               <Link
                 href="/settings"
                 className="rounded-2xl bg-zinc-800 px-6 py-4 text-center font-semibold text-white hover:bg-zinc-700 transition-colors"

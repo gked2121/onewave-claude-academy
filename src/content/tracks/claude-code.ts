@@ -1099,5 +1099,203 @@ This is a Next.js 14 application with:
         }
       ]
     } as LevelContent
+  },
+
+  // Level 13: Plan Mode
+  {
+    levelNumber: 13,
+    title: 'Plan Mode',
+    description: 'Use Plan Mode to have Claude design an approach before making changes',
+    xpReward: 250,
+    estimatedMinutes: 25,
+    isFree: false,
+    requiresVerification: true,
+    content: {
+      type: 'lesson',
+      sections: [
+        {
+          id: 'cc13-1',
+          type: 'text',
+          title: 'What is Plan Mode?',
+          content: `<p>Plan Mode is a special mode in Claude Code where Claude analyzes your codebase and proposes a plan of action before making any changes. Instead of immediately editing files and running commands, Claude:</p>
+<ul>
+  <li><strong>Reads and explores</strong> your code to understand the current state</li>
+  <li><strong>Thinks through</strong> the implications of the requested changes</li>
+  <li><strong>Proposes a step-by-step plan</strong> for you to review</li>
+  <li><strong>Waits for your approval</strong> before executing anything</li>
+</ul>
+<p>This gives you full visibility and control over what Claude will do, making it ideal for high-stakes or complex changes where you want to verify the approach first.</p>`
+        },
+        {
+          id: 'cc13-2',
+          type: 'code',
+          title: 'Activating Plan Mode',
+          language: 'text',
+          content: `# Toggle Plan Mode with Shift+Tab
+# The input prompt indicator changes to show you are in Plan Mode
+
+# Or use the slash command
+> /plan
+
+# You can also start a message with the plan command
+> /plan Refactor the authentication module to use JWT tokens
+
+# To exit Plan Mode, press Shift+Tab again or use:
+> /plan off`
+        },
+        {
+          id: 'cc13-3',
+          type: 'text',
+          title: 'How Plan Mode Works',
+          content: `<p>When Plan Mode is active, Claude follows a structured workflow:</p>
+<ol>
+  <li><strong>Read phase</strong> - Claude explores the relevant files, understands dependencies, and maps out the affected areas of your codebase</li>
+  <li><strong>Think phase</strong> - Claude reasons about the best approach, considers edge cases, and identifies potential risks</li>
+  <li><strong>Propose phase</strong> - Claude presents a detailed plan outlining each file to change, what changes to make, and in what order</li>
+  <li><strong>Review phase</strong> - You review the plan, ask questions, request adjustments, or approve it</li>
+  <li><strong>Execute phase</strong> - Once approved, Claude carries out the plan, and you can switch back to normal mode</li>
+</ol>
+<p>Claude will not write or edit any files while in Plan Mode. It only reads and proposes.</p>`
+        },
+        {
+          id: 'cc13-4',
+          type: 'text',
+          title: 'When to Use Plan Mode',
+          content: `<p>Plan Mode is most valuable in these scenarios:</p>
+<ul>
+  <li><strong>Large refactors</strong> - renaming modules, restructuring folders, changing patterns across many files</li>
+  <li><strong>Architecture changes</strong> - switching databases, adding authentication layers, changing API structures</li>
+  <li><strong>Unfamiliar codebases</strong> - when you are new to a project and want Claude to explain its approach before touching anything</li>
+  <li><strong>High-risk changes</strong> - modifying payment logic, security code, or database schemas where mistakes are costly</li>
+  <li><strong>Team coordination</strong> - when you need to share the plan with colleagues before implementing</li>
+</ul>`
+        },
+        {
+          id: 'cc13-5',
+          type: 'tip',
+          title: 'Reviewing and Approving Plans',
+          content: 'When Claude presents a plan, you can ask clarifying questions, request changes to the approach, or ask Claude to consider alternatives. The plan is a conversation -- iterate on it until you are confident in the approach. Once satisfied, switch out of Plan Mode and ask Claude to execute the plan.'
+        }
+      ],
+      exercise: {
+        type: 'prompt',
+        instructions: 'Write a prompt that uses Plan Mode to design a refactoring approach for a real or hypothetical project. Describe the current state of the code, what you want to change, and any constraints Claude should consider. Your prompt should be something you would type after activating Plan Mode.',
+        hints: [
+          'Describe the current code structure and what is wrong with it',
+          'Be specific about the desired end state after refactoring',
+          'Mention any constraints like backward compatibility, test coverage, or deployment concerns'
+        ],
+        validationCriteria: [
+          'Describes the current state of the code clearly',
+          'Specifies the desired refactoring outcome',
+          'Includes constraints or considerations for Claude to factor in',
+          'Is scoped to a task that genuinely benefits from planning before execution'
+        ]
+      }
+    } as LevelContent
+  },
+
+  // Level 14: Thinking Mode & Extended Thinking
+  {
+    levelNumber: 14,
+    title: 'Thinking Mode & Extended Thinking',
+    description: 'Unlock deeper reasoning with extended thinking for complex problems',
+    xpReward: 250,
+    estimatedMinutes: 25,
+    isFree: false,
+    requiresVerification: true,
+    content: {
+      type: 'lesson',
+      sections: [
+        {
+          id: 'cc14-1',
+          type: 'text',
+          title: 'What is Extended Thinking?',
+          content: `<p>Extended thinking is a capability that allows Claude to reason more deeply before responding. When enabled, Claude spends additional time "thinking through" complex problems, similar to how a developer might pause to consider multiple approaches before writing code.</p>
+<ul>
+  <li><strong>Deeper analysis</strong> - Claude considers more possibilities and edge cases</li>
+  <li><strong>Better accuracy</strong> - More thorough reasoning leads to fewer mistakes</li>
+  <li><strong>Visible thought process</strong> - You can see Claude's reasoning chain</li>
+  <li><strong>Higher quality solutions</strong> - Especially for complex or ambiguous tasks</li>
+</ul>
+<p>Extended thinking uses additional tokens for the reasoning process, so it costs more per response but delivers significantly better results for challenging tasks.</p>`
+        },
+        {
+          id: 'cc14-2',
+          type: 'code',
+          title: 'Enabling and Configuring Thinking',
+          language: 'text',
+          content: `# Toggle thinking mode with the slash command
+> /think
+
+# Set a specific thinking budget (tokens allocated to reasoning)
+> /think 10000
+
+# Use a high budget for very complex tasks
+> /think 50000
+
+# Disable thinking mode
+> /think off
+
+# You can also set thinking in your project configuration
+# .claude/settings.json:
+# { "thinking": { "enabled": true, "budget": 10000 } }`
+        },
+        {
+          id: 'cc14-3',
+          type: 'text',
+          title: 'When Extended Thinking Helps',
+          content: `<p>Extended thinking provides the biggest improvement for tasks that require multi-step reasoning:</p>
+<ul>
+  <li><strong>Complex debugging</strong> - tracing issues across multiple files, understanding race conditions, or diagnosing intermittent failures</li>
+  <li><strong>Architecture decisions</strong> - evaluating tradeoffs between approaches, considering scalability and maintenance implications</li>
+  <li><strong>Tricky algorithms</strong> - implementing complex data structures, optimization problems, or mathematical computations</li>
+  <li><strong>Security analysis</strong> - identifying vulnerabilities, reviewing authentication flows, evaluating attack vectors</li>
+  <li><strong>Legacy code comprehension</strong> - understanding poorly documented codebases, mapping dependencies, identifying patterns</li>
+</ul>
+<p>For straightforward tasks like formatting, simple edits, or well-defined changes, standard mode is sufficient and more cost-efficient.</p>`
+        },
+        {
+          id: 'cc14-4',
+          type: 'text',
+          title: 'Reading Claude\'s Thinking Output',
+          content: `<p>When extended thinking is enabled, Claude's response includes a thinking section that shows its internal reasoning. This is valuable because:</p>
+<ul>
+  <li><strong>Transparency</strong> - you can see why Claude chose a particular approach over alternatives</li>
+  <li><strong>Debugging the AI</strong> - if Claude's solution is wrong, the thinking reveals where its reasoning went astray</li>
+  <li><strong>Learning opportunity</strong> - the thinking process often surfaces considerations you might not have thought of</li>
+  <li><strong>Validation</strong> - you can verify that Claude understood your requirements correctly before looking at the output</li>
+</ul>
+<p>The thinking output appears in a collapsible section above the main response. Review it when results are unexpected or when working on critical code.</p>`
+        },
+        {
+          id: 'cc14-5',
+          type: 'tip',
+          title: 'Combining with Plan Mode for Maximum Effectiveness',
+          content: 'For the most thorough approach to complex tasks, enable extended thinking while in Plan Mode. Claude will use deeper reasoning to analyze your codebase and produce a more comprehensive plan. This combination is especially powerful for large-scale refactors, migration projects, or when working in unfamiliar codebases where surface-level analysis might miss important details.'
+        },
+        {
+          id: 'cc14-6',
+          type: 'warning',
+          title: 'Cost and Performance Considerations',
+          content: 'Extended thinking uses additional tokens for reasoning, which increases cost per response. Start with a moderate thinking budget and increase it only for tasks where you notice a quality difference. Not every task benefits from extended thinking -- use it strategically for your most challenging problems.'
+        }
+      ],
+      exercise: {
+        type: 'prompt',
+        instructions: 'Choose a complex coding task (debugging a tricky issue, designing an algorithm, or evaluating an architecture decision). Write two versions of a prompt for Claude Code: one for standard mode and one that leverages extended thinking. Explain what additional reasoning you expect the thinking mode version to produce.',
+        hints: [
+          'Pick a task that genuinely has multiple valid approaches or hidden complexity',
+          'In the extended thinking version, ask Claude to consider tradeoffs and edge cases',
+          'Note what kind of reasoning you expect to see in the thinking output'
+        ],
+        validationCriteria: [
+          'Chooses a task complex enough to benefit from extended thinking',
+          'Provides both a standard and extended thinking version of the prompt',
+          'Explains what deeper reasoning is expected from extended thinking',
+          'Demonstrates understanding of when thinking mode adds value'
+        ]
+      }
+    } as LevelContent
   }
 ];

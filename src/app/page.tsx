@@ -30,6 +30,7 @@ import {
   Flame,
   Lock,
   CheckCircle2,
+  LayoutDashboard,
 } from 'lucide-react';
 import { useProgress } from '@/context/ProgressContext';
 import { getAllPaths } from '@/lib/paths';
@@ -48,6 +49,8 @@ const TRACK_ICON_MAP: Record<string, React.ComponentType<{ className?: string }>
   'anthropic-api': Code,
   'claude-enterprise': Building2,
   'claude-skills': Zap,
+  'claude-workspace': LayoutDashboard,
+  'ai-strategy': Target,
 };
 
 const fadeUp = {
@@ -60,8 +63,8 @@ const stagger = {
 };
 
 const STATS = [
-  { value: '6', label: 'Learning Tracks', icon: BookOpen },
-  { value: '53', label: 'Interactive Levels', icon: Layers },
+  { value: '8', label: 'Learning Tracks', icon: BookOpen },
+  { value: '68', label: 'Interactive Levels', icon: Layers },
   { value: '500+', label: 'Hands-on Exercises', icon: Target },
   { value: '3', label: 'Certification Tiers', icon: Award },
 ];
@@ -579,7 +582,7 @@ export default function Home() {
               className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl mb-5"
               variants={fadeUp}
             >
-              6 Tracks. 53 Levels. One Ecosystem.
+              8 Tracks. 68 Levels. One Ecosystem.
             </motion.h2>
             <motion.p
               className="mx-auto max-w-2xl text-base text-white/50"

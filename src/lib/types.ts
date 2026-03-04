@@ -189,6 +189,8 @@ export const TRACK_ICONS: Record<string, string> = {
   'anthropic-api': 'Code',
   'claude-enterprise': 'Building',
   'claude-skills': 'Zap',
+  'claude-workspace': 'LayoutDashboard',
+  'ai-strategy': 'Target',
 };
 
 export const DIFFICULTY_COLORS: Record<string, string> = {

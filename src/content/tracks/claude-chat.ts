@@ -318,6 +318,75 @@ Reference our brand guide (uploaded) for visual standards.
           type: 'warning',
           title: 'Artifact Limitations',
           content: 'Artifacts are stored per-conversation and don\'t persist across chats. For important artifacts, save them locally or in your project files. Also, complex interactive artifacts may have rendering limitations.'
+        },
+        {
+          id: 'projects-6',
+          type: 'text',
+          title: 'Interactive Artifacts',
+          content: `<p>Claude can build fully interactive React components as artifacts, giving you working tools right inside the conversation. Common interactive artifacts include:</p>
+<ul>
+  <li><strong>Dashboards</strong> - data visualizations with charts, filters, and dynamic displays</li>
+  <li><strong>Calculators</strong> - mortgage calculators, ROI estimators, unit converters, pricing tools</li>
+  <li><strong>Forms and surveys</strong> - multi-step forms with validation, quizzes, and feedback collectors</li>
+  <li><strong>Mini applications</strong> - to-do lists, timers, kanban boards, color pickers</li>
+  <li><strong>Data tools</strong> - CSV parsers, JSON formatters, regex testers, diff viewers</li>
+  <li><strong>Games and simulations</strong> - simple games, algorithm visualizations, physics simulations</li>
+</ul>
+<p>To request an interactive artifact, describe what you want the tool to do and ask Claude to build it as a React component. You can iterate on the design, add features, or change styling through follow-up messages.</p>`
+        },
+        {
+          id: 'projects-7',
+          type: 'code',
+          title: 'Mermaid Diagrams',
+          language: 'text',
+          content: `Claude can generate Mermaid diagram artifacts for visual documentation.
+Here are example prompts and what they produce:
+
+--- Flowchart ---
+Prompt: "Create a flowchart showing our user signup process:
+visitor lands on page, chooses email or Google signup,
+validates input, creates account, sends welcome email."
+
+Claude produces a Mermaid flowchart with decision nodes,
+directional arrows, and labeled steps.
+
+--- Org Chart ---
+Prompt: "Create an org chart for a startup with a CEO,
+CTO and COO reporting to them, and 2-3 people under each."
+
+Claude produces a top-down hierarchy diagram with
+roles and reporting lines.
+
+--- Sequence Diagram ---
+Prompt: "Show the API request flow: client sends request
+to API gateway, gateway checks auth service, forwards
+to backend, backend queries database, response flows back."
+
+Claude produces a sequence diagram with labeled
+participants and message arrows showing the full flow.
+
+--- Timeline ---
+Prompt: "Create a timeline of our product roadmap:
+Q1 - MVP launch, Q2 - mobile app, Q3 - enterprise
+features, Q4 - international expansion."
+
+Claude produces a Gantt chart or timeline visualization
+with phases and milestones.`
+        },
+        {
+          id: 'projects-8',
+          type: 'text',
+          title: 'SVG Visualizations',
+          content: `<p>Claude can generate custom SVG (Scalable Vector Graphics) artifacts for visual content that goes beyond what Mermaid diagrams offer. SVG artifacts are resolution-independent and can be downloaded or embedded anywhere.</p>
+<ul>
+  <li><strong>Custom diagrams</strong> - architecture diagrams, network topologies, system overviews with precise layouts and styling</li>
+  <li><strong>Data visualizations</strong> - bar charts, pie charts, scatter plots, and custom chart types with your specific data</li>
+  <li><strong>Infographics</strong> - visual summaries combining icons, text, and layout for presentations or documentation</li>
+  <li><strong>Icons and logos</strong> - simple vector graphics, badges, and branded visual elements</li>
+  <li><strong>Wireframes</strong> - low-fidelity UI mockups and layout sketches for rapid prototyping</li>
+  <li><strong>Process maps</strong> - detailed workflow visualizations with custom styling beyond standard diagram tools</li>
+</ul>
+<p>To get the best SVG results, describe the visual you want in detail: specify colors, layout direction, relative sizes, and any text labels. Claude will generate clean SVG code rendered as a visual artifact you can preview and download.</p>`
         }
       ],
       exercise: {

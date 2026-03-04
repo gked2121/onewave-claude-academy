@@ -15,6 +15,9 @@ import {
   UserPlus,
   ArrowLeft,
   Clock,
+  Activity,
+  Upload,
+  Building2,
 } from 'lucide-react';
 import { useProgress } from '@/context/ProgressContext';
 import { getCurrentUserId } from '@/lib/supabase-sync';
@@ -22,8 +25,11 @@ import {
   getUserOrganization,
   getUserOrgRole,
   getOrgMembers,
+  getOrgMembersByDepartment,
   getOrgStats,
+  getOrgStatsByDepartment,
   getOrgInvitations,
+  getManagerDepartment,
   inviteMember,
   removeMember,
   updateMemberRole,
@@ -32,6 +38,23 @@ import {
   type OrgStats,
   type OrgInvitation,
 } from '@/lib/admin';
+import dynamic from 'next/dynamic';
+import ExportMenu from '@/components/admin/ExportMenu';
+import BulkInviteModal from '@/components/admin/BulkInviteModal';
+
+// Lazy-load analytics dashboard (heavy recharts dependency)
+const AnalyticsDashboard = dynamic(
+  () => import('@/components/admin/AnalyticsDashboard'),
+  {
+    loading: () => (
+      <div className="flex items-center justify-center py-20">
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    ),
+  }
+);
+
+type TabId = 'team' | 'analytics';
 
 const ROLE_STYLES: Record<string, string> = {
   admin: 'bg-claude/20 text-claude',
@@ -46,13 +69,17 @@ export default function AdminDashboardPage() {
   // Auth + data state
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
+  const [userRole, setUserRole] = useState<'admin' | 'manager' | null>(null);
+  const [userDepartment, setUserDepartment] = useState<string | null>(null);
   const [org, setOrg] = useState<OrgDetails | null>(null);
   const [members, setMembers] = useState<OrgMember[]>([]);
   const [stats, setStats] = useState<OrgStats | null>(null);
   const [invitations, setInvitations] = useState<OrgInvitation[]>([]);
 
-  // Invite form
+  // UI state
+  const [activeTab, setActiveTab] = useState<TabId>('team');
   const [showInvite, setShowInvite] = useState(false);
+  const [showBulkInvite, setShowBulkInvite] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteRole, setInviteRole] = useState<'member' | 'manager' | 'admin'>('member');
   const [inviteLoading, setInviteLoading] = useState(false);
@@ -62,14 +89,18 @@ export default function AdminDashboardPage() {
   const [error, setError] = useState<string | null>(null);
 
   // ── Load org data ──
-  const loadData = useCallback(async (orgId: string, currentUserId: string) => {
+  const loadData = useCallback(async (orgId: string, role: 'admin' | 'manager', dept: string | null) => {
     try {
+      // Managers see department-scoped data; admins see everything
       const [membersData, statsData, invitationsData] = await Promise.all([
-        getOrgMembers(orgId),
-        getOrgStats(orgId),
+        role === 'manager' && dept
+          ? getOrgMembersByDepartment(orgId, dept)
+          : getOrgMembers(orgId),
+        role === 'manager' && dept
+          ? getOrgStatsByDepartment(orgId, dept)
+          : getOrgStats(orgId),
         getOrgInvitations(orgId),
       ]);
-      // Sort members by XP descending
       membersData.sort((a, b) => (b.profile.xp || 0) - (a.profile.xp || 0));
       setMembers(membersData);
       setStats(statsData);
@@ -101,13 +132,23 @@ export default function AdminDashboardPage() {
         ]);
         if (cancelled) return;
 
-        if (!userOrg || role !== 'admin') {
+        // Allow admin and manager roles
+        if (!userOrg || (role !== 'admin' && role !== 'manager')) {
           router.push('/dashboard');
           return;
         }
 
         setOrg(userOrg);
-        await loadData(userOrg.id, uid);
+        setUserRole(role as 'admin' | 'manager');
+
+        // For managers, get their department
+        let dept: string | null = null;
+        if (role === 'manager') {
+          dept = await getManagerDepartment(userOrg.id, uid);
+          setUserDepartment(dept);
+        }
+
+        await loadData(userOrg.id, role as 'admin' | 'manager', dept);
       } catch (err) {
         console.error('Admin init error:', err);
         if (!cancelled) setError('Something went wrong. Please try again.');
@@ -133,7 +174,6 @@ export default function AdminDashboardPage() {
       setInviteMessage({ type: 'success', text: `Invitation sent to ${inviteEmail}` });
       setInviteEmail('');
       setInviteRole('member');
-      // Refresh invitations
       const updated = await getOrgInvitations(org.id);
       setInvitations(updated);
     } else {
@@ -144,8 +184,8 @@ export default function AdminDashboardPage() {
   };
 
   const handleRoleChange = async (member: OrgMember, newRole: 'admin' | 'manager' | 'member') => {
-    if (!org) return;
-    const result = await updateMemberRole(org.id, member.user_id, newRole);
+    if (!org || !userId) return;
+    const result = await updateMemberRole(org.id, member.user_id, newRole, userId);
     if (result.success) {
       setMembers(prev =>
         prev.map(m =>
@@ -156,18 +196,27 @@ export default function AdminDashboardPage() {
   };
 
   const handleRemoveMember = async (member: OrgMember) => {
-    if (!org) return;
+    if (!org || !userId) return;
     const name = member.profile.full_name || member.profile.email;
     const confirmed = window.confirm(`Remove ${name} from the team? This cannot be undone.`);
     if (!confirmed) return;
 
-    const result = await removeMember(org.id, member.user_id);
+    const result = await removeMember(org.id, member.user_id, userId);
     if (result.success) {
       setMembers(prev => prev.filter(m => m.user_id !== member.user_id));
-      // Refresh stats
-      const updatedStats = await getOrgStats(org.id);
-      setStats(updatedStats);
+      if (org && userRole) {
+        const updatedStats = userRole === 'manager' && userDepartment
+          ? await getOrgStatsByDepartment(org.id, userDepartment)
+          : await getOrgStats(org.id);
+        setStats(updatedStats);
+      }
     }
+  };
+
+  const handleBulkInviteComplete = async () => {
+    if (!org) return;
+    const updated = await getOrgInvitations(org.id);
+    setInvitations(updated);
   };
 
   // ── Loading state ──
@@ -201,6 +250,17 @@ export default function AdminDashboardPage() {
 
   if (!org || !stats) return null;
 
+  // Manager-specific role options (can only assign 'member')
+  const isManager = userRole === 'manager';
+  const availableRoles = isManager
+    ? ['member'] as const
+    : ['member', 'manager', 'admin'] as const;
+
+  // Manager invite roles (no admin option)
+  const availableInviteRoles = isManager
+    ? ['member'] as const
+    : ['member', 'manager', 'admin'] as const;
+
   return (
     <main className="min-h-screen bg-bg pt-24 pb-16">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -217,180 +277,309 @@ export default function AdminDashboardPage() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8"
+          className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6"
         >
           <div>
             <h1 className="text-3xl font-bold text-text">Team Dashboard</h1>
             <p className="text-text-soft mt-1">
               {org.name} -- {stats.totalMembers} {stats.totalMembers === 1 ? 'member' : 'members'}
+              {isManager && userDepartment && (
+                <span className="ml-2 inline-flex items-center gap-1 text-xs font-medium bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                  <Building2 className="w-3 h-3" />
+                  {userDepartment}
+                </span>
+              )}
             </p>
           </div>
-          <button
-            onClick={() => setShowInvite(!showInvite)}
-            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary/90"
-          >
-            <UserPlus className="w-4 h-4" />
-            Invite Member
-          </button>
-        </motion.div>
-
-        {/* ── Stats Row ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
-        >
-          <StatCard
-            icon={<Sparkles className="w-5 h-5 text-claude" />}
-            iconBg="bg-claude/20"
-            label="Total Team XP"
-            value={stats.totalXp.toLocaleString()}
-          />
-          <StatCard
-            icon={<BarChart3 className="w-5 h-5 text-primary" />}
-            iconBg="bg-primary/20"
-            label="Avg Completion"
-            value={`${stats.avgCompletionPercent}%`}
-          />
-          <StatCard
-            icon={<Users className="w-5 h-5 text-green-400" />}
-            iconBg="bg-green-500/10"
-            label="Team Members"
-            value={String(stats.totalMembers)}
-          />
-          <StatCard
-            icon={<Trophy className="w-5 h-5 text-yellow-500" />}
-            iconBg="bg-yellow-500/10"
-            label="Top Performer"
-            value={stats.topPerformer?.name || '--'}
-            sub={stats.topPerformer ? `${stats.topPerformer.xp.toLocaleString()} XP` : undefined}
-          />
-        </motion.div>
-
-        {/* ── Invite Section (collapsible) ── */}
-        {showInvite && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="rounded-xl border border-border bg-bg-card p-6 mb-8"
-          >
-            <div className="flex items-center gap-2 mb-4">
-              <Mail className="w-5 h-5 text-text-muted" />
-              <h2 className="text-lg font-semibold text-text">Invite a Team Member</h2>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-3">
-              <input
-                type="email"
-                value={inviteEmail}
-                onChange={(e) => setInviteEmail(e.target.value)}
-                placeholder="colleague@company.com"
-                className="flex-1 rounded-lg border border-border bg-bg px-3 py-2 text-text placeholder:text-text-soft focus:border-border-hover focus:outline-none focus:ring-1 focus:ring-border-hover transition-colors"
-              />
-              <select
-                value={inviteRole}
-                onChange={(e) => setInviteRole(e.target.value as 'member' | 'manager' | 'admin')}
-                className="rounded-lg border border-border bg-bg px-3 py-2 text-text focus:border-border-hover focus:outline-none focus:ring-1 focus:ring-border-hover transition-colors"
-              >
-                <option value="member">Member</option>
-                <option value="manager">Manager</option>
-                <option value="admin">Admin</option>
-              </select>
+          <div className="flex items-center gap-2">
+            {stats && (
+              <ExportMenu members={members} stats={stats} orgName={org.name} />
+            )}
+            {userRole === 'admin' && (
               <button
-                onClick={handleInvite}
-                disabled={inviteLoading || !inviteEmail.trim()}
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={() => setShowBulkInvite(true)}
+                className="inline-flex items-center gap-2 rounded-lg border border-border bg-bg-card px-4 py-2.5 text-sm font-medium text-text transition-colors hover:bg-bg-lighter"
               >
-                {inviteLoading ? (
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                ) : (
-                  <Mail className="w-4 h-4" />
-                )}
-                Send Invite
+                <Upload className="w-4 h-4" />
+                Bulk Invite
               </button>
-            </div>
-
-            {inviteMessage && (
-              <p className={`mt-3 text-sm ${inviteMessage.type === 'success' ? 'text-green-400' : 'text-red-400'}`}>
-                {inviteMessage.text}
-              </p>
             )}
+            <button
+              onClick={() => setShowInvite(!showInvite)}
+              className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary/90"
+            >
+              <UserPlus className="w-4 h-4" />
+              Invite Member
+            </button>
+          </div>
+        </motion.div>
 
-            {/* Pending Invitations */}
-            {invitations.length > 0 && (
-              <div className="mt-6 border-t border-border pt-4">
-                <h3 className="text-sm font-medium text-text-muted mb-3 flex items-center gap-2">
-                  <Clock className="w-4 h-4" />
-                  Pending Invitations ({invitations.length})
-                </h3>
-                <div className="space-y-2">
-                  {invitations.map((inv) => (
-                    <div
-                      key={inv.id}
-                      className="flex items-center justify-between rounded-lg bg-bg px-4 py-2.5 border border-border"
-                    >
-                      <div className="flex items-center gap-3">
-                        <Mail className="w-4 h-4 text-text-soft" />
-                        <span className="text-sm text-text">{inv.email}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${ROLE_STYLES[inv.role]}`}>
-                          {inv.role}
-                        </span>
-                        <span className="text-xs text-text-soft">
-                          expires {new Date(inv.expires_at).toLocaleDateString()}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </motion.div>
+        {/* ── Tab Bar ── */}
+        <div className="flex items-center gap-1 mb-6 border-b border-border">
+          <TabButton
+            active={activeTab === 'team'}
+            onClick={() => setActiveTab('team')}
+            icon={<Users className="w-4 h-4" />}
+            label="Team"
+          />
+          <TabButton
+            active={activeTab === 'analytics'}
+            onClick={() => setActiveTab('analytics')}
+            icon={<Activity className="w-4 h-4" />}
+            label="Analytics"
+          />
+        </div>
+
+        {/* ── Analytics Tab ── */}
+        {activeTab === 'analytics' && (
+          <AnalyticsDashboard
+            orgId={org.id}
+            members={members}
+            role={userRole || 'admin'}
+            department={userDepartment}
+          />
         )}
 
-        {/* ── Members Table ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="rounded-xl border border-border bg-bg-card overflow-hidden"
-        >
-          <div className="px-6 py-4 border-b border-border">
-            <h2 className="text-lg font-semibold text-text flex items-center gap-2">
-              <Users className="w-5 h-5 text-text-muted" />
-              Team Members ({members.length})
-            </h2>
-          </div>
+        {/* ── Team Tab ── */}
+        {activeTab === 'team' && (
+          <>
+            {/* Stats Row */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
+            >
+              <StatCard
+                icon={<Sparkles className="w-5 h-5 text-claude" />}
+                iconBg="bg-claude/20"
+                label="Total Team XP"
+                value={stats.totalXp.toLocaleString()}
+              />
+              <StatCard
+                icon={<BarChart3 className="w-5 h-5 text-primary" />}
+                iconBg="bg-primary/20"
+                label="Avg Completion"
+                value={`${stats.avgCompletionPercent}%`}
+              />
+              <StatCard
+                icon={<Users className="w-5 h-5 text-green-400" />}
+                iconBg="bg-green-500/10"
+                label="Team Members"
+                value={String(stats.totalMembers)}
+              />
+              <StatCard
+                icon={<Trophy className="w-5 h-5 text-yellow-500" />}
+                iconBg="bg-yellow-500/10"
+                label="Top Performer"
+                value={stats.topPerformer?.name || '--'}
+                sub={stats.topPerformer ? `${stats.topPerformer.xp.toLocaleString()} XP` : undefined}
+              />
+            </motion.div>
 
-          {/* Desktop table */}
-          <div className="hidden md:block overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-border text-left">
-                  <th className="px-6 py-3 text-xs font-medium text-text-muted uppercase tracking-wider">Member</th>
-                  <th className="px-6 py-3 text-xs font-medium text-text-muted uppercase tracking-wider">Role</th>
-                  <th className="px-6 py-3 text-xs font-medium text-text-muted uppercase tracking-wider text-right">XP</th>
-                  <th className="px-6 py-3 text-xs font-medium text-text-muted uppercase tracking-wider text-right">Levels</th>
-                  <th className="px-6 py-3 text-xs font-medium text-text-muted uppercase tracking-wider text-right">Achievements</th>
-                  <th className="px-6 py-3 text-xs font-medium text-text-muted uppercase tracking-wider text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
+            {/* Invite Section (collapsible) */}
+            {showInvite && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="rounded-xl border border-border bg-bg-card p-6 mb-8"
+              >
+                <div className="flex items-center gap-2 mb-4">
+                  <Mail className="w-5 h-5 text-text-muted" />
+                  <h2 className="text-lg font-semibold text-text">Invite a Team Member</h2>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <input
+                    type="email"
+                    value={inviteEmail}
+                    onChange={(e) => setInviteEmail(e.target.value)}
+                    placeholder="colleague@company.com"
+                    className="flex-1 rounded-lg border border-border bg-bg px-3 py-2 text-text placeholder:text-text-soft focus:border-border-hover focus:outline-none focus:ring-1 focus:ring-border-hover transition-colors"
+                  />
+                  <select
+                    value={inviteRole}
+                    onChange={(e) => setInviteRole(e.target.value as 'member' | 'manager' | 'admin')}
+                    className="rounded-lg border border-border bg-bg px-3 py-2 text-text focus:border-border-hover focus:outline-none focus:ring-1 focus:ring-border-hover transition-colors"
+                  >
+                    {availableInviteRoles.map((r) => (
+                      <option key={r} value={r}>{r.charAt(0).toUpperCase() + r.slice(1)}</option>
+                    ))}
+                  </select>
+                  <button
+                    onClick={handleInvite}
+                    disabled={inviteLoading || !inviteEmail.trim()}
+                    className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {inviteLoading ? (
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                      <Mail className="w-4 h-4" />
+                    )}
+                    Send Invite
+                  </button>
+                </div>
+
+                {inviteMessage && (
+                  <p className={`mt-3 text-sm ${inviteMessage.type === 'success' ? 'text-green-400' : 'text-red-400'}`}>
+                    {inviteMessage.text}
+                  </p>
+                )}
+
+                {/* Pending Invitations */}
+                {invitations.length > 0 && (
+                  <div className="mt-6 border-t border-border pt-4">
+                    <h3 className="text-sm font-medium text-text-muted mb-3 flex items-center gap-2">
+                      <Clock className="w-4 h-4" />
+                      Pending Invitations ({invitations.length})
+                    </h3>
+                    <div className="space-y-2">
+                      {invitations.map((inv) => (
+                        <div
+                          key={inv.id}
+                          className="flex items-center justify-between rounded-lg bg-bg px-4 py-2.5 border border-border"
+                        >
+                          <div className="flex items-center gap-3">
+                            <Mail className="w-4 h-4 text-text-soft" />
+                            <span className="text-sm text-text">{inv.email}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${ROLE_STYLES[inv.role]}`}>
+                              {inv.role}
+                            </span>
+                            <span className="text-xs text-text-soft">
+                              expires {new Date(inv.expires_at).toLocaleDateString()}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            )}
+
+            {/* Members Table */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="rounded-xl border border-border bg-bg-card overflow-hidden"
+            >
+              <div className="px-6 py-4 border-b border-border">
+                <h2 className="text-lg font-semibold text-text flex items-center gap-2">
+                  <Users className="w-5 h-5 text-text-muted" />
+                  Team Members ({members.length})
+                </h2>
+              </div>
+
+              {/* Desktop table */}
+              <div className="hidden md:block overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-border text-left">
+                      <th className="px-6 py-3 text-xs font-medium text-text-muted uppercase tracking-wider">Member</th>
+                      <th className="px-6 py-3 text-xs font-medium text-text-muted uppercase tracking-wider">Role</th>
+                      <th className="px-6 py-3 text-xs font-medium text-text-muted uppercase tracking-wider text-right">XP</th>
+                      <th className="px-6 py-3 text-xs font-medium text-text-muted uppercase tracking-wider text-right">Levels</th>
+                      <th className="px-6 py-3 text-xs font-medium text-text-muted uppercase tracking-wider text-right">Achievements</th>
+                      <th className="px-6 py-3 text-xs font-medium text-text-muted uppercase tracking-wider text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {members.map((member) => {
+                      const name = member.profile.full_name || member.profile.username || member.profile.email;
+                      const initials = name.charAt(0).toUpperCase();
+                      const levelsCompleted = Object.values(member.profile.completed_levels || {}).filter(Boolean).length;
+                      const achievementCount = Object.values(member.profile.achievements || {}).filter(Boolean).length;
+                      const isOrgOwner = org.admin_user_id === member.user_id;
+                      const isHigherRole = member.role === 'admin' || member.role === 'manager';
+                      const canModify = !isOrgOwner && !(isManager && isHigherRole);
+
+                      return (
+                        <tr key={member.id} className="hover:bg-bg-lighter/30 transition-colors">
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-9 h-9 rounded-full bg-primary/20 flex items-center justify-center text-sm font-semibold text-primary shrink-0">
+                                {initials}
+                              </div>
+                              <div className="min-w-0">
+                                <p className="text-sm font-medium text-text truncate">{name}</p>
+                                {member.profile.email !== name && (
+                                  <p className="text-xs text-text-soft truncate">{member.profile.email}</p>
+                                )}
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4">
+                            {isOrgOwner ? (
+                              <span className={`inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full ${ROLE_STYLES.admin}`}>
+                                <Shield className="w-3 h-3" />
+                                Owner
+                              </span>
+                            ) : canModify ? (
+                              <div className="relative">
+                                <select
+                                  value={member.role}
+                                  onChange={(e) => handleRoleChange(member, e.target.value as 'admin' | 'manager' | 'member')}
+                                  className={`appearance-none text-xs font-medium px-2.5 py-1 pr-6 rounded-full border-0 cursor-pointer focus:outline-none focus:ring-1 focus:ring-border-hover ${ROLE_STYLES[member.role]}`}
+                                >
+                                  {availableRoles.map((r) => (
+                                    <option key={r} value={r}>{r}</option>
+                                  ))}
+                                </select>
+                                <ChevronDown className="w-3 h-3 absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none text-current opacity-60" />
+                              </div>
+                            ) : (
+                              <span className={`inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full ${ROLE_STYLES[member.role]}`}>
+                                {member.role}
+                              </span>
+                            )}
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            <span className="text-sm font-medium text-text">{(member.profile.xp || 0).toLocaleString()}</span>
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            <span className="text-sm text-text-muted">{levelsCompleted}</span>
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            <span className="text-sm text-text-muted">{achievementCount}</span>
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            {canModify && (
+                              <button
+                                onClick={() => handleRemoveMember(member)}
+                                className="inline-flex items-center gap-1 text-xs text-red-400 hover:text-red-300 transition-colors px-2 py-1 rounded hover:bg-red-500/10"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                                Remove
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile cards */}
+              <div className="md:hidden divide-y divide-border">
                 {members.map((member) => {
                   const name = member.profile.full_name || member.profile.username || member.profile.email;
                   const initials = name.charAt(0).toUpperCase();
                   const levelsCompleted = Object.values(member.profile.completed_levels || {}).filter(Boolean).length;
                   const achievementCount = Object.values(member.profile.achievements || {}).filter(Boolean).length;
                   const isOrgOwner = org.admin_user_id === member.user_id;
+                  const isHigherRole = member.role === 'admin' || member.role === 'manager';
+                  const canModify = !isOrgOwner && !(isManager && isHigherRole);
 
                   return (
-                    <tr key={member.id} className="hover:bg-bg-lighter/30 transition-colors">
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-full bg-primary/20 flex items-center justify-center text-sm font-semibold text-primary shrink-0">
+                    <div key={member.id} className="px-4 py-4">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-sm font-semibold text-primary shrink-0">
                             {initials}
                           </div>
                           <div className="min-w-0">
@@ -400,121 +589,90 @@ export default function AdminDashboardPage() {
                             )}
                           </div>
                         </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        {isOrgOwner ? (
-                          <span className={`inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full ${ROLE_STYLES.admin}`}>
-                            <Shield className="w-3 h-3" />
-                            Owner
-                          </span>
-                        ) : (
-                          <div className="relative">
-                            <select
-                              value={member.role}
-                              onChange={(e) => handleRoleChange(member, e.target.value as 'admin' | 'manager' | 'member')}
-                              className={`appearance-none text-xs font-medium px-2.5 py-1 pr-6 rounded-full border-0 cursor-pointer focus:outline-none focus:ring-1 focus:ring-border-hover ${ROLE_STYLES[member.role]}`}
-                            >
-                              <option value="member">member</option>
-                              <option value="manager">manager</option>
-                              <option value="admin">admin</option>
-                            </select>
-                            <ChevronDown className="w-3 h-3 absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none text-current opacity-60" />
-                          </div>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <span className="text-sm font-medium text-text">{(member.profile.xp || 0).toLocaleString()}</span>
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <span className="text-sm text-text-muted">{levelsCompleted}</span>
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <span className="text-sm text-text-muted">{achievementCount}</span>
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        {!isOrgOwner && (
+                        <span className={`text-xs font-medium px-2 py-0.5 rounded-full shrink-0 ${ROLE_STYLES[member.role]}`}>
+                          {isOrgOwner ? 'Owner' : member.role}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-4 mt-3 ml-13 text-xs text-text-muted">
+                        <span>{(member.profile.xp || 0).toLocaleString()} XP</span>
+                        <span>{levelsCompleted} levels</span>
+                        <span>{achievementCount} achievements</span>
+                      </div>
+                      {canModify && (
+                        <div className="mt-3 ml-13 flex items-center gap-2">
+                          <select
+                            value={member.role}
+                            onChange={(e) => handleRoleChange(member, e.target.value as 'admin' | 'manager' | 'member')}
+                            className="text-xs rounded-lg border border-border bg-bg px-2 py-1 text-text focus:outline-none"
+                          >
+                            {availableRoles.map((r) => (
+                              <option key={r} value={r}>{r}</option>
+                            ))}
+                          </select>
                           <button
                             onClick={() => handleRemoveMember(member)}
                             className="inline-flex items-center gap-1 text-xs text-red-400 hover:text-red-300 transition-colors px-2 py-1 rounded hover:bg-red-500/10"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
-                            Remove
                           </button>
-                        )}
-                      </td>
-                    </tr>
+                        </div>
+                      )}
+                    </div>
                   );
                 })}
-              </tbody>
-            </table>
-          </div>
+              </div>
 
-          {/* Mobile cards */}
-          <div className="md:hidden divide-y divide-border">
-            {members.map((member) => {
-              const name = member.profile.full_name || member.profile.username || member.profile.email;
-              const initials = name.charAt(0).toUpperCase();
-              const levelsCompleted = Object.values(member.profile.completed_levels || {}).filter(Boolean).length;
-              const achievementCount = Object.values(member.profile.achievements || {}).filter(Boolean).length;
-              const isOrgOwner = org.admin_user_id === member.user_id;
-
-              return (
-                <div key={member.id} className="px-4 py-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-sm font-semibold text-primary shrink-0">
-                        {initials}
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-sm font-medium text-text truncate">{name}</p>
-                        {member.profile.email !== name && (
-                          <p className="text-xs text-text-soft truncate">{member.profile.email}</p>
-                        )}
-                      </div>
-                    </div>
-                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full shrink-0 ${ROLE_STYLES[member.role]}`}>
-                      {isOrgOwner ? 'Owner' : member.role}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-4 mt-3 ml-13 text-xs text-text-muted">
-                    <span>{(member.profile.xp || 0).toLocaleString()} XP</span>
-                    <span>{levelsCompleted} levels</span>
-                    <span>{achievementCount} achievements</span>
-                  </div>
-                  {!isOrgOwner && (
-                    <div className="mt-3 ml-13 flex items-center gap-2">
-                      <select
-                        value={member.role}
-                        onChange={(e) => handleRoleChange(member, e.target.value as 'admin' | 'manager' | 'member')}
-                        className="text-xs rounded-lg border border-border bg-bg px-2 py-1 text-text focus:outline-none"
-                      >
-                        <option value="member">member</option>
-                        <option value="manager">manager</option>
-                        <option value="admin">admin</option>
-                      </select>
-                      <button
-                        onClick={() => handleRemoveMember(member)}
-                        className="inline-flex items-center gap-1 text-xs text-red-400 hover:text-red-300 transition-colors px-2 py-1 rounded hover:bg-red-500/10"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  )}
+              {members.length === 0 && (
+                <div className="px-6 py-12 text-center">
+                  <Users className="w-10 h-10 text-text-soft mx-auto mb-3" />
+                  <p className="text-text-muted">No team members yet.</p>
+                  <p className="text-text-soft text-sm mt-1">Invite your first team member to get started.</p>
                 </div>
-              );
-            })}
-          </div>
-
-          {members.length === 0 && (
-            <div className="px-6 py-12 text-center">
-              <Users className="w-10 h-10 text-text-soft mx-auto mb-3" />
-              <p className="text-text-muted">No team members yet.</p>
-              <p className="text-text-soft text-sm mt-1">Invite your first team member to get started.</p>
-            </div>
-          )}
-        </motion.div>
+              )}
+            </motion.div>
+          </>
+        )}
       </div>
+
+      {/* Bulk Invite Modal */}
+      {org && userId && (
+        <BulkInviteModal
+          isOpen={showBulkInvite}
+          onClose={() => setShowBulkInvite(false)}
+          orgId={org.id}
+          userId={userId}
+          existingEmails={members.map(m => m.profile.email.toLowerCase())}
+          onComplete={handleBulkInviteComplete}
+        />
+      )}
     </main>
+  );
+}
+
+// ── Tab Button ──
+function TabButton({
+  active,
+  onClick,
+  icon,
+  label,
+}: {
+  active: boolean;
+  onClick: () => void;
+  icon: React.ReactNode;
+  label: string;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
+        active
+          ? 'border-primary text-primary'
+          : 'border-transparent text-text-muted hover:text-text hover:border-border'
+      }`}
+    >
+      {icon}
+      {label}
+    </button>
   );
 }
 

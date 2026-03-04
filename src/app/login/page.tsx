@@ -8,7 +8,6 @@ import { getTestEmails } from '@/config/auth';
 import { useProgress } from '@/context/ProgressContext';
 import { Mail, ArrowRight, Sparkles, Shield, User, Users, Lock, Play } from 'lucide-react';
 import { signUp, signIn } from '@/lib/supabase';
-import { createOrganization } from '@/lib/admin';
 
 type AuthMode = 'login' | 'signup';
 
@@ -17,7 +16,6 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [accountType, setAccountType] = useState<'individual' | 'team'>('individual');
-  const [teamName, setTeamName] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -56,11 +54,6 @@ export default function LoginPage() {
 
     if (!password || password.length < 6) {
       setError('Password must be at least 6 characters');
-      return;
-    }
-
-    if (mode === 'signup' && accountType === 'team' && teamName.trim().length < 2) {
-      setError('Team name is required');
       return;
     }
 
@@ -105,16 +98,13 @@ export default function LoginPage() {
           return;
         }
 
-        // Handle team signup
+        // Handle team signup — redirect to org setup wizard
         if (accountType === 'team' && user) {
-          const org = await createOrganization(teamName.trim(), user.id);
-          if (org) {
-            setPlan('pro');
-            setUserEmail(normalized);
-            setSuccess('Team created! Redirecting to admin dashboard...');
-            setTimeout(() => router.push('/admin'), 1500);
-            return;
-          }
+          setPlan('pro');
+          setUserEmail(normalized);
+          setSuccess('Account created! Setting up your team...');
+          setTimeout(() => router.push('/org/setup'), 1500);
+          return;
         }
 
         // Set plan based on user type (individual flow)
@@ -229,28 +219,6 @@ export default function LoginPage() {
 
           {/* Form */}
           <form onSubmit={onSubmit} className="space-y-6">
-            {/* Team Name (team signup only) */}
-            {mode === 'signup' && accountType === 'team' && (
-              <div>
-                <label className="block text-sm font-medium text-white/90 mb-2">
-                  Team Name
-                </label>
-                <div className="relative">
-                  <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/50" />
-                  <input
-                    type="text"
-                    value={teamName}
-                    onChange={(e) => { setTeamName(e.target.value); resetMessages(); }}
-                    className="w-full bg-black/30 border border-white/20 rounded-lg pl-10 pr-4 py-3 text-white placeholder-white/50 outline-none focus:ring-2 focus:ring-claude/50 focus:border-claude/50 transition-all"
-                    placeholder="Your company or team name"
-                    required
-                    minLength={2}
-                    disabled={loading}
-                  />
-                </div>
-              </div>
-            )}
-
             <div>
               <label className="block text-sm font-medium text-white/90 mb-2">
                 Email Address

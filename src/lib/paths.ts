@@ -48,6 +48,20 @@ export const ROLE_PATHS: RolePath[] = [
         isCore: true,
       },
       {
+        trackSlug: 'claude-workspace',
+        label: 'Claude Workspace',
+        description:
+          'Cowork, Connectors, Styles, Plugins, and the Surfaces decision framework',
+        isCore: true,
+      },
+      {
+        trackSlug: 'ai-strategy',
+        label: 'AI Strategy & Fluency',
+        description:
+          'Strategic frameworks for AI adoption, model selection, and productivity optimization',
+        isCore: true,
+      },
+      {
         trackSlug: 'claude-enterprise',
         label: 'Enterprise Collaboration',
         description:
@@ -56,8 +70,8 @@ export const ROLE_PATHS: RolePath[] = [
         isCore: false,
       },
     ],
-    estimatedHours: 6,
-    totalLevels: 11,
+    estimatedHours: 15,
+    totalLevels: 24,
   },
 
   // ─────────────────────────────────────────────────
@@ -111,6 +125,20 @@ export const ROLE_PATHS: RolePath[] = [
         isCore: false,
       },
       {
+        trackSlug: 'claude-workspace',
+        label: 'Claude Workspace',
+        description:
+          'Cowork, Connectors, Styles, Plugins, and the Surfaces decision framework',
+        isCore: true,
+      },
+      {
+        trackSlug: 'ai-strategy',
+        label: 'AI Strategy & Fluency',
+        description:
+          'Strategic frameworks for AI adoption, model selection, and productivity optimization',
+        isCore: true,
+      },
+      {
         trackSlug: 'anthropic-api',
         label: 'API Literacy',
         description:
@@ -119,8 +147,8 @@ export const ROLE_PATHS: RolePath[] = [
         isCore: false,
       },
     ],
-    estimatedHours: 14,
-    totalLevels: 21,
+    estimatedHours: 23,
+    totalLevels: 34,
   },
 
   // ─────────────────────────────────────────────────
@@ -195,9 +223,25 @@ export const ROLE_PATHS: RolePath[] = [
         selectedLevels: [1, 2, 3, 4, 7, 8],
         isCore: false,
       },
+      {
+        trackSlug: 'claude-workspace',
+        label: 'Claude Workspace',
+        description:
+          'Platform features including Cowork, Connectors, and Surfaces framework',
+        selectedLevels: [1, 3, 4, 6, 8],
+        isCore: false,
+      },
+      {
+        trackSlug: 'ai-strategy',
+        label: 'AI Strategy',
+        description:
+          'Model selection, productivity frameworks, and strategic AI adoption',
+        selectedLevels: [1, 2, 4],
+        isCore: false,
+      },
     ],
-    estimatedHours: 36,
-    totalLevels: 47,
+    estimatedHours: 42,
+    totalLevels: 57,
   },
 ];
 

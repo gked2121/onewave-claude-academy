@@ -1,6 +1,34 @@
 import { supabase, getUserProfile, updateUserProfile, saveProgress } from './supabase';
 
 /**
+ * Log organization activity to the org_activity_log table
+ */
+export async function logOrgActivity(
+  userId: string,
+  orgId: string,
+  activityType: string,
+  activityData: Record<string, unknown> = {}
+): Promise<void> {
+  try {
+    const { error } = await supabase
+      .from('org_activity_log')
+      .insert({
+        user_id: userId,
+        org_id: orgId,
+        activity_type: activityType,
+        activity_data: activityData,
+        created_at: new Date().toISOString(),
+      });
+
+    if (error) {
+      console.error('Failed to log org activity:', error);
+    }
+  } catch (error) {
+    console.error('Failed to log org activity:', error);
+  }
+}
+
+/**
  * Sync user progress to Supabase database
  */
 export async function syncProgressToDatabase(userId: string, levelId: number, data: {
@@ -28,6 +56,29 @@ export async function syncProgressToDatabase(userId: string, levelId: number, da
           xp: (profile.xp || 0) + data.xpEarned,
           level: Math.floor(((profile.xp || 0) + data.xpEarned) / 100) + 1,
         });
+      }
+    }
+
+    // Log org activity for level completion
+    if (data.completed) {
+      try {
+        const { data: memberData } = await supabase
+          .from('organization_members')
+          .select('org_id')
+          .eq('user_id', userId)
+          .single();
+
+        if (memberData?.org_id) {
+          await logOrgActivity(userId, memberData.org_id, 'level_completed', {
+            level_id: levelId,
+            score: data.score,
+            time_spent: data.timeSpent,
+            xp_earned: data.xpEarned,
+          });
+        }
+      } catch (activityError) {
+        // Activity logging is additive — never break progress sync
+        console.error('Failed to log level completion activity:', activityError);
       }
     }
 

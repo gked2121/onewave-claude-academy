@@ -6,6 +6,8 @@ import { mcpDevelopmentLevels, MCP_DEVELOPMENT_TRACK_ID, MCP_DEVELOPMENT_COLOR }
 import { anthropicApiLevels, ANTHROPIC_API_TRACK_ID, ANTHROPIC_API_COLOR } from '@/content/tracks/anthropic-api';
 import { claudeEnterpriseLevels, CLAUDE_ENTERPRISE_TRACK_ID, CLAUDE_ENTERPRISE_COLOR } from '@/content/tracks/claude-enterprise';
 import { claudeSkillsLevels, CLAUDE_SKILLS_TRACK_ID, CLAUDE_SKILLS_COLOR } from '@/content/tracks/claude-skills';
+import { claudeWorkspaceLevels, CLAUDE_WORKSPACE_TRACK_ID, CLAUDE_WORKSPACE_COLOR } from '@/content/tracks/claude-workspace';
+import { aiStrategyLevels, AI_STRATEGY_TRACK_ID, AI_STRATEGY_COLOR } from '@/content/tracks/ai-strategy';
 
 // Track definitions
 export const TRACKS: LearningTrack[] = [
@@ -31,11 +33,11 @@ export const TRACKS: LearningTrack[] = [
     description: 'CLI installation, hooks, skills, and IDE integrations for developers',
     icon: 'terminal',
     difficulty: 'intermediate',
-    estimatedHours: 8,
+    estimatedHours: 9,
     orderIndex: 2,
     color: '#2563EB',
-    totalLevels: 12,
-    totalXp: 2400,
+    totalLevels: 14,
+    totalXp: 2900,
     isFree: false,
     prerequisites: ['claude-chat'],
   },
@@ -99,6 +101,36 @@ export const TRACKS: LearningTrack[] = [
     isFree: false,
     prerequisites: ['claude-code'],
   },
+  {
+    id: 'claude-workspace',
+    slug: 'claude-workspace',
+    name: 'Claude Workspace',
+    description: 'Master Cowork, Connectors, Styles, Plugins, and the Surfaces decision framework',
+    icon: 'layout-dashboard',
+    difficulty: 'beginner',
+    estimatedHours: 5,
+    orderIndex: 7,
+    color: CLAUDE_WORKSPACE_COLOR,
+    totalLevels: 8,
+    totalXp: 1550,
+    isFree: false,
+    prerequisites: ['claude-chat'],
+  },
+  {
+    id: 'ai-strategy',
+    slug: 'ai-strategy',
+    name: 'AI Strategy & Fluency',
+    description: 'Strategic AI adoption frameworks, model selection, and productivity optimization for leaders',
+    icon: 'target',
+    difficulty: 'intermediate',
+    estimatedHours: 4,
+    orderIndex: 8,
+    color: AI_STRATEGY_COLOR,
+    totalLevels: 5,
+    totalXp: 1100,
+    isFree: false,
+    prerequisites: ['claude-chat'],
+  },
 ];
 
 // Map of track slug to level content
@@ -109,6 +141,8 @@ const TRACK_LEVELS: Record<string, Omit<TrackLevel, 'id' | 'trackId'>[]> = {
   'anthropic-api': anthropicApiLevels,
   'claude-enterprise': claudeEnterpriseLevels,
   'claude-skills': claudeSkillsLevels,
+  'claude-workspace': claudeWorkspaceLevels,
+  'ai-strategy': aiStrategyLevels,
 };
 
 /**
@@ -183,6 +217,16 @@ export function getRecommendedTracks(profile: {
     });
   }
 
+  // Claude Workspace is recommended for all users
+  const workspaceTrack = allTracks.find(t => t.slug === 'claude-workspace');
+  if (workspaceTrack) {
+    recommendations.push({
+      track: workspaceTrack,
+      reason: 'Master Cowork, Connectors, and platform features',
+      priority: 'secondary'
+    });
+  }
+
   // Role-based recommendations
   const { department, role, experienceLevel } = profile;
 
@@ -212,6 +256,10 @@ export function getRecommendedTracks(profile: {
     const enterpriseTrack = allTracks.find(t => t.slug === 'claude-enterprise');
     if (enterpriseTrack) {
       recommendations.push({ track: enterpriseTrack, reason: 'Deploy Claude across your organization', priority: 'secondary' });
+    }
+    const strategyTrack = allTracks.find(t => t.slug === 'ai-strategy');
+    if (strategyTrack) {
+      recommendations.push({ track: strategyTrack, reason: 'Strategic AI adoption and productivity frameworks', priority: 'primary' });
     }
   }
 

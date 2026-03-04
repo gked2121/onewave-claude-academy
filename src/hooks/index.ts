@@ -10,3 +10,4 @@ export { default as useMediaQuery } from './useMediaQuery';
 export { default as useTitle } from './useTitle';
 export { default as useTimer } from './useTimer';
 export { default as useAnimation } from './useAnimation';
+export { default as useOrgRole } from './useOrgRole';
