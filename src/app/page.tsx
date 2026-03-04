@@ -69,28 +69,28 @@ const STATS = [
 const FEATURES = [
   {
     title: 'AI-Verified Exercises',
-    description: 'Submit real work and receive instant, structured feedback powered by Claude. Every exercise is evaluated for accuracy, completeness, and best practices.',
+    description: 'Submit real work and receive instant, structured feedback powered by Claude. Every exercise is evaluated against real-world standards so your team builds skills they can use on day one.',
     icon: Bot,
     color: '#DA7756',
     span: 'col-span-1 lg:col-span-2',
   },
   {
     title: 'Gamified Progression',
-    description: 'Earn XP, unlock achievements, maintain streaks, and climb leaderboards as you master each track.',
+    description: 'XP, achievements, streaks, and leaderboards keep individuals motivated and teams competing toward full proficiency.',
     icon: Trophy,
     color: '#F59E0B',
     span: 'col-span-1',
   },
   {
     title: 'Role-Based Paths',
-    description: 'Curated curricula for sales, product, engineering, and leadership. Learn exactly what your role needs.',
+    description: 'Sales, product, engineering, leadership -- every department gets a curriculum designed for exactly how they use AI.',
     icon: Target,
     color: '#2563EB',
     span: 'col-span-1',
   },
   {
-    title: 'Team Certifications',
-    description: 'Verifiable credentials at Associate, Professional, and Expert levels. Track and prove team-wide AI proficiency.',
+    title: 'Team & Individual Certifications',
+    description: 'Verifiable credentials at Associate, Professional, and Expert levels. Prove proficiency to your employer, your team, or yourself.',
     icon: Award,
     color: '#10B981',
     span: 'col-span-1 lg:col-span-2',
@@ -98,10 +98,10 @@ const FEATURES = [
 ];
 
 const ENTERPRISE_FEATURES = [
-  { icon: Shield, title: 'SOC 2 Compliant', description: 'Enterprise-grade security and data handling' },
-  { icon: Lock, title: 'SSO / SAML', description: 'Integrate with your existing identity provider' },
-  { icon: BarChart3, title: 'Admin Analytics', description: 'Team progress dashboards and usage reports' },
-  { icon: Users, title: 'Unlimited Seats', description: 'Scale training across your entire organization' },
+  { icon: Shield, title: 'SOC 2 Compliant', description: 'Enterprise-grade security your IT team will approve' },
+  { icon: Lock, title: 'SSO / SAML', description: 'One-click access through your existing identity provider' },
+  { icon: BarChart3, title: 'Admin Analytics', description: 'See exactly who is trained, who is certified, and where gaps remain' },
+  { icon: Users, title: 'Unlimited Seats', description: 'Roll out to every department -- from the C-suite to the front line' },
 ];
 
 const HOW_IT_WORKS = [
@@ -170,7 +170,7 @@ export default function Home() {
             <motion.div className="mb-8" variants={fadeUp} transition={{ duration: 0.6 }}>
               <span className="inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-5 py-2 text-sm font-medium text-white/80 ring-1 ring-white/[0.1] backdrop-blur-sm">
                 <Sparkles className="w-4 h-4 text-claude" />
-                The official training platform for the Anthropic ecosystem
+                Upskill every employee on the complete Anthropic ecosystem
               </span>
             </motion.div>
 
@@ -180,9 +180,9 @@ export default function Home() {
               variants={fadeUp}
               transition={{ duration: 0.7 }}
             >
-              <span className="block">Master AI Before</span>
+              <span className="block">Deploy Claude</span>
               <span className="block bg-gradient-to-r from-claude via-claude-light to-primary bg-clip-text text-transparent">
-                Your Competition Does
+                Across Your Entire Business
               </span>
             </motion.h1>
 
@@ -192,8 +192,9 @@ export default function Home() {
               variants={fadeUp}
               transition={{ duration: 0.7 }}
             >
-              Structured, role-based training paths for sales, product, and engineering teams.
-              Hands-on exercises verified by Claude. Certifications that prove real proficiency.
+              Train every team -- sales, product, engineering, leadership -- on Claude with
+              role-based paths, hands-on exercises, and verifiable certifications.
+              Whether you are upskilling your workforce or leveling up on your own, start here.
             </motion.p>
 
             {/* CTAs */}
@@ -306,8 +307,8 @@ export default function Home() {
               className="mx-auto max-w-2xl text-lg text-white/55 leading-relaxed"
               variants={fadeUp}
             >
-              Whether you write emails or write code, there is a structured path
-              designed for exactly how you use Claude at work.
+              Every role uses AI differently. Pick the path that matches your job today,
+              or assign paths across departments to upskill your entire organization.
             </motion.p>
           </motion.div>
 
@@ -512,7 +513,8 @@ export default function Home() {
               className="mx-auto max-w-xl text-lg text-white/55"
               variants={fadeUp}
             >
-              Not just awareness training. Hands-on, verified skill building that sticks.
+              Not just awareness slides. Hands-on exercises and AI-verified skills
+              that employees actually use in their daily work.
             </motion.p>
           </motion.div>
 
@@ -664,14 +666,15 @@ export default function Home() {
                 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl mb-6"
                 variants={fadeUp}
               >
-                Scale AI Training Across Your Organization
+                Roll Out AI to Every Department, Not Just Engineering
               </motion.h2>
               <motion.p
                 className="text-lg text-white/55 leading-relaxed mb-10"
                 variants={fadeUp}
               >
-                Deploy Claude Academy to hundreds of employees with admin dashboards,
-                SSO integration, and detailed analytics on team-wide proficiency.
+                Most companies buy AI licenses but never train their people.
+                Claude Academy closes that gap -- deploy structured training to hundreds
+                of employees with admin dashboards, SSO, and real-time proficiency analytics.
               </motion.p>
 
               <motion.div variants={fadeUp}>
@@ -739,11 +742,11 @@ export default function Home() {
 
             <div className="relative z-10 p-12 sm:p-16 lg:p-20 text-center">
               <h3 className="text-4xl font-extrabold text-white mb-5 sm:text-5xl tracking-tight">
-                Ready to Master Claude?
+                Your Team Is Already Behind. Catch Up.
               </h3>
               <p className="text-white/55 mb-10 text-lg leading-relaxed max-w-lg mx-auto">
-                Join professionals across sales, product, and engineering who are building
-                real proficiency with the complete Anthropic ecosystem.
+                Companies that train every employee on AI outperform those that do not.
+                Start with a free individual account or roll out to your entire organization today.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
