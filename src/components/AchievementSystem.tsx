@@ -2,7 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, Star, Zap, Target, Award, Sparkles, Crown, Shield, Gem, Medal, Share2 } from 'lucide-react';
+import {
+  Trophy, Star, Zap, Target, Award, Sparkles, Crown, Shield, Gem, Medal, Share2,
+  Terminal, Wrench, Palette, Bot, Globe, Rocket, Layers, Brain, Handshake, Bug,
+  Briefcase, Microscope, Link2, Settings,
+  type LucideIcon,
+} from 'lucide-react';
 import { useProgress } from '@/context/ProgressContext';
 import ShareAchievement from './ShareAchievement';
 
@@ -251,6 +256,31 @@ const achievements: Achievement[] = [
     rarity: 'legendary'
   }
 ];
+
+const ICON_MAP: Record<string, LucideIcon> = {
+  sparkles: Sparkles,
+  terminal: Terminal,
+  wrench: Wrench,
+  zap: Zap,
+  target: Target,
+  palette: Palette,
+  bot: Bot,
+  globe: Globe,
+  rocket: Rocket,
+  layers: Layers,
+  brain: Brain,
+  star: Star,
+  handshake: Handshake,
+  bug: Bug,
+  medal: Medal,
+  briefcase: Briefcase,
+  microscope: Microscope,
+  bridge: Link2,
+  tools: Settings,
+  award: Award,
+  crown: Crown,
+  trophy: Trophy,
+};
 
 interface AchievementSystemProps {
   onAchievementUnlocked?: (achievement: Achievement) => void;
@@ -509,10 +539,17 @@ export default function AchievementSystem({ onAchievementUnlocked }: { onAchieve
 
               {/* Achievement Icon */}
               <div className="text-center mb-3">
-                <div className={`text-4xl mb-2 ${achievement.unlocked ? '' : 'grayscale'}`}>
-                  {achievement.icon}
+                <div className={`flex justify-center mb-2 ${achievement.unlocked ? '' : 'grayscale opacity-50'}`}>
+                  {(() => {
+                    const IconComp = ICON_MAP[achievement.icon];
+                    return IconComp ? (
+                      <IconComp className={`w-10 h-10 ${achievement.unlocked ? 'text-white' : 'text-gray-500'}`} />
+                    ) : (
+                      <Award className={`w-10 h-10 ${achievement.unlocked ? 'text-white' : 'text-gray-500'}`} />
+                    );
+                  })()}
                 </div>
-                <h3 className={`font-bold ${achievement.unlocked ? 'text-slate-800' : 'text-slate-500'}`}>
+                <h3 className={`font-bold ${achievement.unlocked ? 'text-white' : 'text-gray-400'}`}>
                   {achievement.title}
                 </h3>
               </div>
@@ -587,7 +624,16 @@ export default function AchievementSystem({ onAchievementUnlocked }: { onAchieve
                 <h3 className="font-bold text-white">Achievement Unlocked!</h3>
               </div>
               <div className="flex items-center gap-3 mb-3">
-                <div className="text-3xl">{showNotification.icon}</div>
+                <div className="flex-shrink-0">
+                  {(() => {
+                    const IconComp = ICON_MAP[showNotification.icon];
+                    return IconComp ? (
+                      <IconComp className="w-8 h-8 text-white" />
+                    ) : (
+                      <Award className="w-8 h-8 text-white" />
+                    );
+                  })()}
+                </div>
                 <div>
                   <h4 className="font-semibold text-white">{showNotification.title}</h4>
                   <p className="text-purple-100 text-sm">{showNotification.description}</p>

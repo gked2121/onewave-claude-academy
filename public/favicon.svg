@@ -1,45 +1,76 @@
-<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="120" y2="120">
-      <stop offset="0%" stop-color="#0E1525"/>
+    <!-- Background gradient -->
+    <linearGradient id="bg" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0C1220"/>
+      <stop offset="100%" stop-color="#141E30"/>
+    </linearGradient>
+
+    <!-- Subtle edge stroke -->
+    <linearGradient id="edge" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2A3A5C"/>
       <stop offset="100%" stop-color="#1A2540"/>
     </linearGradient>
-    <linearGradient id="edge" x1="0" y1="0" x2="120" y2="120">
-      <stop offset="0%" stop-color="#2A3A5C"/>
-      <stop offset="100%" stop-color="#151E33"/>
-    </linearGradient>
-    <radialGradient id="glow" cx="42%" cy="38%" r="55%">
-      <stop offset="0%" stop-color="rgba(218,119,86,0.1)"/>
+
+    <!-- Inner ambient glow -->
+    <radialGradient id="ambientGlow" cx="40%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#DA7756" stop-opacity="0.08"/>
+      <stop offset="60%" stop-color="#2563EB" stop-opacity="0.04"/>
       <stop offset="100%" stop-color="transparent"/>
     </radialGradient>
-    <linearGradient id="cGrad" x1="22" y1="85" x2="70" y2="35">
+
+    <!-- C letter gradient (Claude terra cotta) -->
+    <linearGradient id="cGrad" x1="80" y1="380" x2="300" y2="130" gradientUnits="userSpaceOnUse">
       <stop offset="0%" stop-color="#B85636"/>
-      <stop offset="35%" stop-color="#DA7756"/>
-      <stop offset="100%" stop-color="#E8957A"/>
+      <stop offset="40%" stop-color="#DA7756"/>
+      <stop offset="100%" stop-color="#E89A7E"/>
     </linearGradient>
-    <linearGradient id="chevGrad" x1="80" y1="70" x2="87" y2="36">
+
+    <!-- Upward chevron gradient (blue) -->
+    <linearGradient id="chevGrad" x1="340" y1="340" x2="380" y2="140" gradientUnits="userSpaceOnUse">
       <stop offset="0%" stop-color="#1D4ED8"/>
       <stop offset="100%" stop-color="#60A5FA"/>
     </linearGradient>
+
+    <!-- Glow behind the C -->
+    <filter id="cGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="12"/>
+    </filter>
+
+    <!-- Glow behind chevron -->
+    <filter id="chevGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="8"/>
+    </filter>
   </defs>
 
-  <!-- Background -->
-  <rect width="120" height="120" rx="26" fill="url(#bg)"/>
-  <rect x="0.5" y="0.5" width="119" height="119" rx="25.5" fill="none" stroke="url(#edge)" stroke-width="1"/>
-  <rect width="120" height="120" rx="26" fill="url(#glow)"/>
+  <!-- Background rounded square -->
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect x="1" y="1" width="510" height="510" rx="111" fill="none" stroke="url(#edge)" stroke-width="2"/>
+  <rect width="512" height="512" rx="112" fill="url(#ambientGlow)"/>
 
-  <!-- C arc -->
-  <path d="M 70 35 A 30 30 0 1 0 70 85"
+  <!-- Glow layers -->
+  <path d="M 300 140 A 130 130 0 1 0 300 370"
+        stroke="#DA7756" stroke-width="44" stroke-linecap="round" fill="none"
+        opacity="0.15" filter="url(#cGlow)"/>
+  <path d="M 330 300 L 375 150 L 420 300"
+        stroke="#2563EB" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"
+        fill="none" opacity="0.2" filter="url(#chevGlow)"/>
+
+  <!-- C arc (main) -->
+  <path d="M 300 140 A 130 130 0 1 0 300 370"
         stroke="url(#cGrad)"
-        stroke-width="10"
+        stroke-width="44"
         stroke-linecap="round"
         fill="none"/>
 
-  <!-- Upward chevron -->
-  <path d="M 76 69 L 87 39 L 98 69"
+  <!-- Upward chevron (Academy "A" / growth arrow) -->
+  <path d="M 330 300 L 375 150 L 420 300"
         stroke="url(#chevGrad)"
-        stroke-width="7"
+        stroke-width="30"
         stroke-linecap="round"
         stroke-linejoin="round"
         fill="none"/>
+
+  <!-- Small dot accent at top of chevron -->
+  <circle cx="375" cy="138" r="8" fill="#60A5FA" opacity="0.7"/>
 </svg>
