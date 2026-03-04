@@ -24,6 +24,7 @@ import {
 import DateRangePicker, { getDateRange, type DateRange } from './DateRangePicker';
 import MemberDrillDown from './MemberDrillDown';
 import type { OrgMember } from '@/lib/admin';
+import { DEMO_ORG_ID, getDemoTimeline, getDemoDepartmentStats } from '@/lib/demo-data';
 
 // Chart color constants (no purple)
 const COLORS = {
@@ -71,6 +72,14 @@ export default function AnalyticsDashboard({
   const loadAnalytics = useCallback(async () => {
     setLoading(true);
     try {
+      // Demo mode — use mock data
+      if (orgId === DEMO_ORG_ID) {
+        setTimeline(getDemoTimeline(dateRange.startDate, dateRange.endDate));
+        setDeptStats(role === 'admin' ? getDemoDepartmentStats() : []);
+        setLoading(false);
+        return;
+      }
+
       const { getOrgActivityTimeline, getOrgDepartmentStats } = await import('@/lib/admin');
 
       const [timelineData, departmentData] = await Promise.all([

@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { supabase, isSupabaseAvailable } from '@/lib/supabase';
+import { useProgress } from '@/context/ProgressContext';
+import { isDemoAdmin, DEMO_ORG_ID } from '@/lib/demo-data';
 
 interface OrgRole {
   role: 'admin' | 'manager' | 'member' | null;
@@ -15,8 +17,17 @@ function useOrgRole(): OrgRole {
   const [department, setDepartment] = useState<string | null>(null);
   const [orgId, setOrgId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const { userEmail } = useProgress();
 
   useEffect(() => {
+    // Demo mode — return admin immediately
+    if (isDemoAdmin(userEmail)) {
+      setRole('admin');
+      setOrgId(DEMO_ORG_ID);
+      setLoading(false);
+      return;
+    }
+
     if (!isSupabaseAvailable()) {
       setLoading(false);
       return;

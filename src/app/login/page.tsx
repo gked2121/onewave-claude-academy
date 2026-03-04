@@ -27,12 +27,18 @@ export default function LoginPage() {
     setSuccess(null);
   };
 
-  const handleDemoLogin = () => {
+  const handleDemoLogin = (type: 'individual' | 'team-admin') => {
     setLoading(true);
     setPlan('full');
-    setUserEmail('demo@claude-academy.com');
-    setSuccess('Welcome to the demo! Redirecting...');
-    setTimeout(() => router.push('/dashboard'), 800);
+    if (type === 'team-admin') {
+      setUserEmail('admin@acme-corp.demo');
+      setSuccess('Welcome to the Acme Corp demo! Redirecting...');
+      setTimeout(() => router.push('/admin'), 800);
+    } else {
+      setUserEmail('demo@claude-academy.com');
+      setSuccess('Welcome to the demo! Redirecting...');
+      setTimeout(() => router.push('/dashboard'), 800);
+    }
   };
 
   const validateEmail = (email: string): string | null => {
@@ -310,15 +316,28 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <button
-              type="button"
-              onClick={handleDemoLogin}
-              disabled={loading}
-              className="w-full border border-white/20 bg-white/5 px-6 py-3 rounded-lg text-white/80 font-medium hover:bg-white/10 hover:text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            >
-              <Play className="w-4 h-4" />
-              Try Demo -- No Account Needed
-            </button>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => handleDemoLogin('individual')}
+                disabled={loading}
+                className="border border-white/20 bg-white/5 px-4 py-3 rounded-lg text-white/80 font-medium hover:bg-white/10 hover:text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex flex-col items-center gap-1.5"
+              >
+                <Play className="w-4 h-4" />
+                <span className="text-sm">Try Individual</span>
+                <span className="text-xs text-white/40">Learner view</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDemoLogin('team-admin')}
+                disabled={loading}
+                className="border border-primary/30 bg-primary/5 px-4 py-3 rounded-lg text-white/80 font-medium hover:bg-primary/10 hover:text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex flex-col items-center gap-1.5"
+              >
+                <Users className="w-4 h-4 text-primary" />
+                <span className="text-sm">Try Team Admin</span>
+                <span className="text-xs text-white/40">Acme Corp demo</span>
+              </button>
+            </div>
 
             {/* Footer Info */}
             <div className="text-center space-y-3 pt-4 border-t border-white/10">

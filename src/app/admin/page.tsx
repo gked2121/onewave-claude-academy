@@ -41,6 +41,7 @@ import {
 import dynamic from 'next/dynamic';
 import ExportMenu from '@/components/admin/ExportMenu';
 import BulkInviteModal from '@/components/admin/BulkInviteModal';
+import { isDemoAdmin, DEMO_ORG, DEMO_MEMBERS, DEMO_STATS, DEMO_ORG_ID } from '@/lib/demo-data';
 
 // Lazy-load analytics dashboard (heavy recharts dependency)
 const AnalyticsDashboard = dynamic(
@@ -117,6 +118,18 @@ export default function AdminDashboardPage() {
 
     async function init() {
       try {
+        // Demo mode bypass — no Supabase needed
+        if (isDemoAdmin(userEmail)) {
+          setUserId('demo-user-sarah');
+          setOrg(DEMO_ORG);
+          setUserRole('admin');
+          setMembers([...DEMO_MEMBERS].sort((a, b) => (b.profile.xp || 0) - (a.profile.xp || 0)));
+          setStats(DEMO_STATS);
+          setInvitations([]);
+          setLoading(false);
+          return;
+        }
+
         const uid = await getCurrentUserId();
         if (cancelled) return;
 
@@ -159,7 +172,7 @@ export default function AdminDashboardPage() {
 
     init();
     return () => { cancelled = true; };
-  }, [router, loadData]);
+  }, [router, loadData, userEmail]);
 
   // ── Handlers ──
   const handleInvite = async () => {
