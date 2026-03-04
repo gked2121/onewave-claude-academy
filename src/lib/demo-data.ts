@@ -1,4 +1,4 @@
-import type { OrgDetails, OrgMember, OrgStats } from './admin';
+import type { OrgDetails, OrgMember, OrgStats, MemberDetailedProgress } from './admin';
 
 export const DEMO_ADMIN_EMAIL = 'admin@acme-corp.demo';
 export const DEMO_ORG_ID = 'demo-acme-corp-00000000';
@@ -184,4 +184,162 @@ export function getDemoDepartmentStats() {
     { department: 'Sales', memberCount: 1, totalXp: 1500, avgCompletionPercent: 26 },
     { department: 'Design', memberCount: 1, totalXp: 950, avgCompletionPercent: 17 },
   ];
+}
+
+// ── Detailed progress records per member ──
+
+// Real track level names for realistic demo data
+const LEVEL_NAMES: Record<string, string> = {
+  'claude-chat-1': 'Chat Fundamentals',
+  'claude-chat-2': 'Projects & Organization',
+  'claude-chat-3': 'Artifacts Deep Dive',
+  'claude-chat-4': 'Advanced Prompting',
+  'claude-chat-5': 'Custom Instructions',
+  'claude-chat-6': 'Multi-turn Strategies',
+  'claude-chat-7': 'Vision & File Analysis',
+  'claude-chat-8': 'Chat Mastery Challenge',
+  'claude-code-1': 'Installation & Setup',
+  'claude-code-2': 'First Commands',
+  'claude-code-3': 'File Operations',
+  'claude-code-4': 'Project Context',
+  'claude-code-5': 'Hooks & Automation',
+  'claude-code-6': 'Custom Skills',
+  'claude-code-7': 'IDE Integrations',
+  'claude-code-8': 'Multi-file Editing',
+  'claude-code-9': 'Git Workflows',
+  'claude-code-10': 'Debugging with Claude',
+  'claude-code-11': 'Code Review Agent',
+  'claude-code-12': 'Test Generation',
+  'claude-code-13': 'Codebase Analysis',
+  'claude-code-14': 'Code Mastery Challenge',
+  'mcp-1': 'MCP Fundamentals',
+  'mcp-2': 'Server Architecture',
+  'mcp-3': 'Tools & Resources',
+  'mcp-4': 'Transport Protocols',
+  'mcp-5': 'Building Your First Server',
+  'mcp-6': 'Database Integration',
+  'mcp-7': 'API Wrappers',
+  'mcp-8': 'Authentication & Security',
+  'mcp-9': 'Production Deployment',
+  'mcp-10': 'MCP Mastery Challenge',
+  'api-1': 'API Basics & Authentication',
+  'api-2': 'Messages API',
+  'api-3': 'Streaming Responses',
+  'api-4': 'Tool Use (Function Calling)',
+  'api-5': 'Vision & Multimodal',
+  'api-6': 'Batch Processing',
+  'api-7': 'Error Handling & Retries',
+  'enterprise-1': 'SSO & SCIM Setup',
+  'enterprise-2': 'Team Management',
+  'enterprise-3': 'Slack Integration',
+  'enterprise-4': 'Usage & Billing',
+  'enterprise-5': 'Security & Compliance',
+};
+
+function makeProgressRecords(
+  levelIds: string[],
+  startDate: string,
+  avgDaysBetween: number
+): MemberDetailedProgress['progressRecords'] {
+  const start = new Date(startDate);
+  return levelIds.map((id, i) => {
+    const date = new Date(start);
+    date.setDate(date.getDate() + i * avgDaysBetween + Math.floor(Math.random() * 3));
+    const completed = true;
+    const score = 70 + Math.floor(Math.random() * 31); // 70-100
+    const timeSpent = 15 + Math.floor(Math.random() * 45); // 15-60 min
+    return {
+      level_id: LEVEL_NAMES[id] || id,
+      completed,
+      score,
+      time_spent: timeSpent,
+      completion_date: date.toISOString(),
+    };
+  });
+}
+
+const SARAH_LEVELS = [
+  ...Array.from({ length: 8 }, (_, i) => `claude-chat-${i + 1}`),
+  ...Array.from({ length: 14 }, (_, i) => `claude-code-${i + 1}`),
+  ...Array.from({ length: 10 }, (_, i) => `mcp-${i + 1}`),
+  ...Array.from({ length: 6 }, (_, i) => `api-${i + 1}`),
+];
+
+const MARCUS_LEVELS = [
+  ...Array.from({ length: 8 }, (_, i) => `claude-chat-${i + 1}`),
+  ...Array.from({ length: 12 }, (_, i) => `claude-code-${i + 1}`),
+  ...Array.from({ length: 5 }, (_, i) => `mcp-${i + 1}`),
+];
+
+const PRIYA_LEVELS = [
+  ...Array.from({ length: 8 }, (_, i) => `claude-chat-${i + 1}`),
+  ...Array.from({ length: 9 }, (_, i) => `claude-code-${i + 1}`),
+  ...Array.from({ length: 5 }, (_, i) => `enterprise-${i + 1}`),
+];
+
+const JAMES_LEVELS = [
+  ...Array.from({ length: 8 }, (_, i) => `claude-chat-${i + 1}`),
+  ...Array.from({ length: 4 }, (_, i) => `claude-code-${i + 1}`),
+];
+
+const ELENA_LEVELS = [
+  ...Array.from({ length: 6 }, (_, i) => `claude-chat-${i + 1}`),
+  ...Array.from({ length: 2 }, (_, i) => `claude-code-${i + 1}`),
+];
+
+const DEMO_PROGRESS_MAP: Record<string, MemberDetailedProgress> = {
+  'demo-user-sarah': {
+    userId: 'demo-user-sarah',
+    profile: DEMO_MEMBERS[0].profile,
+    role: 'admin',
+    department: 'Engineering',
+    progressRecords: makeProgressRecords(SARAH_LEVELS, '2025-11-18', 2),
+    achievements: DEMO_MEMBERS[0].profile.achievements,
+    totalLevelsCompleted: 38,
+    totalTimeSpent: 38 * 35, // ~35 min avg
+  },
+  'demo-user-marcus': {
+    userId: 'demo-user-marcus',
+    profile: DEMO_MEMBERS[1].profile,
+    role: 'member',
+    department: 'Engineering',
+    progressRecords: makeProgressRecords(MARCUS_LEVELS, '2025-12-05', 3),
+    achievements: DEMO_MEMBERS[1].profile.achievements,
+    totalLevelsCompleted: 25,
+    totalTimeSpent: 25 * 38,
+  },
+  'demo-user-priya': {
+    userId: 'demo-user-priya',
+    profile: DEMO_MEMBERS[2].profile,
+    role: 'manager',
+    department: 'Product',
+    progressRecords: makeProgressRecords(PRIYA_LEVELS, '2025-12-15', 3),
+    achievements: DEMO_MEMBERS[2].profile.achievements,
+    totalLevelsCompleted: 22,
+    totalTimeSpent: 22 * 32,
+  },
+  'demo-user-james': {
+    userId: 'demo-user-james',
+    profile: DEMO_MEMBERS[3].profile,
+    role: 'member',
+    department: 'Sales',
+    progressRecords: makeProgressRecords(JAMES_LEVELS, '2026-01-10', 4),
+    achievements: DEMO_MEMBERS[3].profile.achievements,
+    totalLevelsCompleted: 12,
+    totalTimeSpent: 12 * 28,
+  },
+  'demo-user-elena': {
+    userId: 'demo-user-elena',
+    profile: DEMO_MEMBERS[4].profile,
+    role: 'member',
+    department: 'Design',
+    progressRecords: makeProgressRecords(ELENA_LEVELS, '2026-01-25', 5),
+    achievements: DEMO_MEMBERS[4].profile.achievements,
+    totalLevelsCompleted: 8,
+    totalTimeSpent: 8 * 25,
+  },
+};
+
+export function getDemoMemberProgress(userId: string): MemberDetailedProgress | null {
+  return DEMO_PROGRESS_MAP[userId] || null;
 }

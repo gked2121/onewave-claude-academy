@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import {
@@ -10,6 +10,7 @@ import {
   Mail,
   Trash2,
   ChevronDown,
+  ChevronRight,
   Trophy,
   Sparkles,
   UserPlus,
@@ -41,7 +42,8 @@ import {
 import dynamic from 'next/dynamic';
 import ExportMenu from '@/components/admin/ExportMenu';
 import BulkInviteModal from '@/components/admin/BulkInviteModal';
-import { isDemoAdmin, DEMO_ORG, DEMO_MEMBERS, DEMO_STATS, DEMO_ORG_ID } from '@/lib/demo-data';
+import { isDemoAdmin, DEMO_ORG, DEMO_MEMBERS, DEMO_STATS, DEMO_ORG_ID, getDemoMemberProgress } from '@/lib/demo-data';
+import type { MemberDetailedProgress } from '@/lib/admin';
 
 // Lazy-load analytics dashboard (heavy recharts dependency)
 const AnalyticsDashboard = dynamic(
@@ -85,6 +87,11 @@ export default function AdminDashboardPage() {
   const [inviteRole, setInviteRole] = useState<'member' | 'manager' | 'admin'>('member');
   const [inviteLoading, setInviteLoading] = useState(false);
   const [inviteMessage, setInviteMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  // Expandable member rows
+  const [expandedMembers, setExpandedMembers] = useState<Set<string>>(new Set());
+  const [memberProgress, setMemberProgress] = useState<Record<string, MemberDetailedProgress>>({});
+  const [progressLoading, setProgressLoading] = useState<Set<string>>(new Set());
 
   // Error state
   const [error, setError] = useState<string | null>(null);
@@ -222,6 +229,34 @@ export default function AdminDashboardPage() {
           ? await getOrgStatsByDepartment(org.id, userDepartment)
           : await getOrgStats(org.id);
         setStats(updatedStats);
+      }
+    }
+  };
+
+  const toggleMemberExpand = async (member: OrgMember) => {
+    const uid = member.user_id;
+    setExpandedMembers(prev => {
+      const next = new Set(prev);
+      if (next.has(uid)) { next.delete(uid); return next; }
+      next.add(uid);
+      return next;
+    });
+    // Load progress if not cached
+    if (!memberProgress[uid]) {
+      setProgressLoading(prev => new Set(prev).add(uid));
+      try {
+        if (org && org.id === DEMO_ORG_ID) {
+          const data = getDemoMemberProgress(uid);
+          if (data) setMemberProgress(prev => ({ ...prev, [uid]: data }));
+        } else if (org) {
+          const { getMemberDetailedProgress } = await import('@/lib/admin');
+          const data = await getMemberDetailedProgress(org.id, uid);
+          if (data) setMemberProgress(prev => ({ ...prev, [uid]: data }));
+        }
+      } catch (err) {
+        console.error('Failed to load member progress:', err);
+      } finally {
+        setProgressLoading(prev => { const next = new Set(prev); next.delete(uid); return next; });
       }
     }
   };
@@ -509,68 +544,96 @@ export default function AdminDashboardPage() {
                       const isOrgOwner = org.admin_user_id === member.user_id;
                       const isHigherRole = member.role === 'admin' || member.role === 'manager';
                       const canModify = !isOrgOwner && !(isManager && isHigherRole);
+                      const isExpanded = expandedMembers.has(member.user_id);
+                      const prog = memberProgress[member.user_id];
+                      const isLoadingProg = progressLoading.has(member.user_id);
 
                       return (
-                        <tr key={member.id} className="hover:bg-bg-lighter/30 transition-colors">
-                          <td className="px-6 py-4">
-                            <div className="flex items-center gap-3">
-                              <div className="w-9 h-9 rounded-full bg-primary/20 flex items-center justify-center text-sm font-semibold text-primary shrink-0">
-                                {initials}
-                              </div>
-                              <div className="min-w-0">
-                                <p className="text-sm font-medium text-text truncate">{name}</p>
-                                {member.profile.email !== name && (
-                                  <p className="text-xs text-text-soft truncate">{member.profile.email}</p>
+                        <React.Fragment key={member.id}>
+                          <tr
+                            className="hover:bg-bg-lighter/30 transition-colors cursor-pointer"
+                            onClick={() => toggleMemberExpand(member)}
+                          >
+                            <td className="px-6 py-4">
+                              <div className="flex items-center gap-3">
+                                {isExpanded ? (
+                                  <ChevronDown className="w-4 h-4 text-text-muted shrink-0" />
+                                ) : (
+                                  <ChevronRight className="w-4 h-4 text-text-muted shrink-0" />
                                 )}
+                                <div className="w-9 h-9 rounded-full bg-primary/20 flex items-center justify-center text-sm font-semibold text-primary shrink-0">
+                                  {initials}
+                                </div>
+                                <div className="min-w-0">
+                                  <p className="text-sm font-medium text-text truncate">{name}</p>
+                                  {member.profile.email !== name && (
+                                    <p className="text-xs text-text-soft truncate">{member.profile.email}</p>
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4">
-                            {isOrgOwner ? (
-                              <span className={`inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full ${ROLE_STYLES.admin}`}>
-                                <Shield className="w-3 h-3" />
-                                Owner
-                              </span>
-                            ) : canModify ? (
-                              <div className="relative">
-                                <select
-                                  value={member.role}
-                                  onChange={(e) => handleRoleChange(member, e.target.value as 'admin' | 'manager' | 'member')}
-                                  className={`appearance-none text-xs font-medium px-2.5 py-1 pr-6 rounded-full border-0 cursor-pointer focus:outline-none focus:ring-1 focus:ring-border-hover ${ROLE_STYLES[member.role]}`}
+                            </td>
+                            <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
+                              {isOrgOwner ? (
+                                <span className={`inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full ${ROLE_STYLES.admin}`}>
+                                  <Shield className="w-3 h-3" />
+                                  Owner
+                                </span>
+                              ) : canModify ? (
+                                <div className="relative">
+                                  <select
+                                    value={member.role}
+                                    onChange={(e) => handleRoleChange(member, e.target.value as 'admin' | 'manager' | 'member')}
+                                    className={`appearance-none text-xs font-medium px-2.5 py-1 pr-6 rounded-full border-0 cursor-pointer focus:outline-none focus:ring-1 focus:ring-border-hover ${ROLE_STYLES[member.role]}`}
+                                  >
+                                    {availableRoles.map((r) => (
+                                      <option key={r} value={r}>{r}</option>
+                                    ))}
+                                  </select>
+                                  <ChevronDown className="w-3 h-3 absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none text-current opacity-60" />
+                                </div>
+                              ) : (
+                                <span className={`inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full ${ROLE_STYLES[member.role]}`}>
+                                  {member.role}
+                                </span>
+                              )}
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              <span className="text-sm font-medium text-text">{(member.profile.xp || 0).toLocaleString()}</span>
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              <span className="text-sm text-text-muted">{levelsCompleted}</span>
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              <span className="text-sm text-text-muted">{achievementCount}</span>
+                            </td>
+                            <td className="px-6 py-4 text-right" onClick={(e) => e.stopPropagation()}>
+                              {canModify && (
+                                <button
+                                  onClick={() => handleRemoveMember(member)}
+                                  className="inline-flex items-center gap-1 text-xs text-red-400 hover:text-red-300 transition-colors px-2 py-1 rounded hover:bg-red-500/10"
                                 >
-                                  {availableRoles.map((r) => (
-                                    <option key={r} value={r}>{r}</option>
-                                  ))}
-                                </select>
-                                <ChevronDown className="w-3 h-3 absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none text-current opacity-60" />
-                              </div>
-                            ) : (
-                              <span className={`inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-full ${ROLE_STYLES[member.role]}`}>
-                                {member.role}
-                              </span>
-                            )}
-                          </td>
-                          <td className="px-6 py-4 text-right">
-                            <span className="text-sm font-medium text-text">{(member.profile.xp || 0).toLocaleString()}</span>
-                          </td>
-                          <td className="px-6 py-4 text-right">
-                            <span className="text-sm text-text-muted">{levelsCompleted}</span>
-                          </td>
-                          <td className="px-6 py-4 text-right">
-                            <span className="text-sm text-text-muted">{achievementCount}</span>
-                          </td>
-                          <td className="px-6 py-4 text-right">
-                            {canModify && (
-                              <button
-                                onClick={() => handleRemoveMember(member)}
-                                className="inline-flex items-center gap-1 text-xs text-red-400 hover:text-red-300 transition-colors px-2 py-1 rounded hover:bg-red-500/10"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                                Remove
-                              </button>
-                            )}
-                          </td>
-                        </tr>
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                  Remove
+                                </button>
+                              )}
+                            </td>
+                          </tr>
+                          {isExpanded && (
+                            <tr>
+                              <td colSpan={6} className="px-6 py-4 bg-bg/30">
+                                {isLoadingProg ? (
+                                  <div className="flex items-center justify-center py-4">
+                                    <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                                  </div>
+                                ) : prog?.progressRecords && prog.progressRecords.length > 0 ? (
+                                  <ExpandedMemberProgress records={prog.progressRecords} totalTimeSpent={prog.totalTimeSpent} />
+                                ) : (
+                                  <p className="text-sm text-text-muted text-center py-2">No progress data available.</p>
+                                )}
+                              </td>
+                            </tr>
+                          )}
+                        </React.Fragment>
                       );
                     })}
                   </tbody>
@@ -587,11 +650,22 @@ export default function AdminDashboardPage() {
                   const isOrgOwner = org.admin_user_id === member.user_id;
                   const isHigherRole = member.role === 'admin' || member.role === 'manager';
                   const canModify = !isOrgOwner && !(isManager && isHigherRole);
+                  const isExpanded = expandedMembers.has(member.user_id);
+                  const prog = memberProgress[member.user_id];
+                  const isLoadingProg = progressLoading.has(member.user_id);
 
                   return (
                     <div key={member.id} className="px-4 py-4">
-                      <div className="flex items-start justify-between gap-3">
+                      <div
+                        className="flex items-start justify-between gap-3 cursor-pointer"
+                        onClick={() => toggleMemberExpand(member)}
+                      >
                         <div className="flex items-center gap-3 min-w-0">
+                          {isExpanded ? (
+                            <ChevronDown className="w-4 h-4 text-text-muted shrink-0 mt-0.5" />
+                          ) : (
+                            <ChevronRight className="w-4 h-4 text-text-muted shrink-0 mt-0.5" />
+                          )}
                           <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-sm font-semibold text-primary shrink-0">
                             {initials}
                           </div>
@@ -628,6 +702,19 @@ export default function AdminDashboardPage() {
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
+                        </div>
+                      )}
+                      {isExpanded && (
+                        <div className="mt-3 ml-7">
+                          {isLoadingProg ? (
+                            <div className="flex items-center justify-center py-4">
+                              <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                            </div>
+                          ) : prog?.progressRecords && prog.progressRecords.length > 0 ? (
+                            <ExpandedMemberProgress records={prog.progressRecords} totalTimeSpent={prog.totalTimeSpent} />
+                          ) : (
+                            <p className="text-sm text-text-muted text-center py-2">No progress data available.</p>
+                          )}
                         </div>
                       )}
                     </div>
@@ -715,6 +802,91 @@ function StatCard({
           {sub && <div className="text-xs text-text-soft">{sub}</div>}
         </div>
       </div>
+    </div>
+  );
+}
+
+// ── Track color mapping for expanded progress ──
+const TRACK_COLOR: Record<string, string> = {
+  'Claude Chat': 'text-claude',
+  'Claude Code': 'text-primary',
+  'MCP': 'text-teal-400',
+  'API': 'text-green-400',
+  'Enterprise': 'text-yellow-500',
+};
+
+function detectTrack(levelName: string): string {
+  if (levelName.includes('Chat') || levelName.includes('Artifacts') || levelName.includes('Prompting') || levelName.includes('Instructions') || levelName.includes('Multi-turn') || levelName.includes('Vision & File')) return 'Claude Chat';
+  if (levelName.includes('MCP') || levelName.includes('Server Architecture') || levelName.includes('Transport') || levelName.includes('Building Your') || levelName.includes('Database Integration') || levelName.includes('API Wrappers') || levelName.includes('Production Deployment')) return 'MCP';
+  if (levelName.includes('SSO') || levelName.includes('Team Management') || levelName.includes('Slack') || levelName.includes('Usage & Billing') || levelName.includes('Security & Compliance')) return 'Enterprise';
+  if (levelName.includes('API') || levelName.includes('Messages') || levelName.includes('Streaming') || levelName.includes('Tool Use') || levelName.includes('Batch Processing') || levelName.includes('Error Handling')) return 'API';
+  return 'Claude Code';
+}
+
+interface ProgressRecord {
+  level_id: string;
+  completed: boolean;
+  score?: number;
+  time_spent?: number;
+  completion_date?: string;
+}
+
+function ExpandedMemberProgress({ records, totalTimeSpent }: { records: ProgressRecord[]; totalTimeSpent: number }) {
+  // Group by track
+  const grouped = new Map<string, ProgressRecord[]>();
+  for (const r of records) {
+    const track = detectTrack(r.level_id);
+    if (!grouped.has(track)) grouped.set(track, []);
+    grouped.get(track)!.push(r);
+  }
+
+  return (
+    <div className="space-y-3">
+      {Array.from(grouped.entries()).map(([trackName, trackRecords]) => {
+        const avgScore = Math.round(
+          trackRecords.reduce((s, r) => s + (r.score || 0), 0) / trackRecords.length
+        );
+        const colorClass = TRACK_COLOR[trackName] || 'text-text-muted';
+
+        return (
+          <div key={trackName}>
+            <div className="flex items-center justify-between mb-1.5">
+              <span className={`text-xs font-semibold ${colorClass}`}>{trackName}</span>
+              <span className="text-xs text-text-soft">
+                {trackRecords.length} levels -- Avg: {avgScore}%
+              </span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
+              {trackRecords.map((record, i) => (
+                <div
+                  key={i}
+                  className="flex items-center justify-between rounded bg-bg/50 border border-border px-3 py-1.5"
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${record.completed ? 'bg-green-400' : 'bg-text-muted'}`} />
+                    <span className="text-xs text-text truncate">{record.level_id}</span>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0 ml-2">
+                    {record.score != null && (
+                      <span className="text-xs text-text-soft">{record.score}%</span>
+                    )}
+                    <span className="text-xs text-text-muted">
+                      {record.completion_date
+                        ? new Date(record.completion_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+                        : '--'}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+      {totalTimeSpent > 0 && (
+        <p className="text-xs text-text-soft">
+          Total time: {Math.round(totalTimeSpent / 60)} hours
+        </p>
+      )}
     </div>
   );
 }
