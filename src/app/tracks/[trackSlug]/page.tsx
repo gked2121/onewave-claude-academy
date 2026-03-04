@@ -16,6 +16,8 @@ import {
 } from 'lucide-react';
 import { getTrack, getTrackLevels, trackHasContent } from '@/lib/tracks';
 import { useProgress } from '@/context/ProgressContext';
+import { NextStepCard } from '@/components/NextStepCard';
+import { getTrackCompletionInfo } from '@/lib/recommendations';
 import type { LearningTrack, TrackLevel } from '@/lib/types';
 
 export default function TrackOverviewPage() {
@@ -197,6 +199,32 @@ export default function TrackOverviewPage() {
             </p>
           </motion.div>
         )}
+
+        {/* Track Complete Banner */}
+        {(() => {
+          const info = getTrackCompletionInfo(trackSlug, completedLevels);
+          if (info?.isComplete) {
+            return (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="rounded-2xl p-6 mb-8 text-center border"
+                style={{
+                  borderColor: `${track.color}30`,
+                  background: `linear-gradient(135deg, ${track.color}10, transparent)`,
+                }}
+              >
+                <Trophy className="w-12 h-12 mx-auto mb-3" style={{ color: track.color }} />
+                <h3 className="text-xl font-bold text-text mb-1">Track Complete!</h3>
+                <p className="text-text-soft mb-4">
+                  You have completed all {info.totalCount} levels and earned {info.totalXpEarned.toLocaleString()} XP
+                </p>
+                <NextStepCard compact className="max-w-md mx-auto" />
+              </motion.div>
+            );
+          }
+          return null;
+        })()}
 
         {/* Levels List */}
         <div className="space-y-4">

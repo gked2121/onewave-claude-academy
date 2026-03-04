@@ -31,6 +31,8 @@ import {
 } from 'lucide-react';
 import { getPath } from '@/lib/paths';
 import { getTrack, getTrackLevels } from '@/lib/tracks';
+import { useProgress } from '@/context/ProgressContext';
+import { PathProgressBar } from '@/components/PathProgressBar';
 import type { RolePath, PathTrackEntry, PathTier } from '@/lib/types';
 
 // Map icon strings to components
@@ -302,9 +304,14 @@ export default function PathDetailPage() {
   const params = useParams();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const { learningPath, setLearningPath, getPathProgress, completedLevels } = useProgress();
 
   const slug = typeof params.slug === 'string' ? params.slug : '';
   const path = getPath(slug);
+
+  const isActivePath = learningPath === slug;
+  const isOnDifferentPath = !!learningPath && learningPath !== slug;
+  const pathProgress = isActivePath ? getPathProgress() : null;
 
   useEffect(() => {
     setMounted(true);
@@ -315,6 +322,28 @@ export default function PathDetailPage() {
       router.push('/paths');
     }
   }, [mounted, path, router]);
+
+  const handleStartPath = () => {
+    if (!path) return;
+    setLearningPath(slug);
+    // Navigate to first track's first level
+    const firstTrack = path.trackSequence[0];
+    if (firstTrack) {
+      const levels = getTrackLevels(firstTrack.trackSlug);
+      const firstLevel = firstTrack.selectedLevels?.[0] || levels[0]?.levelNumber || 1;
+      router.push(`/tracks/${firstTrack.trackSlug}/${firstLevel}`);
+    }
+  };
+
+  const handleContinuePath = () => {
+    if (pathProgress?.nextRecommendedLevel) {
+      router.push(`/tracks/${pathProgress.nextRecommendedLevel.trackSlug}/${pathProgress.nextRecommendedLevel.levelNumber}`);
+    }
+  };
+
+  const handleSwitchPath = () => {
+    setLearningPath(slug);
+  };
 
   if (!mounted || !path) {
     return (
@@ -493,26 +522,71 @@ export default function PathDetailPage() {
                   borderColor: `${path.color}25`,
                 }}
               >
-                <div className="text-center mb-5">
-                  <div className="text-3xl font-extrabold text-text mb-1">
-                    {path.estimatedHours}h
+                {/* Path progress if active */}
+                {isActivePath && pathProgress && (
+                  <div className="mb-5">
+                    <PathProgressBar showNextStep={false} />
                   </div>
-                  <p className="text-sm text-text-muted">to completion</p>
-                </div>
-                <Link
-                  href={`/tracks/${path.trackSequence[0]?.trackSlug || ''}`}
-                  className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl text-white font-bold text-sm transition-all duration-300 hover:scale-[1.02]"
-                  style={{
-                    backgroundColor: path.color,
-                    boxShadow: `0 0 20px ${path.color}30`,
-                  }}
-                >
-                  <Play className="w-4 h-4" />
-                  Start This Path
-                </Link>
-                <p className="text-xs text-text-muted text-center mt-3">
-                  Begin with {path.trackSequence[0]?.label}
-                </p>
+                )}
+
+                {!isActivePath && (
+                  <div className="text-center mb-5">
+                    <div className="text-3xl font-extrabold text-text mb-1">
+                      {path.estimatedHours}h
+                    </div>
+                    <p className="text-sm text-text-muted">to completion</p>
+                  </div>
+                )}
+
+                {/* Start / Continue / Switch buttons */}
+                {isActivePath && pathProgress?.nextRecommendedLevel ? (
+                  <button
+                    onClick={handleContinuePath}
+                    className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl text-white font-bold text-sm transition-all duration-300 hover:scale-[1.02]"
+                    style={{
+                      backgroundColor: path.color,
+                      boxShadow: `0 0 20px ${path.color}30`,
+                    }}
+                  >
+                    <Play className="w-4 h-4" />
+                    Continue Path
+                  </button>
+                ) : isOnDifferentPath ? (
+                  <div className="space-y-2">
+                    <button
+                      onClick={handleSwitchPath}
+                      className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl text-white font-bold text-sm transition-all duration-300 hover:scale-[1.02]"
+                      style={{
+                        backgroundColor: path.color,
+                        boxShadow: `0 0 20px ${path.color}30`,
+                      }}
+                    >
+                      <Play className="w-4 h-4" />
+                      Switch to This Path
+                    </button>
+                    <p className="text-xs text-text-muted text-center">
+                      You are currently on a different path
+                    </p>
+                  </div>
+                ) : (
+                  <button
+                    onClick={handleStartPath}
+                    className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl text-white font-bold text-sm transition-all duration-300 hover:scale-[1.02]"
+                    style={{
+                      backgroundColor: path.color,
+                      boxShadow: `0 0 20px ${path.color}30`,
+                    }}
+                  >
+                    <Play className="w-4 h-4" />
+                    Start This Path
+                  </button>
+                )}
+
+                {!isActivePath && !isOnDifferentPath && (
+                  <p className="text-xs text-text-muted text-center mt-3">
+                    Begin with {path.trackSequence[0]?.label}
+                  </p>
+                )}
               </div>
             </motion.div>
           </div>
@@ -639,18 +713,33 @@ export default function PathDetailPage() {
                 {totalXp.toLocaleString()} XP standing between you and mastery.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  href={`/tracks/${path.trackSequence[0]?.trackSlug || ''}`}
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-white font-bold transition-all duration-300 hover:scale-[1.02]"
-                  style={{
-                    backgroundColor: path.color,
-                    boxShadow: `0 0 25px ${path.color}30`,
-                  }}
-                >
-                  <Play className="w-5 h-5" />
-                  Start This Path
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
+                {isActivePath && pathProgress?.nextRecommendedLevel ? (
+                  <button
+                    onClick={handleContinuePath}
+                    className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-white font-bold transition-all duration-300 hover:scale-[1.02]"
+                    style={{
+                      backgroundColor: path.color,
+                      boxShadow: `0 0 25px ${path.color}30`,
+                    }}
+                  >
+                    <Play className="w-5 h-5" />
+                    Continue Path
+                    <ArrowRight className="w-5 h-5" />
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleStartPath}
+                    className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-white font-bold transition-all duration-300 hover:scale-[1.02]"
+                    style={{
+                      backgroundColor: path.color,
+                      boxShadow: `0 0 25px ${path.color}30`,
+                    }}
+                  >
+                    <Play className="w-5 h-5" />
+                    {isOnDifferentPath ? 'Switch to This Path' : 'Start This Path'}
+                    <ArrowRight className="w-5 h-5" />
+                  </button>
+                )}
                 <Link
                   href="/upgrade"
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold border-2 border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/30 transition-all duration-300"

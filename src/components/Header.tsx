@@ -187,6 +187,7 @@ export default function Header() {
             >
               <NavLink href="/dashboard" label="Dashboard" />
               <NavLink href="/tracks" label="Tracks" />
+              <NavLink href="/knowledge-map" label="Knowledge Map" />
               <NavLink href="/achievements" label="Achievements" />
               {showTeamLink && <NavLink href="/admin" label="Team" />}
               <NavLink href="/settings" label="Settings" />
@@ -259,6 +260,13 @@ export default function Header() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Learning Tracks
+              </Link>
+              <Link
+                href="/knowledge-map"
+                className="rounded-2xl bg-zinc-800 px-6 py-4 text-center font-semibold text-white hover:bg-zinc-700 transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Knowledge Map
               </Link>
               <Link
                 href="/achievements"

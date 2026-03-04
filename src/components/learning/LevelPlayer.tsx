@@ -17,6 +17,7 @@ import {
   Check
 } from 'lucide-react';
 import { InteractiveExercise } from './InteractiveExercise';
+import { NextStepCard } from '@/components/NextStepCard';
 import type { TrackLevel, ContentSection, LevelContent } from '@/lib/types';
 
 interface LevelPlayerProps {
@@ -45,6 +46,8 @@ export function LevelPlayer({
   const [exerciseCompleted, setExerciseCompleted] = useState(false);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [startTime] = useState(Date.now());
+  const [showNextStepOverlay, setShowNextStepOverlay] = useState(false);
+  const [justCompleted, setJustCompleted] = useState(false);
 
   const content = level.content;
   const sections = content.sections || [];
@@ -84,8 +87,10 @@ export function LevelPlayer({
   };
 
   const handleLevelComplete = () => {
-    const timeSpent = Math.round((Date.now() - startTime) / 1000);
     onComplete(100);
+    setJustCompleted(true);
+    // Show the next step overlay after a short delay
+    setTimeout(() => setShowNextStepOverlay(true), 500);
   };
 
   // Calculate progress
@@ -413,7 +418,7 @@ export function LevelPlayer({
             </button>
           )}
 
-          {isCompleted && (
+          {(isCompleted || justCompleted) && (
             <div className="flex items-center gap-2 px-6 py-3 rounded-xl bg-success/20 text-success">
               <CheckCircle className="w-5 h-5" />
               <span>Completed</span>
@@ -421,6 +426,14 @@ export function LevelPlayer({
           )}
         </div>
       </div>
+
+      {/* Post-completion next step overlay */}
+      {showNextStepOverlay && (
+        <NextStepCard
+          overlay
+          onDismiss={() => setShowNextStepOverlay(false)}
+        />
+      )}
     </div>
   );
 }

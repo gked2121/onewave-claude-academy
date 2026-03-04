@@ -4,8 +4,10 @@ import { useEffect, useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { LevelPlayer } from '@/components/learning/LevelPlayer';
-import { getTrack, getTrackLevel, getNextLevel as getNextLevelNumber, trackHasContent } from '@/lib/tracks';
+import { getTrack, getTrackLevel, getTrackLevels, getNextLevel as getNextLevelNumber, trackHasContent } from '@/lib/tracks';
 import { useProgress } from '@/context/ProgressContext';
+import { LessonSidebar } from '@/components/LessonSidebar';
+import { LessonBreadcrumbs } from '@/components/LessonBreadcrumbs';
 import type { LearningTrack, TrackLevel } from '@/lib/types';
 import { Lock, AlertCircle } from 'lucide-react';
 
@@ -190,19 +192,36 @@ export default function LevelPlayerPage() {
     );
   }
 
+  const allLevels = getTrackLevels(trackSlug);
+
   return (
-    <main className="min-h-screen bg-bg pt-24 pb-16">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <LevelPlayer
-          level={level}
-          trackColor={track.color}
-          isCompleted={isCurrentLevelCompleted}
-          onComplete={handleComplete}
-          onBack={handleBack}
-          onNext={handleNext}
-          hasPrevious={hasPrevious}
-          hasNext={hasNext}
-        />
+    <main className="min-h-screen bg-bg pt-16 flex">
+      {/* Sidebar */}
+      <LessonSidebar
+        track={track}
+        levels={allLevels}
+        currentLevelNumber={levelNumber}
+      />
+
+      {/* Content */}
+      <div className="flex-1 pt-8 pb-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <LessonBreadcrumbs
+            trackSlug={trackSlug}
+            levelNumber={levelNumber}
+            levelTitle={level.title}
+          />
+          <LevelPlayer
+            level={level}
+            trackColor={track.color}
+            isCompleted={isCurrentLevelCompleted}
+            onComplete={handleComplete}
+            onBack={handleBack}
+            onNext={handleNext}
+            hasPrevious={hasPrevious}
+            hasNext={hasNext}
+          />
+        </div>
       </div>
     </main>
   );

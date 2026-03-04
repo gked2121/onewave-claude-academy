@@ -5,6 +5,20 @@ import { ProgressState, Plan, LevelCompletedEvent, AchievementUnlockedEvent, AiC
 import { useLocalStorage } from '@/hooks';
 import { syncProgressToDatabase, getCurrentUserId, loadUserProgressFromDatabase, syncAchievementToDatabase } from '@/lib/supabase-sync';
 import { getUserProfile, updateUserProfile, isSupabaseAvailable } from '@/lib/supabase';
+import { getPath } from '@/lib/paths';
+import { getTrackLevels } from '@/lib/tracks';
+
+export interface PathProgress {
+  pathSlug: string;
+  pathName: string;
+  currentTrackIndex: number;
+  totalTracks: number;
+  completedTracks: number;
+  completedLevelsInPath: number;
+  totalLevelsInPath: number;
+  percentComplete: number;
+  nextRecommendedLevel: { trackSlug: string; levelNumber: number; title: string } | null;
+}
 
 type ProgressContextType = ProgressState & {
   // Character actions
@@ -25,6 +39,11 @@ type ProgressContextType = ProgressState & {
   setUserEmail: (email: string | undefined) => void;
   updatePreferences: (preferences: Partial<ProgressState['preferences']>) => void;
   setSelectedAiCli: (cli: AiCliType) => void;
+
+  // Learning path management
+  setLearningPath: (pathSlug: string) => void;
+  clearLearningPath: () => void;
+  getPathProgress: () => PathProgress | null;
 
   // Project management
   setProject: (project: UserProject) => void;
@@ -434,6 +453,69 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     return Math.round((state.completedLevels.length / totalLevels) * 100);
   }, [state.completedLevels]);
 
+  // Learning path management
+  const setLearningPath = useCallback((pathSlug: string) => {
+    setState(s => ({ ...s, learningPath: pathSlug }));
+  }, [setState]);
+
+  const clearLearningPath = useCallback(() => {
+    setState(s => ({ ...s, learningPath: undefined }));
+  }, [setState]);
+
+  const getPathProgress = useCallback((): PathProgress | null => {
+    if (!state.learningPath) return null;
+    const path = getPath(state.learningPath);
+    if (!path) return null;
+
+    let completedInPath = 0;
+    let totalInPath = 0;
+    let completedTracks = 0;
+    let currentTrackIndex = 0;
+    let nextRecommended: PathProgress['nextRecommendedLevel'] = null;
+    let foundNext = false;
+
+    for (let i = 0; i < path.trackSequence.length; i++) {
+      const entry = path.trackSequence[i];
+      const levels = getTrackLevels(entry.trackSlug);
+      const relevant = entry.selectedLevels?.length
+        ? levels.filter(l => entry.selectedLevels!.includes(l.levelNumber))
+        : levels;
+
+      const completedCount = relevant.filter(l => state.completedLevels.includes(l.levelNumber)).length;
+      completedInPath += completedCount;
+      totalInPath += relevant.length;
+
+      if (completedCount === relevant.length && relevant.length > 0) {
+        completedTracks++;
+      }
+
+      if (!foundNext) {
+        const nextLevel = relevant.find(l => !state.completedLevels.includes(l.levelNumber));
+        if (nextLevel) {
+          currentTrackIndex = i;
+          nextRecommended = {
+            trackSlug: entry.trackSlug,
+            levelNumber: nextLevel.levelNumber,
+            title: nextLevel.title,
+          };
+          foundNext = true;
+        }
+      }
+    }
+
+    return {
+      pathSlug: state.learningPath,
+      pathName: path.name,
+      currentTrackIndex,
+      totalTracks: path.trackSequence.length,
+      completedTracks,
+      completedLevelsInPath: completedInPath,
+      totalLevelsInPath: totalInPath,
+      percentComplete: totalInPath > 0 ? Math.round((completedInPath / totalInPath) * 100) : 0,
+      nextRecommendedLevel: nextRecommended,
+    };
+  }, [state.learningPath, state.completedLevels]);
+
   // Project management functions
   const setProject = useCallback((project: UserProject) => {
     setState(s => ({ ...s, project }));
@@ -464,6 +546,9 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
       setUserEmail,
       updatePreferences,
       setSelectedAiCli,
+      setLearningPath,
+      clearLearningPath,
+      getPathProgress,
       setProject,
       updateProject,
       clearProject,
@@ -489,6 +574,9 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
       setUserEmail,
       updatePreferences,
       setSelectedAiCli,
+      setLearningPath,
+      clearLearningPath,
+      getPathProgress,
       setProject,
       updateProject,
       clearProject,
