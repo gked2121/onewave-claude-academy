@@ -17,6 +17,7 @@ import {
 import { getTrack, getTrackLevels, trackHasContent } from '@/lib/tracks';
 import { useProgress } from '@/context/ProgressContext';
 import { NextStepCard } from '@/components/NextStepCard';
+import { AnimatedCounter } from '@/components/AnimatedCounter';
 import { getTrackCompletionInfo } from '@/lib/recommendations';
 import type { LearningTrack, TrackLevel } from '@/lib/types';
 
@@ -150,20 +151,29 @@ export default function TrackOverviewPage() {
               <p className="text-text-soft mb-4">{track.description}</p>
 
               {/* Meta info */}
-              <div className="flex items-center gap-6 text-sm text-text-muted">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="flex items-center gap-6 text-sm text-text-muted"
+              >
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4" />
                   <span>{track.estimatedHours} hours</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Trophy className="w-4 h-4" />
-                  <span>{track.totalXp?.toLocaleString() || 0} XP</span>
+                  <span>
+                    <AnimatedCounter value={track.totalXp || 0} format delay={500} duration={1200} /> XP
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="w-4 h-4" />
-                  <span>{progress.completed}/{progress.total} lessons</span>
+                  <span>
+                    <AnimatedCounter value={progress.completed} delay={600} duration={800} />/{progress.total} lessons
+                  </span>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
 

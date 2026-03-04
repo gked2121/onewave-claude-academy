@@ -13,7 +13,6 @@ import {
   BookOpen,
   Map,
   ArrowRight,
-  Clock,
   Play,
   CheckCircle,
 } from 'lucide-react';
@@ -23,7 +22,8 @@ import { useProgress } from '@/context/ProgressContext';
 import { getTrackCompletionInfo } from '@/lib/recommendations';
 import { PathProgressBar } from '@/components/PathProgressBar';
 import { NextStepCard } from '@/components/NextStepCard';
-import type { LearningTrack } from '@/lib/types';
+import { AnimatedCounter } from '@/components/AnimatedCounter';
+import { TypewriterText } from '@/components/TypewriterText';
 
 const fadeUp = {
   initial: { opacity: 0, y: 20 },
@@ -88,7 +88,12 @@ export default function DashboardPage() {
         {/* Section 1: Welcome + Path Progress Hero */}
         <motion.div {...fadeUp} className="mb-10">
           <h1 className="text-3xl font-bold text-text mb-2">
-            Welcome back{userEmail ? `, ${userEmail.split('@')[0]}` : ''}
+            <TypewriterText
+              text={`Welcome back${userEmail ? `, ${userEmail.split('@')[0]}` : ''}`}
+              speed={30}
+              delay={200}
+              cursor={false}
+            />
           </h1>
 
           {pathProgress ? (
@@ -149,14 +154,26 @@ export default function DashboardPage() {
           className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10"
         >
           {/* XP Card */}
-          <div className="perspective-container">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="perspective-container"
+          >
             <div className="card-3d bg-bg-card border border-border rounded-xl p-5">
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 rounded-lg bg-claude/20 flex items-center justify-center">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.3, type: 'spring', stiffness: 400, damping: 15 }}
+                  className="w-10 h-10 rounded-lg bg-claude/20 flex items-center justify-center"
+                >
                   <Sparkles className="w-5 h-5 text-claude" />
-                </div>
+                </motion.div>
                 <div>
-                  <div className="text-2xl font-bold text-text">{xp.toLocaleString()}</div>
+                  <div className="text-2xl font-bold text-text">
+                    <AnimatedCounter value={xp} format delay={400} duration={1500} />
+                  </div>
                   <div className="text-xs text-text-muted">Total XP (Lv. {userLevel})</div>
                 </div>
               </div>
@@ -164,6 +181,7 @@ export default function DashboardPage() {
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${(xp % 500) / 5}%` }}
+                  transition={{ delay: 0.6, duration: 0.8 }}
                   className="h-full bg-gradient-to-r from-claude to-primary rounded-full"
                 />
               </div>
@@ -171,52 +189,88 @@ export default function DashboardPage() {
                 {xpToNext} XP to level {userLevel + 1}
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Streak Card */}
-          <div className="perspective-container">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="perspective-container"
+          >
             <div className="card-3d bg-bg-card border border-border rounded-xl p-5">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.35, type: 'spring', stiffness: 400, damping: 15 }}
+                  className="w-10 h-10 rounded-lg bg-orange-500/20 flex items-center justify-center"
+                >
                   <Flame className="w-5 h-5 text-orange-500" />
-                </div>
+                </motion.div>
                 <div>
-                  <div className="text-2xl font-bold text-text">{completedLevels.length > 0 ? 1 : 0}</div>
+                  <div className="text-2xl font-bold text-text">
+                    <AnimatedCounter value={completedLevels.length > 0 ? 1 : 0} delay={500} duration={600} />
+                  </div>
                   <div className="text-xs text-text-muted">Day Streak</div>
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Levels Completed Card */}
-          <div className="perspective-container">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25 }}
+            className="perspective-container"
+          >
             <div className="card-3d bg-bg-card border border-border rounded-xl p-5">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-success/20 flex items-center justify-center">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.4, type: 'spring', stiffness: 400, damping: 15 }}
+                  className="w-10 h-10 rounded-lg bg-success/20 flex items-center justify-center"
+                >
                   <CheckCircle className="w-5 h-5 text-success" />
-                </div>
+                </motion.div>
                 <div>
-                  <div className="text-2xl font-bold text-text">{completedLevels.length}</div>
+                  <div className="text-2xl font-bold text-text">
+                    <AnimatedCounter value={completedLevels.length} delay={600} duration={1000} />
+                  </div>
                   <div className="text-xs text-text-muted">Levels Done</div>
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Achievements Card */}
-          <div className="perspective-container">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="perspective-container"
+          >
             <div className="card-3d bg-bg-card border border-border rounded-xl p-5">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.45, type: 'spring', stiffness: 400, damping: 15 }}
+                  className="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center"
+                >
                   <Trophy className="w-5 h-5 text-yellow-500" />
-                </div>
+                </motion.div>
                 <div>
-                  <div className="text-2xl font-bold text-text">{achievements.length}</div>
+                  <div className="text-2xl font-bold text-text">
+                    <AnimatedCounter value={achievements.length} delay={700} duration={800} />
+                  </div>
                   <div className="text-xs text-text-muted">Achievements</div>
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         </motion.div>
 
         {/* Section 3: Smart Next Steps */}
@@ -302,51 +356,66 @@ export default function DashboardPage() {
           </div>
           <div className="rounded-xl border border-border bg-bg-card p-6">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {allTrackInfo.map(info => (
-                <Link
-                  key={info.track.slug}
-                  href={`/tracks/${info.track.slug}`}
-                  className="flex flex-col items-center gap-2 p-3 rounded-lg hover:bg-bg-lighter transition-colors group"
-                >
-                  {/* Track node */}
-                  <div className="relative">
-                    <svg width="56" height="56" viewBox="0 0 56 56" className="transform -rotate-90">
-                      {/* Background ring */}
-                      <circle
-                        cx="28" cy="28" r="24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="3"
-                        className="text-border"
-                      />
-                      {/* Progress ring */}
-                      <circle
-                        cx="28" cy="28" r="24"
-                        fill="none"
-                        stroke={info.track.color}
-                        strokeWidth="3"
-                        strokeDasharray={`${2 * Math.PI * 24}`}
-                        strokeDashoffset={`${2 * Math.PI * 24 * (1 - info.percent / 100)}`}
-                        strokeLinecap="round"
-                        className="transition-all duration-500"
-                      />
-                    </svg>
-                    <div
-                      className="absolute inset-0 flex items-center justify-center text-xs font-bold"
-                      style={{ color: info.completedCount > 0 ? info.track.color : undefined }}
+              {allTrackInfo.map((info, i) => {
+                const circumference = 2 * Math.PI * 24;
+                return (
+                  <motion.div
+                    key={info.track.slug}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.4 + i * 0.06, type: 'spring', stiffness: 300 }}
+                  >
+                    <Link
+                      href={`/tracks/${info.track.slug}`}
+                      className="flex flex-col items-center gap-2 p-3 rounded-lg hover:bg-bg-lighter transition-colors group"
                     >
-                      {info.isComplete ? (
-                        <CheckCircle className="w-5 h-5 text-success" />
-                      ) : (
-                        <span className={info.completedCount > 0 ? '' : 'text-text-muted'}>{info.percent}%</span>
-                      )}
-                    </div>
-                  </div>
-                  <span className="text-xs text-text-muted text-center line-clamp-1 group-hover:text-text transition-colors">
-                    {info.track.name.replace('Claude ', '').replace('Anthropic ', '')}
-                  </span>
-                </Link>
-              ))}
+                      <div className="relative">
+                        <svg width="56" height="56" viewBox="0 0 56 56" className="transform -rotate-90">
+                          <circle
+                            cx="28" cy="28" r="24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="3"
+                            className="text-border"
+                          />
+                          <motion.circle
+                            cx="28" cy="28" r="24"
+                            fill="none"
+                            stroke={info.track.color}
+                            strokeWidth="3"
+                            strokeDasharray={circumference}
+                            initial={{ strokeDashoffset: circumference }}
+                            animate={{ strokeDashoffset: circumference * (1 - info.percent / 100) }}
+                            transition={{ delay: 0.6 + i * 0.08, duration: 1, ease: 'easeOut' }}
+                            strokeLinecap="round"
+                          />
+                        </svg>
+                        <div
+                          className="absolute inset-0 flex items-center justify-center text-xs font-bold"
+                          style={{ color: info.completedCount > 0 ? info.track.color : undefined }}
+                        >
+                          {info.isComplete ? (
+                            <motion.div
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              transition={{ delay: 0.8 + i * 0.08, type: 'spring' }}
+                            >
+                              <CheckCircle className="w-5 h-5 text-success" />
+                            </motion.div>
+                          ) : (
+                            <span className={info.completedCount > 0 ? '' : 'text-text-muted'}>
+                              <AnimatedCounter value={info.percent} delay={600 + i * 80} duration={1000} suffix="%" />
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <span className="text-xs text-text-muted text-center line-clamp-1 group-hover:text-text transition-colors">
+                        {info.track.name.replace('Claude ', '').replace('Anthropic ', '')}
+                      </span>
+                    </Link>
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
         </motion.div>

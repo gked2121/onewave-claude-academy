@@ -153,27 +153,39 @@ export function KnowledgeMap() {
       <div className="space-y-6">
         {tracksByRow.map((row, rowIndex) => (
           <div key={rowIndex}>
-            {/* Row connector: vertical line from previous row */}
+            {/* Row connector: animated vertical line from previous row */}
             {rowIndex > 0 && (
-              <div className="flex justify-center mb-4">
-                <div className="flex items-center gap-2 text-text-muted/30">
-                  <svg width="2" height="24" className="text-border">
-                    <line x1="1" y1="0" x2="1" y2="24" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" />
-                  </svg>
-                </div>
-              </div>
+              <motion.div
+                initial={{ opacity: 0, scaleY: 0 }}
+                animate={{ opacity: 1, scaleY: 1 }}
+                transition={{ delay: rowIndex * 0.3, duration: 0.4 }}
+                className="flex justify-center mb-4 origin-top"
+              >
+                <svg width="2" height="32" className="text-border">
+                  <motion.line
+                    x1="1" y1="0" x2="1" y2="32"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeDasharray="4 4"
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={{ delay: rowIndex * 0.3 + 0.2, duration: 0.5 }}
+                  />
+                </svg>
+              </motion.div>
             )}
 
             {/* Row label */}
-            {rowIndex === 0 && (
-              <p className="text-xs text-text-muted uppercase tracking-wider mb-3 pl-1">Foundation</p>
-            )}
-            {rowIndex === 1 && (
-              <p className="text-xs text-text-muted uppercase tracking-wider mb-3 pl-1">Core Tracks</p>
-            )}
-            {rowIndex === 2 && (
-              <p className="text-xs text-text-muted uppercase tracking-wider mb-3 pl-1">Advanced</p>
-            )}
+            <motion.p
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: rowIndex * 0.2 + 0.1 }}
+              className="text-xs text-text-muted uppercase tracking-wider mb-3 pl-1"
+            >
+              {rowIndex === 0 && 'Foundation'}
+              {rowIndex === 1 && 'Core Tracks'}
+              {rowIndex === 2 && 'Advanced'}
+            </motion.p>
 
             {/* Track nodes */}
             <div className={`grid gap-4 ${
@@ -182,7 +194,7 @@ export function KnowledgeMap() {
               row.length === 3 ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' :
               'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
             }`}>
-              {row.map(({ slug, track }) => {
+              {row.map(({ slug, track }, colIndex) => {
                 const info = trackInfoMap.get(slug);
                 if (!info) return null;
                 return (
@@ -195,7 +207,7 @@ export function KnowledgeMap() {
                     percent={info.percent}
                     nextLevelNumber={info.nextLevelNumber}
                     nextLevelTitle={info.nextLevelTitle}
-                    index={rowIndex * 4 + row.indexOf({ slug, track })}
+                    index={rowIndex * 4 + colIndex}
                   />
                 );
               })}

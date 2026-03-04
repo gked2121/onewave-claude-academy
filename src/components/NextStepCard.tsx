@@ -50,16 +50,36 @@ export function NextStepCard({ overlay = false, onDismiss, compact = false, clas
         onClick={onDismiss}
       >
         <motion.div
-          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+          initial={{ opacity: 0, scale: 0.85, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+          transition={{ type: 'spring', stiffness: 260, damping: 22 }}
           className="bg-bg-card border border-border rounded-2xl p-8 max-w-md w-full shadow-2xl"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="text-center mb-6">
-            <Sparkles className="w-12 h-12 text-claude mx-auto mb-3" />
-            <h2 className="text-2xl font-bold text-text mb-1">Level Complete!</h2>
-            <p className="text-text-soft">Great work. Here is what is next:</p>
+            <motion.div
+              initial={{ scale: 0, rotate: -90 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ delay: 0.2, type: 'spring', stiffness: 300, damping: 15 }}
+            >
+              <Sparkles className="w-12 h-12 text-claude mx-auto mb-3" />
+            </motion.div>
+            <motion.h2
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="text-2xl font-bold text-text mb-1"
+            >
+              Level Complete!
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.45 }}
+              className="text-text-soft"
+            >
+              Great work. Here is what is next:
+            </motion.p>
           </div>
 
           <NextStepContent nextStep={nextStep} />

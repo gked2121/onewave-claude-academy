@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ChevronLeft,
@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { InteractiveExercise } from './InteractiveExercise';
 import { NextStepCard } from '@/components/NextStepCard';
+import { TypewriterText } from '@/components/TypewriterText';
 import type { TrackLevel, ContentSection, LevelContent } from '@/lib/types';
 
 interface LevelPlayerProps {
@@ -48,6 +49,8 @@ export function LevelPlayer({
   const [startTime] = useState(Date.now());
   const [showNextStepOverlay, setShowNextStepOverlay] = useState(false);
   const [justCompleted, setJustCompleted] = useState(false);
+  const [typedSections, setTypedSections] = useState<Set<number>>(new Set());
+  const [codeRevealed, setCodeRevealed] = useState<Set<number>>(new Set());
 
   const content = level.content;
   const sections = content.sections || [];
@@ -97,19 +100,56 @@ export function LevelPlayer({
   const readProgress = Math.round((completedSections.size / sections.length) * 100);
   const canComplete = (hasExercise ? exerciseCompleted : readProgress === 100) || isCompleted;
 
-  // Render content section
+  const handleSectionTyped = useCallback(() => {
+    setTypedSections(prev => new Set([...prev, currentSectionIndex]));
+  }, [currentSectionIndex]);
+
+  // Reset typed state when navigating to a new section that hasn't been seen
+  useEffect(() => {
+    if (!typedSections.has(currentSectionIndex)) {
+      setCodeRevealed(prev => {
+        const next = new Set(prev);
+        next.delete(currentSectionIndex);
+        return next;
+      });
+    }
+  }, [currentSectionIndex, typedSections]);
+
+  const isAlreadyTyped = typedSections.has(currentSectionIndex);
+
+  // Render content section with animations
   const renderSection = (section: ContentSection) => {
     switch (section.type) {
       case 'text':
         return (
           <div className="prose prose-invert max-w-none">
             {section.title && (
-              <h3 className="text-xl font-semibold text-text mb-4">{section.title}</h3>
+              <motion.h3
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="text-xl font-semibold text-text mb-4"
+              >
+                {section.title}
+              </motion.h3>
             )}
-            <div
-              className="text-text-soft leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: section.content }}
-            />
+            {isAlreadyTyped ? (
+              <div
+                className="text-text-soft leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: section.content }}
+              />
+            ) : (
+              <div className="text-text-soft leading-relaxed">
+                <TypewriterText
+                  text={section.content}
+                  html
+                  speed={60}
+                  delay={section.title ? 300 : 100}
+                  cursor
+                  onComplete={handleSectionTyped}
+                />
+              </div>
+            )}
           </div>
         );
 
@@ -117,15 +157,35 @@ export function LevelPlayer({
         return (
           <div className="relative">
             {section.title && (
-              <div className="flex items-center justify-between mb-2">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+                className="flex items-center justify-between mb-2"
+              >
                 <span className="text-sm text-text-muted">{section.title}</span>
                 <span className="text-xs text-text-soft uppercase">{section.language}</span>
-              </div>
+              </motion.div>
             )}
-            <div className="relative group">
+            <motion.div
+              initial={{ opacity: 0, scaleY: 0.8 }}
+              animate={{ opacity: 1, scaleY: 1 }}
+              transition={{ duration: 0.4, delay: 0.2, ease: [0.23, 1, 0.32, 1] }}
+              className="relative group origin-top"
+            >
               <pre className="bg-bg p-4 rounded-xl overflow-x-auto border border-border">
                 <code className={`language-${section.language || 'text'} text-sm font-mono text-text`}>
-                  {section.content}
+                  {isAlreadyTyped ? (
+                    section.content
+                  ) : (
+                    <TypewriterText
+                      text={section.content}
+                      speed={80}
+                      delay={400}
+                      cursor
+                      onComplete={handleSectionTyped}
+                    />
+                  )}
                 </code>
               </pre>
               <button
@@ -140,43 +200,99 @@ export function LevelPlayer({
                   <Copy className="w-4 h-4" />
                 )}
               </button>
-            </div>
+            </motion.div>
           </div>
         );
 
       case 'tip':
         return (
-          <div className="flex gap-4 p-4 rounded-xl bg-primary/10 border border-primary/20">
-            <Lightbulb className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+          <motion.div
+            initial={{ opacity: 0, x: -12 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4, delay: 0.15 }}
+            className="flex gap-4 p-4 rounded-xl bg-primary/10 border border-primary/20"
+          >
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.3, type: 'spring', stiffness: 400, damping: 15 }}
+            >
+              <Lightbulb className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+            </motion.div>
             <div>
               {section.title && (
                 <h4 className="font-medium text-primary mb-1">{section.title}</h4>
               )}
-              <p className="text-text-soft text-sm">{section.content}</p>
+              {isAlreadyTyped ? (
+                <p className="text-text-soft text-sm">{section.content}</p>
+              ) : (
+                <p className="text-text-soft text-sm">
+                  <TypewriterText
+                    text={section.content}
+                    speed={50}
+                    delay={500}
+                    onComplete={handleSectionTyped}
+                  />
+                </p>
+              )}
             </div>
-          </div>
+          </motion.div>
         );
 
       case 'warning':
         return (
-          <div className="flex gap-4 p-4 rounded-xl bg-error/10 border border-error/20">
-            <AlertCircle className="w-5 h-5 text-error flex-shrink-0 mt-0.5" />
+          <motion.div
+            initial={{ opacity: 0, x: -12 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4, delay: 0.15 }}
+            className="flex gap-4 p-4 rounded-xl bg-error/10 border border-error/20"
+          >
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.3, type: 'spring', stiffness: 400, damping: 15 }}
+            >
+              <AlertCircle className="w-5 h-5 text-error flex-shrink-0 mt-0.5" />
+            </motion.div>
             <div>
               {section.title && (
                 <h4 className="font-medium text-error mb-1">{section.title}</h4>
               )}
-              <p className="text-text-soft text-sm">{section.content}</p>
+              {isAlreadyTyped ? (
+                <p className="text-text-soft text-sm">{section.content}</p>
+              ) : (
+                <p className="text-text-soft text-sm">
+                  <TypewriterText
+                    text={section.content}
+                    speed={50}
+                    delay={500}
+                    onComplete={handleSectionTyped}
+                  />
+                </p>
+              )}
             </div>
-          </div>
+          </motion.div>
         );
 
       case 'image':
         return (
           <div className="space-y-3">
             {section.title && (
-              <h3 className="text-lg font-semibold text-text">{section.title}</h3>
+              <motion.h3
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+                className="text-lg font-semibold text-text"
+              >
+                {section.title}
+              </motion.h3>
             )}
-            <div className="rounded-xl overflow-hidden border border-border bg-bg">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="rounded-xl overflow-hidden border border-border bg-bg"
+            >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={section.imageSrc || ''}
@@ -184,25 +300,43 @@ export function LevelPlayer({
                 className="w-full h-auto"
                 loading="lazy"
               />
-            </div>
+            </motion.div>
             {section.content && (
-              <p className="text-sm text-text-muted italic">{section.content}</p>
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+                className="text-sm text-text-muted italic"
+              >
+                {section.content}
+              </motion.p>
             )}
           </div>
         );
 
       case 'interactive':
         return (
-          <div className="p-4 rounded-xl border border-claude/30 bg-claude/5">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="p-4 rounded-xl border border-claude/30 bg-claude/5"
+          >
             <div className="flex items-center gap-2 mb-3">
-              <Play className="w-5 h-5 text-claude" />
+              <motion.div
+                initial={{ scale: 0, rotate: -90 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ delay: 0.2, type: 'spring', stiffness: 300 }}
+              >
+                <Play className="w-5 h-5 text-claude" />
+              </motion.div>
               <span className="font-medium text-text">Interactive Example</span>
             </div>
             <div
               className="text-text-soft"
               dangerouslySetInnerHTML={{ __html: section.content }}
             />
-          </div>
+          </motion.div>
         );
 
       default:
@@ -235,23 +369,43 @@ export function LevelPlayer({
       </div>
 
       {/* Level title */}
-      <div className="mb-8">
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="mb-8"
+      >
         <div className="flex items-center gap-3 mb-2">
-          <div
+          <motion.div
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ type: 'spring', stiffness: 260, damping: 20, delay: 0.2 }}
             className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold"
             style={{ backgroundColor: trackColor }}
           >
             {level.levelNumber}
-          </div>
+          </motion.div>
           <div>
             <h1 className="text-2xl font-bold text-text">{level.title}</h1>
-            <p className="text-text-soft">{level.description}</p>
+            <TypewriterText
+              text={level.description}
+              speed={50}
+              delay={400}
+              cursor={false}
+              className="text-text-soft"
+            />
           </div>
           {isCompleted && (
-            <CheckCircle className="w-6 h-6 text-success ml-auto" />
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+            >
+              <CheckCircle className="w-6 h-6 text-success ml-auto" />
+            </motion.div>
           )}
         </div>
-      </div>
+      </motion.div>
 
       {/* Progress bar */}
       <div className="mb-8">
@@ -274,21 +428,29 @@ export function LevelPlayer({
       {/* Section navigation dots */}
       <div className="flex items-center justify-center gap-2 mb-8">
         {sections.map((_, index) => (
-          <button
+          <motion.button
             key={index}
             onClick={() => setCurrentSectionIndex(index)}
-            className={`
-              w-3 h-3 rounded-full transition-all
-              ${index === currentSectionIndex
-                ? 'scale-125'
+            initial={{ scale: 0 }}
+            animate={{
+              scale: index === currentSectionIndex ? 1.4 : 1,
+              backgroundColor: index === currentSectionIndex
+                ? trackColor
                 : completedSections.has(index)
-                  ? 'bg-success'
-                  : 'bg-border hover:bg-border-hover'
+                  ? '#10B981'
+                  : undefined,
+            }}
+            transition={{
+              scale: { type: 'spring', stiffness: 500, damping: 25 },
+              delay: index * 0.05,
+            }}
+            className={`
+              w-3 h-3 rounded-full transition-colors
+              ${index !== currentSectionIndex && !completedSections.has(index)
+                ? 'bg-border hover:bg-border-hover'
+                : ''
               }
             `}
-            style={{
-              backgroundColor: index === currentSectionIndex ? trackColor : undefined
-            }}
           />
         ))}
       </div>
@@ -297,10 +459,10 @@ export function LevelPlayer({
       <AnimatePresence mode="wait">
         <motion.div
           key={currentSectionIndex}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
-          transition={{ duration: 0.2 }}
+          initial={{ opacity: 0, x: 30, scale: 0.98 }}
+          animate={{ opacity: 1, x: 0, scale: 1 }}
+          exit={{ opacity: 0, x: -30, scale: 0.98 }}
+          transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
           className="bg-bg-card rounded-2xl border border-border p-8 mb-8"
         >
           {currentSection && renderSection(currentSection)}
@@ -419,10 +581,21 @@ export function LevelPlayer({
           )}
 
           {(isCompleted || justCompleted) && (
-            <div className="flex items-center gap-2 px-6 py-3 rounded-xl bg-success/20 text-success">
-              <CheckCircle className="w-5 h-5" />
+            <motion.div
+              initial={justCompleted ? { scale: 0 } : false}
+              animate={{ scale: 1 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+              className="flex items-center gap-2 px-6 py-3 rounded-xl bg-success/20 text-success"
+            >
+              <motion.div
+                initial={justCompleted ? { rotate: -180, scale: 0 } : false}
+                animate={{ rotate: 0, scale: 1 }}
+                transition={{ delay: 0.15, type: 'spring', stiffness: 400 }}
+              >
+                <CheckCircle className="w-5 h-5" />
+              </motion.div>
               <span>Completed</span>
-            </div>
+            </motion.div>
           )}
         </div>
       </div>
