@@ -1,53 +1,45 @@
 <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="120" y2="120">
+      <stop offset="0%" stop-color="#0E1525"/>
+      <stop offset="100%" stop-color="#1A2540"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="120" y2="120">
+      <stop offset="0%" stop-color="#2A3A5C"/>
+      <stop offset="100%" stop-color="#151E33"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="42%" cy="38%" r="55%">
+      <stop offset="0%" stop-color="rgba(218,119,86,0.1)"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+    <linearGradient id="cGrad" x1="22" y1="85" x2="70" y2="35">
+      <stop offset="0%" stop-color="#B85636"/>
+      <stop offset="35%" stop-color="#DA7756"/>
+      <stop offset="100%" stop-color="#E8957A"/>
+    </linearGradient>
+    <linearGradient id="chevGrad" x1="80" y1="70" x2="87" y2="36">
+      <stop offset="0%" stop-color="#1D4ED8"/>
+      <stop offset="100%" stop-color="#60A5FA"/>
+    </linearGradient>
+  </defs>
+
   <!-- Background -->
-  <rect width="120" height="120" rx="24" fill="url(#bgGrad)"/>
+  <rect width="120" height="120" rx="26" fill="url(#bg)"/>
+  <rect x="0.5" y="0.5" width="119" height="119" rx="25.5" fill="none" stroke="url(#edge)" stroke-width="1"/>
+  <rect width="120" height="120" rx="26" fill="url(#glow)"/>
 
-  <!-- Inner card -->
-  <rect x="10" y="10" width="100" height="100" rx="16" fill="url(#cardGrad)" stroke="#334155" stroke-width="1"/>
-
-  <!-- Terminal header -->
-  <rect x="10" y="10" width="100" height="14" rx="16" fill="#1E293B"/>
-  <rect x="10" y="19" width="100" height="5" fill="#0F172A"/>
-
-  <!-- Traffic dots -->
-  <circle cx="22" cy="17" r="2" fill="#EF4444" opacity="0.9"/>
-  <circle cx="29" cy="17" r="2" fill="#F59E0B" opacity="0.9"/>
-  <circle cx="36" cy="17" r="2" fill="#10B981" opacity="0.9"/>
-
-  <!-- Stylized C -->
-  <path d="M73 42 C73 42, 68 34, 60 32 C52 30, 43 34, 38 42 C33 50, 33 70, 38 78 C43 86, 52 90, 60 88 C68 86, 73 78, 73 78"
-        stroke="url(#claudeGrad)"
-        stroke-width="7"
+  <!-- C arc -->
+  <path d="M 70 35 A 30 30 0 1 0 70 85"
+        stroke="url(#cGrad)"
+        stroke-width="10"
         stroke-linecap="round"
         fill="none"/>
 
-  <!-- Cursor -->
-  <rect x="77" y="68" width="3" height="12" rx="1.5" fill="#2563EB" opacity="0.85">
-    <animate attributeName="opacity" values="0.85;0.25;0.85" dur="1.5s" repeatCount="indefinite"/>
-  </rect>
-
-  <!-- Prompt chevron -->
-  <path d="M25 48 L32 56 L25 64"
-        stroke="#2563EB"
-        stroke-width="3.5"
+  <!-- Upward chevron -->
+  <path d="M 76 69 L 87 39 L 98 69"
+        stroke="url(#chevGrad)"
+        stroke-width="7"
         stroke-linecap="round"
         stroke-linejoin="round"
-        fill="none"
-        opacity="0.4"/>
-
-  <defs>
-    <linearGradient id="bgGrad" x1="0" y1="0" x2="120" y2="120">
-      <stop offset="0%" stop-color="#0F172A"/>
-      <stop offset="100%" stop-color="#1E293B"/>
-    </linearGradient>
-    <linearGradient id="cardGrad" x1="10" y1="10" x2="110" y2="110">
-      <stop offset="0%" stop-color="#1E293B"/>
-      <stop offset="100%" stop-color="#0F172A"/>
-    </linearGradient>
-    <linearGradient id="claudeGrad" x1="35" y1="30" x2="80" y2="90">
-      <stop offset="0%" stop-color="#DA7756"/>
-      <stop offset="50%" stop-color="#E8957A"/>
-      <stop offset="100%" stop-color="#DA7756"/>
-    </linearGradient>
-  </defs>
+        fill="none"/>
 </svg>
