@@ -480,6 +480,92 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ─── 3 Ways to Work with Claude ─── */}
+      <section className="relative py-20 sm:py-28 overflow-hidden">
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80rem_50rem_at_30%_50%,rgba(218,119,86,0.06),transparent)]" />
+        </div>
+
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            className="text-center mb-16"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-80px' }}
+            variants={stagger}
+          >
+            <motion.p
+              className="text-sm font-semibold uppercase tracking-widest text-claude mb-4"
+              variants={fadeUp}
+            >
+              Master Every Mode
+            </motion.p>
+            <motion.h2
+              className="text-3xl font-bold text-white sm:text-4xl lg:text-5xl mb-4"
+              variants={fadeUp}
+            >
+              3 Ways to Work with Claude
+            </motion.h2>
+            <motion.p
+              className="mx-auto max-w-2xl text-white/60 text-lg"
+              variants={fadeUp}
+            >
+              Whether you are thinking through problems, automating workflows, or building software -- Claude meets you where you work.
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            className="grid gap-8 md:grid-cols-3"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-60px' }}
+            variants={stagger}
+          >
+            {[
+              {
+                title: 'Chat',
+                subtitle: 'Thinking',
+                description: 'Ask questions, brainstorm, draft, and work through problems',
+                image: '/screenshots/claude-chat.png',
+              },
+              {
+                title: 'Cowork',
+                subtitle: 'Working',
+                description: 'For complex or repeatable work across multiple files and sources',
+                image: '/screenshots/claude-cowork.png',
+              },
+              {
+                title: 'Code',
+                subtitle: 'Building',
+                description: 'Read, write, and modify code directly in your codebase',
+                image: '/screenshots/claude-code.png',
+              },
+            ].map((mode) => (
+              <motion.div
+                key={mode.title}
+                className="group relative rounded-2xl border border-white/[0.08] bg-white/[0.03] overflow-hidden hover:border-white/[0.15] hover:bg-white/[0.05] transition-all duration-300"
+                variants={fadeUpSpring}
+              >
+                <div className="aspect-[4/5] relative overflow-hidden">
+                  <Image
+                    src={mode.image}
+                    alt={`Claude ${mode.title} mode`}
+                    fill
+                    className="object-cover object-top group-hover:scale-[1.02] transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0c] via-transparent to-transparent" />
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <span className="text-xs font-semibold uppercase tracking-widest text-claude/80 mb-1 block">{mode.subtitle}</span>
+                  <h3 className="text-xl font-bold text-white mb-2">{mode.title}</h3>
+                  <p className="text-sm text-white/60 leading-relaxed">{mode.description}</p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
       {/* ─── Divider with glow ─── */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
         <motion.div
