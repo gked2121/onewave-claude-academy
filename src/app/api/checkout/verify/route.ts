@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { getAuthUser, unauthorizedResponse } from '@/lib/auth-helpers';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,6 +11,9 @@ function getStripe() {
 }
 
 export async function GET(req: NextRequest) {
+  const user = await getAuthUser(req);
+  if (!user) return unauthorizedResponse();
+
   try {
     const sessionId = req.nextUrl.searchParams.get('session_id');
     if (!sessionId) return NextResponse.json({ error: 'Missing session_id' }, { status: 400 });

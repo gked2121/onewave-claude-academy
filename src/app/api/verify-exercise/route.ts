@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getAuthUser, unauthorizedResponse } from '@/lib/auth-helpers';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 interface VerifyRequest {
   exerciseType: 'prompt' | 'code' | 'upload' | 'build';
@@ -18,6 +20,13 @@ interface AIFeedback {
 }
 
 export async function POST(request: NextRequest) {
+  // Rate limit: 10 requests per 60 seconds per IP
+  const rateLimited = checkRateLimit(request, { limit: 10, windowSeconds: 60 });
+  if (rateLimited) return rateLimited;
+
+  const user = await getAuthUser(request);
+  if (!user) return unauthorizedResponse();
+
   try {
     const body: VerifyRequest = await request.json();
     const { exerciseType, submission, criteria, instructions, fileContent } = body;

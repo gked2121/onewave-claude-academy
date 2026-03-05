@@ -1,5 +1,7 @@
 import { NextRequest } from 'next/server';
 import { AI } from '@/config/ai';
+import { getAuthUser } from '@/lib/auth-helpers';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,7 +29,16 @@ const getApiConfig = () => {
 type ChatMessage = { role: 'system' | 'user' | 'assistant'; content: string };
 
 export async function POST(req: NextRequest) {
+  // Rate limit: 20 requests per 60 seconds per IP
+  const rateLimited = checkRateLimit(req, { limit: 20, windowSeconds: 60 });
+  if (rateLimited) return rateLimited;
+
   try {
+    const user = await getAuthUser(req);
+    if (!user) {
+      return new Response('Unauthorized', { status: 401 });
+    }
+
     const config = getApiConfig();
     if (!config) {
       console.error('AI API config missing');

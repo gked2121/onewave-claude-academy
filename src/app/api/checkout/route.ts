@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { STRIPE_SERVER_CONFIG, validateServerConfig } from '@/config/stripe.server';
+import { getAuthUser, unauthorizedResponse } from '@/lib/auth-helpers';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs'; // Ensure Node.js runtime for env var access
@@ -18,22 +20,21 @@ function getStripe() {
 }
 
 export async function POST(req: NextRequest) {
+  // Rate limit: 5 requests per 60 seconds per IP
+  const rateLimited = checkRateLimit(req, { limit: 5, windowSeconds: 60 });
+  if (rateLimited) return rateLimited;
+
+  const user = await getAuthUser(req);
+  if (!user) return unauthorizedResponse();
+
   try {
     const { priceId } = await req.json();
     if (!priceId || typeof priceId !== 'string') {
       return NextResponse.json({ error: 'Missing priceId' }, { status: 400 });
     }
 
-    console.log('Creating Stripe checkout session with:', {
-      priceId,
-      hasSecretKey: !!STRIPE_SERVER_CONFIG.secretKey,
-      secretKeyPrefix: STRIPE_SERVER_CONFIG.secretKey?.substring(0, 7),
-    });
-
     const stripe = getStripe();
     const origin = req.headers.get('origin') || STRIPE_SERVER_CONFIG.appOrigin || 'http://localhost:3000';
-
-    console.log('Calling Stripe API with origin:', origin);
 
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
@@ -44,20 +45,9 @@ export async function POST(req: NextRequest) {
       automatic_tax: { enabled: true },
     });
 
-    console.log('Checkout session created successfully:', session.id);
     return NextResponse.json({ id: session.id });
   } catch (err: unknown) {
-    // Enhanced error logging for Stripe errors
-    console.error('Checkout error - Full details:', {
-      message: err instanceof Error ? err.message : 'Unknown error',
-      type: (err as any)?.type,
-      code: (err as any)?.code,
-      statusCode: (err as any)?.statusCode,
-      raw: (err as any)?.raw,
-      requestId: (err as any)?.requestId,
-    });
-
-    const message = err instanceof Error ? err.message : 'Server error';
-    return NextResponse.json({ error: message }, { status: 500 });
+    console.error('Checkout error:', err instanceof Error ? err.message : 'Unknown error');
+    return NextResponse.json({ error: 'Checkout failed' }, { status: 500 });
   }
 }

@@ -1,50 +1,37 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import { getAuthUser, isUserAdmin, unauthorizedResponse, forbiddenResponse } from '@/lib/auth-helpers';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const user = await getAuthUser(req);
+  if (!user) return unauthorizedResponse();
+
+  const admin = await isUserAdmin(user.id);
+  if (!admin) return forbiddenResponse('Admin access required');
+
   try {
-    console.log('Checking if plan column exists in profiles table...');
-
-    // Try to select the plan column to see if it exists
     const { data, error } = await supabase
       .from('profiles')
-      .select('id, email, plan')
+      .select('id, plan')
       .limit(1);
 
     if (error) {
-      // If error mentions column doesn't exist, migration not applied
       if (error.message.includes('column') && error.message.includes('plan')) {
         return NextResponse.json({
           success: false,
           migrationApplied: false,
-          message: 'Plan column does NOT exist in database',
-          error: error.message,
-          needsMigration: true
+          needsMigration: true,
         });
       }
-
-      // Some other error
-      return NextResponse.json({
-        success: false,
-        message: 'Database query failed',
-        error: error.message
-      }, { status: 500 });
+      return NextResponse.json({ success: false, error: 'Database query failed' }, { status: 500 });
     }
 
-    // Success - column exists
     return NextResponse.json({
       success: true,
       migrationApplied: true,
-      message: 'Plan column EXISTS in database',
-      sampleData: data,
-      needsMigration: false
+      needsMigration: false,
     });
-
-  } catch (error: any) {
-    return NextResponse.json({
-      success: false,
-      message: 'Verification failed',
-      error: error.message
-    }, { status: 500 });
+  } catch {
+    return NextResponse.json({ success: false, error: 'Verification failed' }, { status: 500 });
   }
 }
